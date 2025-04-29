@@ -13,7 +13,7 @@ const AdminLogin: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/api/accounts/login', {
+      const response = await axios.post('accounts/login', {
             username,
             password,
         });

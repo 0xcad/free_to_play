@@ -1,6 +1,11 @@
-version: '3.8'
+#version: '3.8'
 
 services:
+  ftp-redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+
   ftp-backend:
     build:
       context: ./backend
@@ -10,8 +15,9 @@ services:
       - "8000:8000"
     environment:
       - REDIS_URL=redis://redis:6379
+      - REDIS_HOST=redis
     depends_on:
-      - redis
+      - ftp-redis
 
   ftp-frontend:
     build:
@@ -21,10 +27,7 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - backend
-
-  ftp-redis:
-    image: "redis:alpine"
-    ports:
-      - "6379:6379"
+      - ftp-backend
+    environment:
+      - REACT_APP_BACKEND_ROOT=ftp.0xcad.dev:8000
 

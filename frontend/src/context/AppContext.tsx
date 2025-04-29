@@ -73,8 +73,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
 
   // Open the websocket connection when component mounts.
   useEffect(() => {
-    // Note: adjust the URL protocol and host as needed (ws:// for HTTP, wss:// for HTTPS)
-    const socket = new WebSocket(`ws://localhost:8000/ws/chat/`);
+    const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+    const socketURL = protocol + process.env.REACT_APP_BACKEND_ROOT + '/ws/chat/';
+    const socket = new WebSocket(socketURL);
     socket.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);

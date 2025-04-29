@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +32,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://172.26.34.73:3000',
     'http://ftp.0xcad.dev',
+    'https://ftp.0xcad.dev',
 ]
 CORS_ALLOW_CREDENTIALS = True
 
@@ -116,7 +118,7 @@ CHANNEL_LAYERS = {
 }
 
 # These settings are used in our chat views.
-REDIS_HOST = "127.0.0.1"
+REDIS_HOST = os.getenv('REDIS_HOST', '127.0.0.1')
 REDIS_PORT = 6379
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
