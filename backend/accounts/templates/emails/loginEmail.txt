@@ -1,0 +1,5 @@
+{% if not user.is_active %}{{ user.name }}, we created your Free to Play Account!
+{% endif %}
+Log in to Free to Play using this login link: {{ login_link|safe }}
+
+Break a leg!

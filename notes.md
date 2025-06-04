@@ -196,3 +196,48 @@ tutorial (question icon, probably in top of screen)
 * build/outline infrastructure
 * create dead simple static page for like, "this will come" kinda thing
 * login flow
+
+## devnotes
+* should I use componenet routes so that on each page I can have the react nav bar?
+  * i just put that in root...
+* likely use a client loader to get data on each page? or react redux?
+
+# 2025-05-21
+## goals
+* login flow
+
+## TODO
+backend:
+* create custom backend user
+* email only authentication on backend
+  * view to create users
+  * success view to authenticate users / activate their accounts
+  * resend email view
+
+* TODO for later: change email backend / authenticate that, instead of just using console
+
+frontend:
+* submit form. on success show a "resend email" button with a timer
+  * probably need to
+
+## 2025-05-22
+TODO:
+* resend email frontend + backend
+
+DONE:
+* automatically logout if token is too old
+* if we 401 go to login page
+* log user in on page refresh
+* logout link / clear cookie
+  * put this under account details page
+
+misc TODO:
+* make protected routes
+* make backend login link a POST request instead of GET
+* make frontend logout link actually go to backend and invalidate access token? if that's needed
+* change "Success" account creation language -- maybe, "One more step"
+
+## 2025-06-04
+DONE:
+* resend email frontend + backend finished
+* bug fix on backend email

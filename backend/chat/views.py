@@ -63,6 +63,8 @@ class ChatMessagesView(APIView):
     #API endpoint for retrieving chat messages (GET) and sending a new message (POST).
     #GET: Returns a list of messages.
     #POST: Creates a new message from the current session user.
+
+    permission_classes = [permissions.IsAuthenticated]
     def get(self, request, format=None):
         messages = list(ChatMessage.objects.all().order_by("timestamp").values())
         return Response({"messages": messages}, status=status.HTTP_200_OK)
