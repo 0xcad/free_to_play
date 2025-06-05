@@ -48,10 +48,13 @@ INSTALLED_APPS = [
     'daphne',
     'corsheaders',
     'rest_framework',
-    'accounts',
-    'chat',
-    'channels',
 
+    'accounts',
+    'notifications',
+    'chat',
+    'play',
+
+    'channels',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -64,6 +67,7 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
 }
 AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.AllowAllUsersModelBackend"]

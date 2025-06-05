@@ -75,7 +75,7 @@ function createClient(): AxiosInstance {
   // Attach token dynamically on each request
   client.interceptors.request.use((config) => {
     const token = Storage.get(SESSION_KEY);
-    console.log('this is the token', token);
+    console.log('utils/api.ts: this is the token', token);
     if (token) {
       config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${token}`;
@@ -89,6 +89,7 @@ function createClient(): AxiosInstance {
     (error: AxiosError) => {
       if (error.response?.status === 401) {
         Storage.remove(SESSION_KEY);
+        // TODO: probably need to add a notification here
         // Only redirect in browser
         if (typeof window !== 'undefined' && window.location.pathname !== routes.login.link) {
           window.location.assign(routes.login.link);

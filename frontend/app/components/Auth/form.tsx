@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 
 import Api from '~/utils/api';
 import { apiUrls } from '~/constants/api';
+import routes from '~/constants/routes';
 
 import { useAppContext } from '~/context/AppContext';
 
@@ -97,12 +98,8 @@ const LoginForm: React.FC = () => {
   const [showEmailSuccess, setShowEmailSuccess] = useState(false);
 
   const onSuccess = useCallback((response) => {
-    navigate('/auth/success');
+    navigate(routes.loginEmail.link);
   }, [setShowEmailSuccess]);
-
-  const resendEmail = () => {
-    console.log("TODO");
-  };
 
   const recreateAccount = () => {
     setShowEmailSuccess(false);

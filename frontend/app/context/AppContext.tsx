@@ -8,12 +8,28 @@ import Api from '~/utils/api';
 import { apiUrls } from '~/constants/api';
 
 import type { User } from '~/models/User';
+import { useWsState } from "~/context/useWsState";
+import { useChatState } from "~/context/useChatState";
+import { usePlayState } from "~/context/usePlayState";
+import { useStoreState } from "~/context/useStoreState";
+
+import type { WsState } from "~/context/useWsState";
+import type { ChatState } from "~/context/useChatState";
+import type { PlayState } from "~/context/usePlayState";
+import type { StoreState } from "~/context/useStoreState";
+
+type WsHandler = (payload: any) => void;
 
 interface AppState {
   setToken: (string) => void;
 
   currentUser: User | undefined;
   setCurrentUser: (user: User | undefined) => void;
+
+  ws: WsState;
+  play: PlayState | undefined;
+  chat: ChatState | undefined;
+  store: StoreState | undefined;
 
   /*logout: () => void;
 
@@ -48,18 +64,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [token, setToken] = useState<string>(Storage.get(SESSION_KEY));
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
 
+  const ws = useWsState();
+  const play = usePlayState(ws);
+  const chat = useChatState(ws);
+  const store = useStoreState(ws);
+
 
   // get the current user & refresh their access token
   const getUser = async (): Promise<void> => {
     try {
-        var response = await Api.get(apiUrls.auth.user);
+        var response = await Api.get(apiUrls.play.detail);
         setToken(response.access);
         setCurrentUser(response.user as User);
+        play.setPlayInstance(response.play_instance);
       } catch (err) {
         console.log('this is the user login error we get', err);
       }
   };
 
+  // TOKEN UPDATE LOGIC
   // TODO:
   // login flow with refresh / what happens when token changes on another form...
   // maybe use a useRef?
@@ -110,14 +133,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, [token]);
 
-  /*setCurrentUser(u => ({
-            ...u, is_authenticated: true,
-          }));*/
-
 
   const state: AppState = {
     setToken,
     currentUser, setCurrentUser,
+    ws,
+    play,
+    chat,
+    store,
   };
 
   return (

@@ -235,9 +235,53 @@ misc TODO:
 * make protected routes
 * make backend login link a POST request instead of GET
 * make frontend logout link actually go to backend and invalidate access token? if that's needed
-* change "Success" account creation language -- maybe, "One more step"
+  * [this tutorial?](https://medium.com/django-rest/logout-django-rest-framework-eb1b53ac6d35)
+* onboarding; frontend cookie where on login, show them a tutorial screen and a "buy gems" screen
 
 ## 2025-06-04
 DONE:
 * resend email frontend + backend finished
 * bug fix on backend email
+* create PlayInstance class in backend - DONE
+* create ChatMessage model in backend
+
+TODO:
+* make a model view set for chat
+* this would be great: chat websockets working in frontend. just need to be able to send messages.
+
+# 2025-06-04
+goal (DONE): I need a backend api endpoint that will return information about the PlayInstance. if it's started, current user, etc. The frontend needs to request this on page load. This will determine if we show a waiting message, or the actual game. You can only send chat messages if the current game is running.
+
+goal (DONE): whenever an admin user updates the game state, it should automatically change for the users via a websocket, putting them into the game, as opposed to a waiting screen
+
+DONE: to do this, the frontend app state needs to be expanded. it should have a class for PlayInstance, and another one for ChatMessages. I also probably need to have like, centralized websockets or something. because different django apps will also be sending their own websockets, I should really consider either combining these into one 'notifications' app, or just do something else...
+
+
+
+DONE:
+* model view for chat
+* PlayInstance serializer
+* playinstance save signal hook, to send a websocket to user on status change
+* only send chat if current play instance is running status
+* centralized websockets in backend in `notifications`
+* change "Success" account creation language -- maybe, "One more step" - DONE
+* PlayInstance List view
+* frontend requests playinstance serializer on load
+* frontend app state needs to be expanded
+* centralized websocket in the frontend
+* get game state (waiting/running), websocket for updating that
+* simple waiting screen
+
+TODO:
+* chat messages should be a dictionary of id -> message, for ease of updating
+* chat show prev messages button with cursor pagination
+* send/receive chat messages + websockets
+* notifications with toastify
+
+
+chat goal: once the user knows the game is running, their frontend should make an initial request for messages. only load 20 messages at a time. if a user wants to load more messages, eventually I'll do infinite scroll, but for now they can just click a 'prev' button. this then uses the cursor navigation to get more messages.
+
+
+MISC TODO:
+* join/leave user websockets on login?
+* keep track of which users have played before in PlayInstance ManyToMany + put that in UserSerializer...

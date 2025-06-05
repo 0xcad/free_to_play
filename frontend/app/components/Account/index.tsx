@@ -32,7 +32,8 @@ const Account: React.FC = () => {
       <h1>Account</h1>
       <span>Name: {currentUser.name}</span><br />
       <span>Email: {currentUser.email}</span><br />
-      <span>Participating: {currentUser.is_participating ? "yes" : "no"}</span>
+      <span>Participating: {currentUser.is_participating ? "yes" : "no"}</span><br />
+      <span>Balance: {currentUser.balance} gems</span>
 
       <p><button onClick={handleLogout}>Log out</button></p>
     </>

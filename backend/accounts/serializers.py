@@ -1,4 +1,3 @@
-from django.contrib.auth import authenticate
 from rest_framework import serializers
 from .models import User
 
@@ -35,7 +34,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'name', 'email', 'is_participating', 'is_admin', 'is_authenticated']
+        fields = ['id', 'name', 'email', 'is_participating', 'is_admin', 'is_authenticated', 'balance']
 
     def get_is_admin(self, obj):
         return obj.is_staff or obj.is_superuser
@@ -45,3 +44,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ResendEmailSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
+
+class UserListSerializer(serializers.ModelSerializer):
+    is_admin = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ['id', 'name', 'is_participating', 'is_admin', 'balance']
+
+    def get_is_admin(self, obj):
+        return obj.is_staff or obj.is_superuser

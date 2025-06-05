@@ -7,7 +7,7 @@ import { useAppContext } from '~/context/AppContext';
 import Api from '~/utils/api';
 import { apiUrls } from '~/constants/api';
 
-const Success: React.FC = () => {
+const LoginEmail: React.FC = () => {
   const { currentUser } = useAppContext();
   let navigate = useNavigate();
 
@@ -58,8 +58,8 @@ const Success: React.FC = () => {
 
   return (
     <>
-      <h1>Success!</h1>
-      <p>We created your account. Check your email for a login link.</p>
+      <h1>One more step!</h1>
+      <p>We created your account. Now check your email for a login link.</p>
       <p>Didn't get one? <button onClick={resendEmail} disabled={isResendDisabled}>Resend code</button></p>
       { isResendDisabled && (<p>Email resent. Try again in {resendTimer} seconds</p> )}
       <p>Use a different email address? <button onClick={recreateAccount}>Recreate account</button></p>
@@ -67,4 +67,4 @@ const Success: React.FC = () => {
   );
 }
 
-export default Success;
+export default LoginEmail;

@@ -17,7 +17,7 @@ export default [
   route("auth", "./components/Auth/login.tsx", [
     index("./components/Auth/verify.tsx"),
     route("login", "./components/Auth/form.tsx"),
-    route("success", "./components/Auth/success.tsx"),
+    route("login-email", "./components/Auth/LoginEmail.tsx"),
   ]),
 
 

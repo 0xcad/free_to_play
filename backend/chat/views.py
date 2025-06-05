@@ -3,10 +3,16 @@ from django.conf import settings
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from .models import ChatMessage
+from play.models import PlayInstance
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status, permissions
+from rest_framework import status, permissions, viewsets
+from rest_framework.exceptions import PermissionDenied
+from notifications.utils import send_notification
+
+from .serializers import ChatMessageSerializer
+from .pagination import ChatCursorPagination
 
 from datetime import datetime
 import random
@@ -14,6 +20,54 @@ import random
 # Instantiate a Redis client (adjust host/port as needed)
 redis_client = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=0)
 
+class ChatViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = ChatCursorPagination
+
+    def get_serializer_class(self, *args, **kwargs):
+        print(self.action) # TODO: use this, either list create update
+        return ChatMessageSerializer
+
+    def get_queryset(self):
+        return ChatMessage.objects.filter(
+            play_instance=PlayInstance.get_active(),
+            user__is_muted=False,
+        )
+
+    def create(self, request, *args, **kwargs):
+        play_instance=PlayInstance.get_active()
+
+        if not play_instance or play_instance.status != 'running':
+            return Response({"details": "No play instance running right now"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+
+        chat_message = serializer.instance
+        send_notification('chat.ChatMessage', 'created', serializer.data)
+
+        # Return the response with the created book data
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def update(self, request, *args, **kwargs):
+        raise PermissionDenied("Updating chat messages is not allowed.")
+
+    def destroy(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            raise PermissionDenied("Only admins can delete chat messages")
+
+        instance = self.get_object()
+        self.perform_destroy(instance)
+
+        send_notification('chat.ChatMessage', 'deleted', {'id': instance.id})
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+'''
 class JoinChatView(APIView):
     #API endpoint for joining the chat.
     #Expects a JSON payload with 'username'.
@@ -39,25 +93,6 @@ class JoinChatView(APIView):
         )
         return Response({"success": True, "username": username}, status=status.HTTP_200_OK)
 
-
-class LeaveChatView(APIView):
-    #API endpoint for leaving the chat.
-    #Clears the session and removes the user from the active users set.
-    def post(self, request, format=None):
-        username = request.session.get("chat_username")
-        if username:
-            redis_client.srem("active_users", username)
-            redis_client.srem("muted_users", username)
-            # Remove username from session.
-            request.session.pop("chat_username")
-
-            channel_layer = get_channel_layer()
-            async_to_sync(channel_layer.group_send)(
-                "chat_room",
-                {"type": "leave_user", "username": username}
-            )
-            return Response({"success": True}, status=status.HTTP_200_OK)
-        return Response({"error": "No user in session"}, status=status.HTTP_400_BAD_REQUEST)
 
 class ChatMessagesView(APIView):
     #API endpoint for retrieving chat messages (GET) and sending a new message (POST).
@@ -121,26 +156,6 @@ class UsersView(APIView):
                 }, status=status.HTTP_200_OK)
 
 
-class DeleteMessageView(APIView):
-    #API endpoint for moderators to delete messages.
-    #Only accessible to authenticated staff users.
-    permission_classes = [permissions.IsAuthenticated]
-
-    def post(self, request, message_id, format=None):
-        try:
-            message = ChatMessage.objects.get(id=message_id)
-        except ChatMessage.DoesNotExist:
-            return Response({"error": "Message not found"}, status=status.HTTP_404_NOT_FOUND)
-        message.delete()
-
-        # send websocket to delete message
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            "chat_room",
-            {"type": "delete_message", "message_id": message_id}
-        )
-        return Response({"success": True}, status=status.HTTP_200_OK)
-
 class KickUser(APIView):
     #API endpoint for moderators to kick users
     #Only accessible to authenticated staff users.
@@ -194,3 +209,4 @@ class MuteUser(APIView):
         )
 
         return Response({'success': True, 'muted': True}, status=status.HTTP_200_OK)
+'''

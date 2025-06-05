@@ -7,12 +7,23 @@ const routes = {
     link: '/auth/login',
   },
 
+  loginEmail: {
+    link: '/auth/login-email',
+  },
+
   verify: {
     link: '/auth',
   },
 
   stage: {
     link: '/stage',
+  },
+
+  program: {
+    link: '/program',
+  },
+  tutorial: {
+    link: '/tutorial',
   },
 };
 
