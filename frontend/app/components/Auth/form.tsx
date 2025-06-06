@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import useToggle from '~/hooks/useToggle';
 import { useFormStatus } from "react-dom";
-import { useNavigate } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 
 import Api from '~/utils/api';
 import { apiUrls } from '~/constants/api';
@@ -14,6 +14,7 @@ const EmailForm: React.FC<{
 }> = ({
   onSuccess
 }) => {
+  const location = useLocation();
   const { currentUser, setCurrentUser } = useAppContext();
 
   const [formData, setFormData] = useState({
@@ -22,6 +23,13 @@ const EmailForm: React.FC<{
     is_participating: (currentUser?.is_participating !== undefined) ? currentUser.is_participating : true,
   });
   const [emailError, setEmailError] = useState(false);
+  const [joinCode, setJoinCode] = useState<string>('');
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    if (!joinCode)
+      setJoinCode(params.get('join_code', ""));
+  }, []);
 
   const handleSubmit = async (values): Promise<void> => {
     // todo: make name a minimum of 5 chars?
@@ -35,6 +43,8 @@ const EmailForm: React.FC<{
       onSuccess(response);
     } catch (err) {
       console.log('this is the error we get', err);
+      if (response.email)
+        setEmailError(response.email);
     }
   };
 
@@ -84,6 +94,8 @@ const EmailForm: React.FC<{
         I want to participate in the show that calls for audience participation.
       </label>
       <br />
+
+      <input name="join_code" type="hidden" id="join_code" value={joinCode}/>
       <button type="submit" disabled={pending}>
         {pending ? "Submitting..." : "Submit"}
       </button>
@@ -108,7 +120,7 @@ const LoginForm: React.FC = () => {
 
   return (
     <>
-      <h1>Create account / log in</h1>
+      <h1>Join the game</h1>
       <button disabled={true}>Continue with Apple</button>
       <button disabled={true}>Continue with Google</button>
       <button onClick={toggleShowEmail}>Continue with Email</button>

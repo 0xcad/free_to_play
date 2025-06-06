@@ -1,7 +1,7 @@
 import { useState } from "react";
 
-import type { ChatMessage } from '~/models/ChatMessage';
-import type { WsState } from "~/context/useWsState";
+import type { ChatMessage } from '../models/ChatMessage';
+import type { WsState } from "./useWsState";
 
 export interface ChatState {
   messages: ChatMessage[];

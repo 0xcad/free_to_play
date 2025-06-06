@@ -3,6 +3,7 @@ import type {AxiosInstance} from "axios";
 import { useNavigate } from "react-router";
 import routes from '~/constants/routes';
 
+import { toast } from 'react-toastify';
 
 import Storage from '~/utils/storage';
 
@@ -13,57 +14,9 @@ const headers = {
   'Content-Type': 'application/json',
 };
 
-/*
-const createClient = (): AxiosInstance => {
-  const client = axios.create({ baseURL: apiBaseUrl, headers });
-  client.defaults.headers.common.Authorization = `Token ${Storage.get(
-      sessionKey,
-  )}`;
-
-  const token = Storage.get(SESSION_KEY);
-
-  return client;
-};
-
-const Api = createClient() as AxiosInstance;
-
-// if the user isn't authenticated, remove session key & re-auth
-const defaultErrorInterceptor = () => (
-  error: AxiosError,
-): Promise<AxiosError> => {
-  let navigate = useNavigate();
-  let location = useLocation();
-
-  console.log('hey', location.pathname);
-
-
-  console.error(`[response error] [${JSON.stringify(error)}]`);
-
-  let e = error.response;
-
-  if (e && e.status === 401) {
-    Storage.remove(AuthSession.sessionKey);
-    delete Api.defaults.headers.common.Authorization;
-
-    if (window.location.pathname !== routes.login.link) {
-      navigate(`${routes.login.link}?redirect_url=${window.location.pathname}`);
-    }
-  }
-
-  return Promise.reject(errors);
-};
-
-(Api as AxiosInstance).interceptors.response.use(
-  (res) => res.data,
-  defaultErrorInterceptor(),
-);
-
-
-//const Api = axios.create({ baseURL: apiBaseUrl, headers });*/
-
 
 // Create Axios client without reading window at import
-function createClient(): AxiosInstance {
+function createClient(useNotifs: boolean): AxiosInstance {
   const client = axios.create({
     baseURL: apiBaseUrl,
     headers: {
@@ -75,7 +28,6 @@ function createClient(): AxiosInstance {
   // Attach token dynamically on each request
   client.interceptors.request.use((config) => {
     const token = Storage.get(SESSION_KEY);
-    console.log('utils/api.ts: this is the token', token);
     if (token) {
       config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${token}`;
@@ -83,17 +35,32 @@ function createClient(): AxiosInstance {
     return config;
   });
 
-  // Handle 401 in response
   client.interceptors.response.use(
-    (response) => response.data,
+    (response ) => {
+      if (response?.status == 200 && response.data?.details && useNotifs) {
+        toast.success(response.data.details);
+      }
+      return response.data;
+    },
     (error: AxiosError) => {
+      // Handle 401 in response
       if (error.response?.status === 401) {
         Storage.remove(SESSION_KEY);
-        // TODO: probably need to add a notification here
+        if (useNotifs)
+          toast.error('invalid token; being logged out');
         // Only redirect in browser
-        if (typeof window !== 'undefined' && window.location.pathname !== routes.login.link) {
-          window.location.assign(routes.login.link);
+        if (typeof window !== 'undefined' && window.location.pathname !== routes.join.link) {
+          window.location.assign(routes.join.link);
         }
+      }
+
+
+      else if (error.response?.status === 400 && useNotifs) {
+        if (error.response.data?.details)
+          toast.error(error.response.data?.details);
+      }
+      else if (error.response?.status === 500 && useNotifs) {
+          toast.error('oopsy woopsy. a little fucky wucky occured :(');
       }
       return Promise.reject(error);
     }
@@ -102,5 +69,6 @@ function createClient(): AxiosInstance {
   return client;
 }
 
-const Api = createClient();
+export const Api = createClient(true);
+export const ApiSilent = createClient(false);
 export default Api;

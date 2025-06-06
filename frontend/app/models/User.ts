@@ -6,5 +6,7 @@ export interface User {
   is_admin: bool;
   is_authenticated: bool;
   balance?: number;
+  spent?: number;
   is_muted?: bool;
+  is_joined: bool;
 }

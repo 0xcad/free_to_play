@@ -233,7 +233,6 @@ DONE:
 
 misc TODO:
 * make protected routes
-* make backend login link a POST request instead of GET
 * make frontend logout link actually go to backend and invalidate access token? if that's needed
   * [this tutorial?](https://medium.com/django-rest/logout-django-rest-framework-eb1b53ac6d35)
 * onboarding; frontend cookie where on login, show them a tutorial screen and a "buy gems" screen
@@ -257,6 +256,8 @@ goal (DONE): whenever an admin user updates the game state, it should automatica
 DONE: to do this, the frontend app state needs to be expanded. it should have a class for PlayInstance, and another one for ChatMessages. I also probably need to have like, centralized websockets or something. because different django apps will also be sending their own websockets, I should really consider either combining these into one 'notifications' app, or just do something else...
 
 
+join codes: how do we make sure a logged in user is actually in the audience? what if they saw a previous version of the show, and still have an account? I suggest join codes for this. You're joined if you're a member of the audience of the current game (put that into the UserSerializer, `is_joined`). When you make an account, you can scan a QR code that puts a url parameter. If it matches the join code of a game, we put you into that game. Otherwise, you're just not joined. If you're not joined on any of the app screens, we just render a join form for you.
+
 
 DONE:
 * model view for chat
@@ -271,12 +272,7 @@ DONE:
 * centralized websocket in the frontend
 * get game state (waiting/running), websocket for updating that
 * simple waiting screen
-
-TODO:
-* chat messages should be a dictionary of id -> message, for ease of updating
-* chat show prev messages button with cursor pagination
-* send/receive chat messages + websockets
-* notifications with toastify
+* backend should have a view that just generates a QR code to join current game
 
 
 chat goal: once the user knows the game is running, their frontend should make an initial request for messages. only load 20 messages at a time. if a user wants to load more messages, eventually I'll do infinite scroll, but for now they can just click a 'prev' button. this then uses the cursor navigation to get more messages.
@@ -285,3 +281,23 @@ chat goal: once the user knows the game is running, their frontend should make a
 MISC TODO:
 * join/leave user websockets on login?
 * keep track of which users have played before in PlayInstance ManyToMany + put that in UserSerializer...
+
+
+Admin panel:
+* The admin user should have a desktop interface that shows chat (and mute/kick controls), everyone in the audience, how much total has been spent/gems in circulation, inventory, game state. They should be able to change status of PlayInstance.
+* They should be able to get a QR code for the current active game
+
+## 2025-06-06
+* fix frontend join code + username bug
+* join code frontend
+* protected routes, kinda, in that game forces user to be joined :shrug:
+* notifications with toastify
+* game waiting indicator -- until the game starts, on all pages in the game layout, show a waiting spinner. when the game starts, navigate to the game screen and send a notification
+
+next TODO:
+* add backend permission for is joined + is authenticated for play views, chat views
+* consider -- play model view set?
+
+* chat messages should be a dictionary of id -> message, for ease of updating
+* chat show prev messages button with cursor pagination
+* send/receive chat messages + websockets

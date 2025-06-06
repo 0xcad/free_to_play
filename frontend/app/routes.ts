@@ -8,15 +8,17 @@ import {
 
 import routes from './constants/routes';
 
+//import { RequireAuth, RequireJoin } from './layouts/guard';
+
 
 export default [
   index("./routes/home.tsx"),
 
   // auth
-  //route(routes.login.link, "./components/Auth/login.tsx", [
   route("auth", "./components/Auth/login.tsx", [
     index("./components/Auth/verify.tsx"),
-    route("login", "./components/Auth/form.tsx"),
+    route("join", "./components/Auth/join.tsx"),
+    //route("login", "./components/Auth/form.tsx"),
     route("login-email", "./components/Auth/LoginEmail.tsx"),
   ]),
 

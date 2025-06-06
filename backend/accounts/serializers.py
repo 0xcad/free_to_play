@@ -31,16 +31,22 @@ class CreateUserSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     is_admin = serializers.SerializerMethodField()
     is_authenticated = serializers.SerializerMethodField()
+    is_joined = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ['id', 'name', 'email', 'is_participating', 'is_admin', 'is_authenticated', 'balance']
+        fields = ['id', 'name', 'email', 'is_participating', 'is_admin', 'is_authenticated',
+                  'balance', 'spent',
+                  'is_joined']
 
     def get_is_admin(self, obj):
         return obj.is_staff or obj.is_superuser
 
     def get_is_authenticated(self, obj):
         return obj.is_active
+
+    def get_is_joined(self, obj):
+        return obj.is_joined
 
 class ResendEmailSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()

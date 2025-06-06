@@ -8,3 +8,15 @@ export interface PlayInstance {
   status: string;
   current_game_start: string | undefined;
 }
+
+export const defaultPlayInstance = (): PlayInstance => {
+  return {
+    name: '',
+    is_debug: false,
+    current_user: undefined,
+    created: '',
+    status: 'waiting',
+    current_game_start: undefined,
+  };
+};
+

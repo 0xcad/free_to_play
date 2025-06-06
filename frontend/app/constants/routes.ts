@@ -1,23 +1,20 @@
 const routes = {
+  /* Unprotected routes-------------------------- */
   home: {
     link: '/',
   },
 
-  login: {
-    link: '/auth/login',
-  },
+  join: {
+    link: '/auth/join',
+  }, // if you're joined, redirect to stage
 
   loginEmail: {
     link: '/auth/login-email',
-  },
+  }, // if you have no user, redirect to join
 
   verify: {
     link: '/auth',
-  },
-
-  stage: {
-    link: '/stage',
-  },
+  }, // if you're joined, redirect to stage
 
   program: {
     link: '/program',
@@ -25,6 +22,13 @@ const routes = {
   tutorial: {
     link: '/tutorial',
   },
+  //^end group
+
+  /* Users here must be authenticated and joined */
+  stage: {
+    link: '/stage',
+  },
+  //^end group
 };
 
 export default routes;

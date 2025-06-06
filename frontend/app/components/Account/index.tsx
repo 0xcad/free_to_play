@@ -21,7 +21,7 @@ const Account: React.FC = () => {
     // TODO: make a backend request to invalidate current key. but anyways...
     Storage.remove(SESSION_KEY);
     setToken('');
-    navigate(`${routes.login.link}`);
+    navigate(`${routes.join.link}`);
   };
 
   if (!currentUser)

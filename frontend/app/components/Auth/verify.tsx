@@ -20,7 +20,7 @@ const Verify: React.FC = () => {
 
     if (!token || !uid) {
       console.log("invalid parameters");
-      navigate(routes.login.link);
+      navigate(routes.join.link);
       return;
     }
 
@@ -31,8 +31,11 @@ const Verify: React.FC = () => {
       setToken(response.access);
       response.user.is_authenticated = true;
       setCurrentUser(response.user as User);
-      console.log("successfully verified user");
-      navigate(routes.home.link);
+
+      if (response.user.is_joined)
+        navigate(routes.stage.link);
+      else
+        navigate(routes.join.link);
 
     } catch (err) {
       console.log('this is the error we get', err);

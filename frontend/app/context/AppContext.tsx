@@ -1,22 +1,24 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
-import Storage from '~/utils/storage';
-import { SESSION_KEY } from '~/constants/api';
+import Storage from '../utils/storage';
+import { SESSION_KEY } from '../constants/api';
 import { useNavigate } from "react-router";
-import routes from '~/constants/routes';
+import routes from '../constants/routes';
 
-import Api from '~/utils/api';
-import { apiUrls } from '~/constants/api';
+import Api from '../utils/api';
+import { apiUrls } from '../constants/api';
 
 import type { User } from '~/models/User';
-import { useWsState } from "~/context/useWsState";
-import { useChatState } from "~/context/useChatState";
-import { usePlayState } from "~/context/usePlayState";
-import { useStoreState } from "~/context/useStoreState";
+import { useWsState } from "./useWsState";
+import { useChatState } from "./useChatState";
+import { usePlayState } from "./usePlayState";
+import { useStoreState } from "./useStoreState";
 
-import type { WsState } from "~/context/useWsState";
-import type { ChatState } from "~/context/useChatState";
-import type { PlayState } from "~/context/usePlayState";
-import type { StoreState } from "~/context/useStoreState";
+import type { WsState } from "./useWsState";
+import type { ChatState } from "./useChatState";
+import type { PlayState } from "./usePlayState";
+import type { StoreState } from "./useStoreState";
+
+import { toast } from 'react-toastify';
 
 type WsHandler = (payload: any) => void;
 
@@ -27,7 +29,7 @@ interface AppState {
   setCurrentUser: (user: User | undefined) => void;
 
   ws: WsState;
-  play: PlayState | undefined;
+  play: PlayState;
   chat: ChatState | undefined;
   store: StoreState | undefined;
 
@@ -65,7 +67,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined);
 
   const ws = useWsState();
-  const play = usePlayState(ws);
+  const play = usePlayState(ws, currentUser);
   const chat = useChatState(ws);
   const store = useStoreState(ws);
 
@@ -90,10 +92,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     console.log('the current token is', token);
 
     if (!token) {
-      if (!currentUser && window.location.pathname != routes.verify.link) {
+      if (!currentUser && !(window.location.pathname === routes.verify.link || window.location.pathname == routes.join.link)) {
         // TODO: skip this, and just get protected routes
-        console.log('navigating to login page...');
-        navigate(routes.login.link);
+        toast.error('you need to log in again. no token, and no user');
+        navigate(routes.join.link);
       }
       return;
     }
@@ -114,14 +116,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           console.log('login expired');
           Storage.remove(SESSION_KEY);
           setToken('');
-          navigate(routes.login.link);
+          navigate(routes.join.link);
         }
       }
       catch (err) {
         console.log('this is the token error we get', err);
         Storage.remove(SESSION_KEY);
         setToken('');
-        navigate(routes.login.link);
+        navigate(routes.join.link);
       }
     }
 

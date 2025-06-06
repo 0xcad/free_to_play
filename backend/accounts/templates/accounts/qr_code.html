@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FTP QR Code</title>
+</head>
+<body>
+  <h1>Join QR Code</h1>
+  <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code">
+  <p><a href="{{ login_link|safe }}" target="_blank">{{ login_link|safe }}</a></p>
+</body>
+</html>

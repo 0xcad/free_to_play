@@ -18,8 +18,11 @@ export default function Home() {
   const location = useLocation();
   const { currentUser } = useAppContext();
 
-  if (currentUser?.is_authenticated) {
+  if (currentUser?.is_authenticated && currentUser.is_joined) {
     return <Navigate to={routes.stage.link} state={{ from: location }} replace />;
+  }
+  else if (currentUser?.is_authenticated) {
+    return <Navigate to={routes.join.link} replace />;
   }
 
   return (

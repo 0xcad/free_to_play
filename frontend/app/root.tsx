@@ -12,9 +12,11 @@ import type { Route } from "./+types/root";
 import "./app.css";
 
 import { AppProvider } from './context/AppContext';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
-export const links: Route.LinksFunction = () => [
+/*export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
     rel: "preconnect",
@@ -25,7 +27,7 @@ export const links: Route.LinksFunction = () => [
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
-];
+];*/
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -53,6 +55,11 @@ export default function App() {
     <AppProvider>
       {isNavigating && <p>navigating...</p>}
       <Outlet />
+      <ToastContainer
+        hideProgressBar={true}
+        autoClose={3000}
+        pauseOnHover
+      />
     </AppProvider>
   );
 }

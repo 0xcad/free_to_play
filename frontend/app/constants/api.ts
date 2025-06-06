@@ -10,6 +10,7 @@ export const apiUrls = {
     login: (uid: string, token: string): string => `accounts/login/${uid}/${token}`,
     resend: 'accounts/resend-email',
     create: 'accounts/create',
+    join: `accounts/join`,
   },
 
   chat: {

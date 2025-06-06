@@ -13,6 +13,12 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 
+# FTP Constants ----------------------------------------------
+
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:5173')
+
+# ------------------------------------------------------------
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

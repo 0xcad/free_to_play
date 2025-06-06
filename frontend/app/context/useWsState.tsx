@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 
-import { wsBaseUrl } from '~/constants/api';
+import { wsBaseUrl } from '../constants/api';
 
 /* Websockets
  * Websockets all get sent with `app`, `action`, and `data`

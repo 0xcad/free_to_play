@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import type { WsState } from "~/context/useWsState";
+import type { WsState } from "../useWsState";
 
 export interface StoreState {
   items: string[];

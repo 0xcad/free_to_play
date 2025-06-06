@@ -10,6 +10,7 @@ from .serializers import (
 )
 from rest_framework import permissions
 from .models import User
+from play.models import PlayInstance
 
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -17,13 +18,16 @@ from django.contrib.auth import logout
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
+from django.shortcuts import render
+
+from django.conf import settings
 
 def send_login_email(user):
     # TODO: pass an origin variable from the user
     token = default_token_generator.make_token(user)
     uid = urlsafe_base64_encode(force_bytes(user.pk))
 
-    login_link = f'http://localhost:5173/auth?uid={uid}&token={token}'
+    login_link = f'{settings.FRONTEND_URL}/auth?uid={uid}&token={token}'
     text_content = render_to_string(
         "emails/loginEmail.txt",
         context={"user": user, "login_link": login_link},
@@ -46,23 +50,6 @@ def send_login_email(user):
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
-
-'''
-TODO: Log a user in
-TODO: oauth
-TODO: email
-class LoginView(APIView):
-    def post(self, request):
-        serializer = LoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data
-        refresh = RefreshToken.for_user(user)
-        return Response({
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-            'username': user.username,
-        }, status=status.HTTP_200_OK)
-'''
 
 class UserView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -142,31 +129,83 @@ Either email them a login code, or later, do oauth.
 '''
 class CreateUserView(APIView):
     def post(self, request):
-        serializer = CreateUserSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        # get user if they exist, otherwise save
-        data = serializer.validated_data
+        # if the user exists, update them if not active
         try:
-            user = User.objects.get(email=data['email'])
-
+            email = request.data['email']
+            user = User.objects.get(email=email)
+            serializer = CreateUserSerializer(data=request.data, instance=user, partial=True)
+            serializer.is_valid(raise_exception=True)
             if not user.is_active:
-                user.name = data['name']
-                user.is_participating = data['is_participating']
-                user.save()
-
+                user = serializer.save()
+        # otherwise create a new user
         except User.DoesNotExist:
+            serializer = CreateUserSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
             user = serializer.save()
+        except:
+            return Response({"details": "Invalid form"}, status=HTTP_400_BAD_REQUEST)
+
+        # add the user to the current game, if they have a join code
+        join_code = request.data.get('join_code')
+        play_instance = PlayInstance.get_active()
+        if join_code and play_instance and play_instance.join_code == join_code.strip():
+            play_instance.audience.add(user)
 
         send_login_email(user)
 
         #refresh = RefreshToken.for_user(user)
         user_data = UserSerializer(user).data
+        user_data['is_authenticated'] = False
+        print(user_data)
 
         return Response({
             'details': 'Login link sent!',
             'user': user_data,
         }, status=status.HTTP_200_OK)
 
+class JoinView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
+    def post(self, request):
+        join_code = request.data.get('join_code')
+        if request.user.is_joined:
+            return Response({"details": "Already in active play"}, status=status.HTTP_200_OK)
+
+        play_instance = PlayInstance.get_active()
+        if join_code and play_instance and play_instance.join_code == join_code.strip():
+            play_instance.audience.add(request.user)
+            return Response({"details": "Successfully joined the current play!"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"details": "Invalid code"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+from urllib.parse import quote
+import qrcode
+from io import BytesIO
+import base64
+
+def qr_code(request):
+    play_instance = PlayInstance.get_active()
+    if not play_instance.join_code:
+        play_instance.join_code = PlayInstance.generate_join_code()
+        play_instance.save()
+
+    encoded_code = quote(play_instance.join_code)
+    login_link = f'{settings.FRONTEND_URL}/auth/login?join_code={encoded_code}'
+
+    # make the qr code
+    qr = qrcode.QRCode(version=1, box_size=10, border=1)
+    qr.add_data(login_link)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill='black', back_color='white')
+    buffered = BytesIO()
+    img.save(buffered, format="PNG")
+    img_str = base64.b64encode(buffered.getvalue()).decode()
+
+    return render(request, 'accounts/qr_code.html', {
+        'qr_code': img_str,
+        'login_link': login_link,
+    })
 

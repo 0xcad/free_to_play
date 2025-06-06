@@ -17,7 +17,7 @@ const LoginEmail: React.FC = () => {
   // if there is no current user, redirect to login page
   useEffect(() => {
     if (!currentUser) {
-      navigate(routes.login.link);
+      navigate(routes.join.link);
     }
   }, []);
 
