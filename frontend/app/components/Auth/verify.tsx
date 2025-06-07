@@ -11,7 +11,7 @@ import routes from '~/constants/routes';
 const Verify: React.FC = () => {
   let navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { setToken, setCurrentUser } = useAppContext();
+  const { setToken, setCurrentUser, play } = useAppContext();
   const hasVerified = useRef(false);
 
   const verifyParams = async (): Promise<void> => {
@@ -31,6 +31,7 @@ const Verify: React.FC = () => {
       setToken(response.access);
       response.user.is_authenticated = true;
       setCurrentUser(response.user as User);
+      play.setPlayInstance(response.play_instance);
 
       if (response.user.is_joined)
         navigate(routes.stage.link);

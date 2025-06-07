@@ -31,6 +31,7 @@ export default function GameLayout() {
       { play?.playInstance?.status === 'waiting' && (
         <div>Waiting for the play to start <Spinner /></div>
       )}
+      <div>Balance: {currentUser?.balance} gems</div>
       <Outlet />
     </>
   );

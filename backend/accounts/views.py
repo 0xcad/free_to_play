@@ -8,6 +8,9 @@ from .serializers import (
     UserSerializer,
     ResendEmailSerializer,
 )
+from play.serializers import PlayInstanceSerializer
+
+from .permissions import AllowInactiveUsers, UserJoinedAudience
 from rest_framework import permissions
 from .models import User
 from play.models import PlayInstance
@@ -63,15 +66,6 @@ class UserView(APIView):
             'user': UserSerializer(user).data,
         });
 
-class AllowInactiveUsers(permissions.BasePermission):
-    """
-    Custom permission to allow inactive users to access the API.
-    """
-
-    def has_permission(self, request, view):
-        # Allow access to all users, including inactive ones
-        return True
-
 class LoginView(APIView):
     permission_classes = [AllowInactiveUsers]
 
@@ -86,10 +80,16 @@ class LoginView(APIView):
                     user.save()
                 refresh = RefreshToken.for_user(user)
 
+                play_instance_data = {}
+                if user.is_joined:
+                    play_instance = PlayInstance.get_active()
+                    play_instance_data = PlayInstanceSerializer(play_instance).data
+
                 return Response({
                     'refresh': str(refresh),
                     'access': str(refresh.access_token),
                     'user': UserSerializer(user).data,
+                    'play_instance': play_instance_data
                 });
             return Response({"details": "Invalid token"}, status=status.HTTP_401_UNAUTHORIZED)
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):

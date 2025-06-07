@@ -5,10 +5,12 @@ import type { WsState } from "./useWsState";
 
 export interface ChatState {
   messages: ChatMessage[];
-  setMessages: (msgs: ChatMessage[]) => void;
+  messages: Record<string, ChatMessage>;
+  setMessages: (msgs: Record<string, ChatMessage>) => void;
 }
 
 export function useChatState(ws: WsState): ChatState {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<Record<string, ChatMessage>>({});
+
   return { messages, setMessages };
 }

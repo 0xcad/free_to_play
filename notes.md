@@ -288,16 +288,49 @@ Admin panel:
 * They should be able to get a QR code for the current active game
 
 ## 2025-06-06
+DONE:
 * fix frontend join code + username bug
 * join code frontend
 * protected routes, kinda, in that game forces user to be joined :shrug:
 * notifications with toastify
 * game waiting indicator -- until the game starts, on all pages in the game layout, show a waiting spinner. when the game starts, navigate to the game screen and send a notification
 
-next TODO:
-* add backend permission for is joined + is authenticated for play views, chat views
-* consider -- play model view set?
+## 2025-06-07
 
+DONE:
+* add backend permission for is joined + is authenticated for play views, chat views
+* made backend also send play status on login, if joined
 * chat messages should be a dictionary of id -> message, for ease of updating
 * chat show prev messages button with cursor pagination
 * send/receive chat messages + websockets
+
+misc TODO:
+* consider -- play model view set?
+* consider -- get play status on join?
+
+stage todo:
+* add youtube video that's currently playing
+* get the current user who's playing
+* get the time current user has been playing for...
+
+stage todo later:
+* make it look pretty!
+* add colors for who is who
+* add like, an image/reaction keyboard if you pay for it
+* pay for bold styling
+
+admin todo:
+* chat moderation
+* see a list of users in the audience
+* select a user that is currently logged in and hasn't been chosen, to play
+  * consider: each play needs to remember a couple of things per user. if they've played the game before, if they're muted, if they're kicked. should this be another model object?
+
+accounts:
+* update name
+* update participation
+* buy gems
+
+store todo:
+* make model for items to purchase
+* make model for purchased items in play
+* buy gems

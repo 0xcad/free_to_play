@@ -9,9 +9,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 from rest_framework.exceptions import PermissionDenied
+from accounts.permissions import UserJoinedAudience
 from notifications.utils import send_notification
 
-from .serializers import ChatMessageSerializer
+from .serializers import (
+        ChatMessageSerializer,
+        CreateChatMessageSerializer
+)
 from .pagination import ChatCursorPagination
 
 from datetime import datetime
@@ -21,11 +25,12 @@ import random
 redis_client = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, db=0)
 
 class ChatViewSet(viewsets.ModelViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, UserJoinedAudience]
     pagination_class = ChatCursorPagination
 
     def get_serializer_class(self, *args, **kwargs):
-        print(self.action) # TODO: use this, either list create update
+        if self.action == 'create':
+            return CreateChatMessageSerializer
         return ChatMessageSerializer
 
     def get_queryset(self):
@@ -34,22 +39,27 @@ class ChatViewSet(viewsets.ModelViewSet):
             user__is_muted=False,
         )
 
+    def perform_create(self, serializer):
+        # set the current play instance and user
+        play_instance=PlayInstance.get_active()
+        serializer.save(user=self.request.user, play_instance=play_instance)
+
     def create(self, request, *args, **kwargs):
         play_instance=PlayInstance.get_active()
 
         if not play_instance or play_instance.status != 'running':
             return Response({"details": "No play instance running right now"}, status=status.HTTP_400_BAD_REQUEST)
 
-
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
 
-        chat_message = serializer.instance
-        send_notification('chat.ChatMessage', 'created', serializer.data)
+        full_serializer = ChatMessageSerializer(serializer.instance)
 
-        # Return the response with the created book data
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        send_notification('chat.ChatMessage', 'created', full_serializer.data)
+
+        # Return the response with the created data
+        return Response(full_serializer.data, status=status.HTTP_201_CREATED)
 
     def update(self, request, *args, **kwargs):
         raise PermissionDenied("Updating chat messages is not allowed.")

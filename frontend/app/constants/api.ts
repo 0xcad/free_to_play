@@ -15,6 +15,7 @@ export const apiUrls = {
 
   chat: {
     list: 'chat/',
+    create: 'chat/',
     detail: (id: number) : string => `chat/${id}`,
   },
 

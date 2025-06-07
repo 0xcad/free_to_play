@@ -19,11 +19,14 @@ class PlayInstanceView(APIView):
         user = request.user
         refresh = RefreshToken.for_user(user)
 
-        play_instance = PlayInstance.get_active()
+        play_instance_data = {}
+        if user.is_joined:
+            play_instance = PlayInstance.get_active()
+            play_instance_data = PlayInstanceSerializer(play_instance).data
 
         return Response({
             'refresh': str(refresh),
             'access': str(refresh.access_token),
             'user': UserSerializer(user).data,
-            'play_instance': PlayInstanceSerializer(play_instance).data
+            'play_instance': play_instance_data
         });

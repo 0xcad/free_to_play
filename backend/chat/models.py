@@ -9,5 +9,5 @@ class ChatMessage(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user_name}: {self.content[:50]}"
+        return f"{self.user.name if self.user else 'no user'}: {self.content[:50]}"
 

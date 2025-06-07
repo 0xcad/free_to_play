@@ -30,7 +30,7 @@ interface AppState {
 
   ws: WsState;
   play: PlayState;
-  chat: ChatState | undefined;
+  chat: ChatState;
   store: StoreState | undefined;
 
   /*logout: () => void;

@@ -2,6 +2,7 @@ import type { Route } from "./+types/stage";
 import { useAppContext } from '~/context/AppContext';
 
 import Waiting from './waiting';
+import Chat from './Chat';
 
 const Stage: React.FC = () => {
   const { currentUser, play, chat } = useAppContext();
@@ -11,7 +12,14 @@ const Stage: React.FC = () => {
   }
 
   return (
-    <p>stage</p>
+    <>
+      <p>stage</p>
+      {/*<Chat
+        messages={chat.messages}
+        setMessages={chat.setMessages}
+      />*/}
+     <Chat />
+    </>
   );
 };
 
