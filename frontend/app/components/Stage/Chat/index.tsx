@@ -13,6 +13,12 @@ interface PaginatedResponse {
   prev: string | null;
 }
 
+
+interface ChatProps {
+  kickUser?: (user_id: string) => void;
+  muteUser?: (user_id: string) => void;
+  unmuteUser?: (user_id: string) => void;
+}
 /*interface ChatProps {
   messages: Record<string, ChatMessage>;
   setMessages: React.Dispatch<React.SetStateAction<Record<string, ChatMessage>>>;
@@ -20,30 +26,12 @@ interface PaginatedResponse {
 
 const Chat: React.FC<ChatProps> = ({ messages, setMessages }) => {
   const { ws } = useAppContext();*/
-const Chat: React.FC = () => {
+const Chat: React.FC<ChatProps> = ({kickUser, muteUser, unmuteUser}) => {
   const { ws, chat, currentUser } = useAppContext();
 
   const [prevLink, setPrevLink] = useState<string | null>(null); // prev link with cursor pagination
   const [inputText, setInputText] = useState('');
   const containerRef = useRef<HTMLUListElement>(null);
-
-  // function to create chat messages
-  const createChatMessage = (msg: ChatMessage) => {
-    if (!msg) return;
-    chat.setMessages((prev) => {
-      if (prev[msg.id]) return prev;
-      return { ...prev, [msg.id]: msg };
-    });
-  };
-
-  // if a websocket comes in with a new chat message, post it
-  useEffect(() => {
-    ws.registerHandler("chat.ChatMessage.created", createChatMessage);
-
-    return () => {
-      ws.unregisterHandler("chat.ChatMessage.created", createChatMessage);
-    };
-  }, [ws.registerHandler, ws.unregisterHandler]);
 
   //get messages on page load
   useEffect(() => {
@@ -70,14 +58,6 @@ const Chat: React.FC = () => {
     }
   }, [chat.messages]);
 
-  const deleteMessage = (messageId : string) => {
-    chat.setMessages((prev) => {
-      const updated = { ...prev };
-      delete updated[messageId];
-      return updated;
-    });
-  }
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!inputText.trim()) return;
@@ -89,16 +69,16 @@ const Chat: React.FC = () => {
       user: currentUser,
       created: new Date().toISOString(),
     } as ChatMessage;
-    createChatMessage(optimisticMsg);
+    chat.addChatMessage(optimisticMsg);
     setInputText('');
 
     try {
       var newMsg = await Api.post(apiUrls.chat.create, {content: inputText});
-      createChatMessage(newMsg);
+      chat.addChatMessage(newMsg);
       // remove optimistic placeholder
-      deleteMessage(tempId);
+      chat.removeChatMessage(tempId);
     } catch (err) {
-      deleteMessage(tempId);
+      chat.removeChatMessage(tempId);
       console.log('this is the error we get', err);
       toast.error('Failed to send message.');
     }
@@ -109,7 +89,7 @@ const Chat: React.FC = () => {
     if (!prevLink) return;
     try {
       const data = await Api.get<PaginatedResponse>(prevLink);
-      data.results.forEach((m) => createChatMessage(m));
+      data.results.forEach((m) => addChatMessage(m));
       setPrevLink(data.next);
     } catch (error) {
       toast.error('Failed to load more messages.');
@@ -130,7 +110,11 @@ const Chat: React.FC = () => {
         {Object.values(chat.messages)
           .sort((a, b) => new Date(a.created).getTime() - new Date(b.created).getTime())
           .map((msg) => (
-            <Message key={msg.id} message={msg} currentUser={currentUser} />
+            <li key={msg.id}>
+              <Message key={msg.id} message={msg} currentUser={currentUser} />
+              {kickUser && (<button onClick={() => {kickUser(msg.user.id)}}>kick user</button>)}
+              {muteUser && !msg.user?.is_muted && (<button onClick={() => {muteUser(msg.user.id)}}>mute user</button>)}
+            </li>
           ))}
       </ul>
       <form onSubmit={handleSubmit}>

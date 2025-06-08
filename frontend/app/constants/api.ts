@@ -16,6 +16,8 @@ export const apiUrls = {
   chat: {
     list: 'chat/',
     create: 'chat/',
+    kick: 'chat/kick/',
+    mute: 'chat/mute/',
     detail: (id: number) : string => `chat/${id}`,
   },
 

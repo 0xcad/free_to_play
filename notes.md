@@ -297,6 +297,28 @@ DONE:
 
 ## 2025-06-07
 
+admin panel thoughts: the game admin should have a view to do the following things, optimized for their desktop:
+* view the chat, and administrate that (kick, mute, delete, etc)
+* view all audience members currently in the game
+  * need websockets on login view, probably?
+* select the new player to go next
+  * re-roll + confirm ability
+* start / pause / finish the game
+  * confirm button on game finish
+* get the join QR code thing
+* ability to view/change/update the join code
+* users should have like, a "call flight attendant" button, that just sends a websocket to the admin that they need help
+
+what do we need to do this:
+* a list of all audience members in the game; so joining the game should *send* a websocket with the current user's info, and we need a list view for all users in the audience
+  * websockets are hard. just put a refresh button in this shit.
+* kick view -- if you get kicked, we just remove you from the audience, and send your device a 'kicked' websocket
+* mute view -- PUT/DELETE. if you get muted, need to update user info to admin. set `is_muted` flag on user to true. subsequent users
+* delete messages -- just a function that hooks into the existing backend fn.
+^ you can probably define all of these *in* that admin function, just put them there
+
+* if a user needs help, send a websocket to the backend. admin panel has a handler where we like, highlight their name or something
+
 DONE:
 * add backend permission for is joined + is authenticated for play views, chat views
 * made backend also send play status on login, if joined
@@ -318,6 +340,7 @@ stage todo later:
 * add colors for who is who
 * add like, an image/reaction keyboard if you pay for it
 * pay for bold styling
+* so currently I send out the entire user on every chat message, both in websockets and in api return. this leads to a lot of potential user duplication. i could send out just the userID, and make the frontend do a lookup of users it has in its system??
 
 admin todo:
 * chat moderation

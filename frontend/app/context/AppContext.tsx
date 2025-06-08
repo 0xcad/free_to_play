@@ -12,11 +12,13 @@ import { useWsState } from "./useWsState";
 import { useChatState } from "./useChatState";
 import { usePlayState } from "./usePlayState";
 import { useStoreState } from "./useStoreState";
+import { useUsersState } from "./useUsersState";
 
 import type { WsState } from "./useWsState";
 import type { ChatState } from "./useChatState";
 import type { PlayState } from "./usePlayState";
 import type { StoreState } from "./useStoreState";
+import type { UsersState } from "./useStoreState";
 
 import { toast } from 'react-toastify';
 
@@ -31,7 +33,8 @@ interface AppState {
   ws: WsState;
   play: PlayState;
   chat: ChatState;
-  store: StoreState | undefined;
+  store: StoreState;
+  users: UsersState;
 
   /*logout: () => void;
 
@@ -70,6 +73,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const play = usePlayState(ws, currentUser);
   const chat = useChatState(ws);
   const store = useStoreState(ws);
+  const users = useUsersState(ws);
 
 
   // get the current user & refresh their access token
@@ -143,6 +147,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     play,
     chat,
     store,
+    users,
   };
 
   return (

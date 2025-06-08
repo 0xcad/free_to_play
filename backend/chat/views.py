@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.decorators import action
 from accounts.permissions import UserJoinedAudience
 from notifications.utils import send_notification
 
@@ -45,6 +46,9 @@ class ChatViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user, play_instance=play_instance)
 
     def create(self, request, *args, **kwargs):
+        if request.user.is_muted:
+            return Response({'details': "You've been muted :("}, status=status.HTTP_403_FORBIDDEN)
+
         play_instance=PlayInstance.get_active()
 
         if not play_instance or play_instance.status != 'running':
@@ -74,7 +78,9 @@ class ChatViewSet(viewsets.ModelViewSet):
         send_notification('chat.ChatMessage', 'deleted', {'id': instance.id})
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
+    @action(detail=True, methods=["POST"])
+    def kick(self, request, *args, **kwargs):
+        print(request.data)
 
 
 '''
