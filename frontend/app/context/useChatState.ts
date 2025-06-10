@@ -20,13 +20,17 @@ export function useChatState(ws: WsState): ChatState {
       if (prev[msg.id]) return prev;
       return { ...prev, [msg.id]: msg };
     });
-    console.log(messages);
   };
 
-  const removeChatMessage = (messageId : string) => {
+  const removeChatMessage = (data) => {
+    let message_id: string;
+    if (typeof data === "string")
+      message_id = data;
+    else
+      message_id = data.message_id;
     setMessages((prev) => {
       const updated = { ...prev };
-      delete updated[messageId];
+      delete updated[message_id];
       return updated;
     });
   }

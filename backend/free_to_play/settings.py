@@ -42,10 +42,10 @@ CORS_ALLOWED_ORIGINS = [
 ]
 CORS_ALLOW_CREDENTIALS = True
 
-SESSION_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_SECURE = False    # TODO: set to True when you switch to HTTPS
-CSRF_COOKIE_SAMESITE    = 'None'
-CSRF_COOKIE_SECURE      = False  # TODO: likewise
+#SESSION_COOKIE_SAMESITE = 'None'
+#SESSION_COOKIE_SECURE = False    # TODO: set to True when you switch to HTTPS
+#CSRF_COOKIE_SAMESITE    = 'None'
+#CSRF_COOKIE_SECURE      = False  # TODO: likewise
 
 
 # Application definition

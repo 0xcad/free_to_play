@@ -19,8 +19,9 @@ const JoinForm: React.FC = () => {
   });
 
   const handleSubmit = async (values): Promise<void> => {
+    console.log('why is this running?');
     try {
-      await Api.post(apiUrls.auth.join, values);
+      await Api.post(apiUrls.play.join, values);
       console.log('successfully joined the game');
       setCurrentUser((prevUser) => ({
         ...prevUser,
@@ -66,10 +67,15 @@ const Join: React.FC = () => {
   let navigate = useNavigate();
   const { currentUser } = useAppContext();
 
-  if (currentUser?.is_authenticated && currentUser.is_joined) {
-    navigate(routes.stage.link);
-  }
-  else if (currentUser?.is_authenticated)
+  useEffect(() => {
+    if (currentUser?.is_authenticated) {
+      if (currentUser.is_joined) {
+        navigate(routes.stage.link);
+      }
+    }
+  }, [currentUser, navigate]);
+
+  if (currentUser?.is_authenticated)
     return <JoinForm />;
   else
     return <LoginForm />;

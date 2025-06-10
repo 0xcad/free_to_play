@@ -3,6 +3,7 @@ from django.conf import settings
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 from .models import ChatMessage
+from accounts.models import User
 from play.models import PlayInstance
 
 from rest_framework.views import APIView
@@ -72,15 +73,48 @@ class ChatViewSet(viewsets.ModelViewSet):
         if not request.user.is_staff:
             raise PermissionDenied("Only admins can delete chat messages")
 
+
         instance = self.get_object()
+        message_id = instance.id
         self.perform_destroy(instance)
 
-        send_notification('chat.ChatMessage', 'deleted', {'id': instance.id})
+        send_notification('chat.ChatMessage', 'deleted', {'message_id': message_id})
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @action(detail=True, methods=["POST"])
+    @action(detail=False, methods=["POST"])
     def kick(self, request, *args, **kwargs):
-        print(request.data)
+        if not request.user.is_staff:
+            raise PermissionDenied("Only admins can kick users")
+        user_id = request.data.get("user_id")
+        user = User.objects.filter(id=user_id).first()
+        if not user:
+            return Response({"details": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        elif user.is_staff:
+            return Response({"details": "Cannot kick staff users"}, status=status.HTTP_403_FORBIDDEN)
+        play_instance = PlayInstance.get_active()
+        play_instance.audience.remove(user)
+        send_notification('accounts.User', 'kicked', {'user_id': user_id})
+        return Response({"details": 'kicked user from the play'}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["POST"])
+    def mute(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            raise PermissionDenied("Only admins can mute/unmute users")
+        user_id = request.data.get("user_id")
+        user = User.objects.filter(id=user_id).first()
+        muted = request.data.get("muted", False)
+        if not user:
+            return Response({"details": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        elif user.is_staff:
+            return Response({"details": "Cannot mute/unmute staff users"}, status=status.HTTP_403_FORBIDDEN)
+        if muted:
+            user.is_muted = True
+            send_notification('accounts.User', 'muted', {'user_id': user_id, 'muted': True})
+        else:
+            user.is_muted = False
+            send_notification('accounts.User', 'muted', {'user_id': user_id, 'muted': False})
+        user.save()
+        return Response(status=status.HTTP_200_OK)
 
 
 '''

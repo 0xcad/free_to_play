@@ -8,7 +8,6 @@ urlpatterns = [
     path('login/<uidb64>/<token>', views.LoginView.as_view(), name='login'),
     path('resend-email', views.ResendEmailView.as_view(), name='resend-email'),
 	path('create', views.CreateUserView.as_view(), name='create'),
-    path('join', views.JoinView.as_view(), name='join'),
 	path('logout', views.LogoutView.as_view(), name='logout'),
 
     path('qr-code', views.qr_code, name='qr-code'),

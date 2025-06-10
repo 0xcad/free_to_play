@@ -10,7 +10,6 @@ export const apiUrls = {
     login: (uid: string, token: string): string => `accounts/login/${uid}/${token}`,
     resend: 'accounts/resend-email',
     create: 'accounts/create',
-    join: `accounts/join`,
   },
 
   chat: {
@@ -18,11 +17,13 @@ export const apiUrls = {
     create: 'chat/',
     kick: 'chat/kick/',
     mute: 'chat/mute/',
-    detail: (id: number) : string => `chat/${id}`,
+    detail: (id: number) : string => `chat/${id}/`,
+    delete: (id: number) : string => `chat/${id}/`,
   },
 
   play: {
     detail: 'play/',
+    join: `play/join`,
   },
 };
 

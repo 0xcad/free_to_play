@@ -310,13 +310,6 @@ admin panel thoughts: the game admin should have a view to do the following thin
 * users should have like, a "call flight attendant" button, that just sends a websocket to the admin that they need help
 
 what do we need to do this:
-* a list of all audience members in the game; so joining the game should *send* a websocket with the current user's info, and we need a list view for all users in the audience
-  * websockets are hard. just put a refresh button in this shit.
-* kick view -- if you get kicked, we just remove you from the audience, and send your device a 'kicked' websocket
-* mute view -- PUT/DELETE. if you get muted, need to update user info to admin. set `is_muted` flag on user to true. subsequent users
-* delete messages -- just a function that hooks into the existing backend fn.
-^ you can probably define all of these *in* that admin function, just put them there
-
 * if a user needs help, send a websocket to the backend. admin panel has a handler where we like, highlight their name or something
 
 DONE:
@@ -357,3 +350,32 @@ store todo:
 * make model for items to purchase
 * make model for purchased items in play
 * buy gems
+
+# 2025-06-09
+
+todo later:
+* if you get muted, admins can still see your messages, you can send new ones, just other people can't see them
+
+TODO:
+* select the new player to go next
+  * re-roll + confirm ability
+* start / pause / finish the game
+  * confirm button on game finish
+* get the join QR code thing
+* ability to view/change/update the join code
+* users should have like, a "call flight attendant" button, that just sends a websocket to the admin that they need help
+
+what do we need to do this:
+* if a user needs help, send a websocket to the backend. admin panel has a handler where we like, highlight their name or something
+* new player to go next:
+    * create an API endpoint that returns a random user who is not currently playing, and has not played before
+    * admin panel has a button to select the next player, which calls that endpoint
+      * updates the PlayInstance with the new player
+    * admin panel can either confirm, or re-roll
+* ^should probably create a model viewset for PlayInstance. have PATCH/partial updates for changing status, current player, join code
+
+DONE:
+* kick functionality
+* mute functionality
+* believe I fixed a bug where join was being slowed down
+* admin panel has list of users / users join

@@ -73,7 +73,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const play = usePlayState(ws, currentUser);
   const chat = useChatState(ws);
   const store = useStoreState(ws);
-  const users = useUsersState(ws);
+  const users = useUsersState(ws, currentUser, setCurrentUser);
 
 
   // get the current user & refresh their access token
@@ -83,6 +83,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setToken(response.access);
         setCurrentUser(response.user as User);
         play.setPlayInstance(response.play_instance);
+
+        // set the users data
+        const dict: Record<string, User> = {};
+        response.users.forEach((m) => { dict[m.id] = m; });
+        users.setUsers(dict);
       } catch (err) {
         console.log('this is the user login error we get', err);
       }

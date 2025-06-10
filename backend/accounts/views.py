@@ -163,22 +163,6 @@ class CreateUserView(APIView):
             'user': user_data,
         }, status=status.HTTP_200_OK)
 
-class JoinView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-
-    def post(self, request):
-        join_code = request.data.get('join_code')
-        if request.user.is_joined:
-            return Response({"details": "Already in active play"}, status=status.HTTP_200_OK)
-
-        play_instance = PlayInstance.get_active()
-        if join_code and play_instance and play_instance.join_code == join_code.strip():
-            play_instance.audience.add(request.user)
-            return Response({"details": "Successfully joined the current play!"}, status=status.HTTP_200_OK)
-        else:
-            return Response({"details": "Invalid code"}, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 from urllib.parse import quote
 import qrcode
