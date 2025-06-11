@@ -29,6 +29,11 @@ const routes = {
     link: '/stage',
   },
   //^end group
+
+  /* only admins here */
+  admin: {
+    link: '/admin',
+  },
 };
 
 export default routes;

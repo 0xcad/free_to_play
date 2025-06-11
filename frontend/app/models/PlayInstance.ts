@@ -7,6 +7,7 @@ export interface PlayInstance {
   created: string;
   status: string;
   current_game_start: string | undefined;
+  join_code: string;
 }
 
 export const defaultPlayInstance = (): PlayInstance => {
@@ -17,6 +18,7 @@ export const defaultPlayInstance = (): PlayInstance => {
     created: '',
     status: 'waiting',
     current_game_start: undefined,
+    join_code: '',
   };
 };
 

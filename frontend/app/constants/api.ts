@@ -23,7 +23,8 @@ export const apiUrls = {
 
   play: {
     detail: 'play/',
-    join: `play/join`,
+    update: 'play/update/',
+    join: `play/join/`,
   },
 };
 

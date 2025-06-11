@@ -17,7 +17,7 @@ const Admin: React.FC = () => {
   useEffect(() => {
     if (currentUser && !currentUser.is_admin) {
       toast.error("You are not authorized to access the admin panel.");
-      navigate(routes.home);
+      navigate(routes.home.link);
       return;
     }
   }, [currentUser]);
@@ -34,8 +34,8 @@ const Admin: React.FC = () => {
   const muteUser = async (user_id: string) => {
     var old_value = users.users[user_id]?.is_muted;
     try {
-      await Api.post(apiUrls.chat.mute, {user_id: user_id, muted: true});
       users.updateUser({id: user_id, is_muted: true});
+      await Api.post(apiUrls.chat.mute, {user_id: user_id, muted: true});
     } catch (error) {
       users.updateUser({id: user_id, is_muted: old_value});
       if (error.response?.status == 404)
@@ -45,8 +45,8 @@ const Admin: React.FC = () => {
   const unmuteUser = async (user_id: string) => {
     var old_value = users.users[user_id]?.is_muted;
     try {
-      await Api.post(apiUrls.chat.mute, {user_id: user_id, muted: false});
       users.updateUser({id: user_id, is_muted: false});
+      await Api.post(apiUrls.chat.mute, {user_id: user_id, muted: false});
     } catch (error) {
       users.updateUser({id: user_id, is_muted: old_value});
       if (error.response?.status == 404)
@@ -62,6 +62,32 @@ const Admin: React.FC = () => {
     } catch (error) {
       console.log(error);
       toast.error("Failed to delete message.");
+    }
+  }
+
+  const updatePlayInstance = async (data: any) => {
+    try {
+      var oldPI = play.playInstance;
+      play.updatePlayInstance(data);
+      await Api.post(apiUrls.play.update, data);
+    } catch (error) {
+      play.setPlayInstance(oldPI);
+      console.log(error);
+      toast.error("failed to update play instance...");
+    }
+  }
+
+  const changeJoinCode = async () => {
+    let code = prompt(`The current join code is ${play.playInstance.join_code}.\nNew join code:`);
+    if (!code) return;
+    var oldCode = play.playInstance.join_code;
+    play.updatePlayInstance({join_code: code });
+    try {
+      await Api.post(apiUrls.play.update, {join_code: code});
+    } catch (error) {
+      play.updatePlayInstance({join_code: oldCode });
+      console.log(error);
+      toast.error("failed to update play instance...");
     }
   }
 
@@ -81,9 +107,11 @@ const Admin: React.FC = () => {
           <li>Timer: {play.playInstance.current_game_start}</li>
         </ul>
 
-        <button onClick={() => {}}>Set status to "waiting"</button>
-        <button onClick={() => {}}>Set status to "finished"</button>
-        <button onClick={() => {}}>Change join code</button>
+
+        { play.playInstance.status != "waiting" && (<button onClick={() => {updatePlayInstance({status: "waiting"})}}>Set status to "waiting"</button>)}
+        { play.playInstance.status != "running" && (<button onClick={() => {updatePlayInstance({status: "running"})}}>Set status to "running"</button>)}
+        { play.playInstance.status == "running" && (<button onClick={() => {updatePlayInstance({status: "finished"})}}>Set status to "finished"</button>)}
+        <button onClick={changeJoinCode}>Change join code</button>
         <button onClick={() => {}}>Select new player</button>
         <button onClick={() => {}}>Start timer</button>
       </div>
