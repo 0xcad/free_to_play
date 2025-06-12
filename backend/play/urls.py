@@ -1,9 +1,12 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from . import views
 
 app_name = 'play'
+router = DefaultRouter()
+router.register('', views.PlayInstanceViewSet, basename='play')
+
 urlpatterns = [
-    path('', views.PlayInstanceView.as_view(), name='play'),
-    path('join', views.JoinView.as_view(), name='join'),
+    path('', include(router.urls)),
 ]
 

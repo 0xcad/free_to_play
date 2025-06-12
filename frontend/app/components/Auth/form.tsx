@@ -38,7 +38,7 @@ const EmailForm: React.FC<{
     }
 
     try {
-      const response = await Api.post(apiUrls.auth.create, values);
+      const response = await Api.post(apiUrls.accounts.create, values);
       setCurrentUser(response.user);
       onSuccess(response);
     } catch (err) {

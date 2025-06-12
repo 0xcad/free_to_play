@@ -5,26 +5,31 @@ export const SESSION_KEY = '__free_to_play__';
 
 // these are constants for the backend django api, after the /api/ root
 export const apiUrls = {
-  auth: {
-    user: 'accounts',
+  accounts: {
+    me: 'accounts/me/',
     login: (uid: string, token: string): string => `accounts/login/${uid}/${token}`,
-    resend: 'accounts/resend-email',
-    create: 'accounts/create',
+    logout: 'accounts/logout/',
+    resend: 'accounts/resend_email/',
+
+    create: 'accounts/',
+    update: (id: string) : string => `accounts/${id}/`,
+    detail: (id: string) : string => `accounts/${id}/`,
+    mute: (id: string) : string => `accounts/${id}/mute/`,
   },
 
   chat: {
     list: 'chat/',
     create: 'chat/',
     kick: 'chat/kick/',
-    mute: 'chat/mute/',
-    detail: (id: number) : string => `chat/${id}/`,
-    delete: (id: number) : string => `chat/${id}/`,
+    detail: (id: string) : string => `chat/${id}/`,
+    delete: (id: string) : string => `chat/${id}/`,
   },
 
   play: {
     detail: 'play/',
     update: 'play/update/',
     join: `play/join/`,
+    select_player: 'play/select_player/',
   },
 };
 

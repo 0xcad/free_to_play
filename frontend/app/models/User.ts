@@ -9,4 +9,5 @@ export interface User {
   spent?: number;
   is_muted?: bool;
   is_joined: bool;
+  has_played: bool;
 }

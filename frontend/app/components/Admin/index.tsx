@@ -1,5 +1,5 @@
 import type { Route } from "./+types/admin";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router";
 import { useAppContext } from '~/context/AppContext';
 
@@ -9,10 +9,14 @@ import { toast } from 'react-toastify';
 import routes from '~/constants/routes';
 
 import Chat from '~/components/Stage/Chat';
+import Modal from '~/components/shared/modal';
 
 const Admin: React.FC = () => {
   let navigate = useNavigate();
   const { currentUser, ws, users, chat, play } = useAppContext();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPlayer, setSelectedPlayer] = useState(undefined);
 
   useEffect(() => {
     if (currentUser && !currentUser.is_admin) {
@@ -31,27 +35,31 @@ const Admin: React.FC = () => {
       console.log(error);
     };
   }
-  const muteUser = async (user_id: string) => {
+
+  const muteUser = async (user_id: string, is_muted: boolean) => {
     var old_value = users.users[user_id]?.is_muted;
     try {
-      users.updateUser({id: user_id, is_muted: true});
-      await Api.post(apiUrls.chat.mute, {user_id: user_id, muted: true});
+      users.updateUser({id: user_id, is_muted: is_muted});
+      if (is_muted)
+        await Api.put(apiUrls.accounts.mute(user_id));
+      else
+        await Api.delete(apiUrls.accounts.mute(user_id));
     } catch (error) {
       users.updateUser({id: user_id, is_muted: old_value});
       if (error.response?.status == 404)
         toast.error("user not found");
     };
   }
-  const unmuteUser = async (user_id: string) => {
-    var old_value = users.users[user_id]?.is_muted;
+
+  // TODO: make this optimistic?
+  const updateUser = async (user_id: string, data: any) => {
     try {
-      users.updateUser({id: user_id, is_muted: false});
-      await Api.post(apiUrls.chat.mute, {user_id: user_id, muted: false});
+      const response = await Api.patch(apiUrls.accounts.update(user_id), data);
+      users.updateUser(response);
     } catch (error) {
-      users.updateUser({id: user_id, is_muted: old_value});
-      if (error.response?.status == 404)
-        toast.error("user not found");
-    };
+      console.log(error);
+      toast.error("failed to update user...");
+    }
   }
 
   const deleteChatMessage = async (message_id: string) => {
@@ -91,6 +99,18 @@ const Admin: React.FC = () => {
     }
   }
 
+  const selectPlayer = async (exclude?: string[]) => {
+    try {
+      const data = exclude ? {exclude: exclude} : {};
+      const response = await Api.post(apiUrls.play.select_player, data);
+      setSelectedPlayer(response.current_player);
+      //play.updatePlayInstance({current_player: response.current_player });
+      setIsModalOpen(true);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   if (!currentUser) {
     return <p>Loading...</p>;
   }
@@ -103,7 +123,7 @@ const Admin: React.FC = () => {
         <ul>
           <li>Join code: {play.playInstance.join_code}</li>
           <li>Status: {play.playInstance.status}</li>
-          <li>Current Player: {play.playInstance.current_player}</li>
+          <li>Current Player: {play.playInstance.current_player.name}</li>
           <li>Timer: {play.playInstance.current_game_start}</li>
         </ul>
 
@@ -112,21 +132,42 @@ const Admin: React.FC = () => {
         { play.playInstance.status != "running" && (<button onClick={() => {updatePlayInstance({status: "running"})}}>Set status to "running"</button>)}
         { play.playInstance.status == "running" && (<button onClick={() => {updatePlayInstance({status: "finished"})}}>Set status to "finished"</button>)}
         <button onClick={changeJoinCode}>Change join code</button>
-        <button onClick={() => {}}>Select new player</button>
+        <button onClick={() => {selectPlayer()}}>Select new player</button>
         <button onClick={() => {}}>Start timer</button>
+
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => {setIsModalOpen(false)}}
+        >
+          <p>Selected the player <b>{selectedPlayer?.name}</b> to play next</p>
+          <p>Would you like to re-roll? <button onClick={() => {selectPlayer([selectedPlayer?.id])}}>Re-roll</button></p>
+          <p><button onClick={() => {
+            updatePlayInstance({current_player: selectedPlayer.id});
+            setIsModalOpen(false);
+          }}>Confirm</button></p>
+        </Modal>
       </div>
 
       <div>
         <h2>Audience</h2>
         <ul>
+          {/*Consider turning this to a table. Name, balance, actions, statuses*/}
           {Object.values(users.users).map((user) => (
             <li key={user.id}>
               {user.name} {''}
-              <button onClick={() => kickUser(user.id)}>Kick</button>
-              { user.is_muted ? (
-                <button onClick={() => unmuteUser(user.id)}>Unmute</button>
-              ) : (
-                <button onClick={() => muteUser(user.id)}>Mute</button>
+              {!user.is_admin && (
+                <>
+                  <button onClick={() => {kickUser(user.id)}}>Kick</button>
+                  { user.is_muted ? (
+                    <button onClick={() => {muteUser(user.id, false)}}>Unmute</button>
+                  ) : (
+                    <button onClick={() => {muteUser(user.id, true)}}>Mute</button>
+                  )}
+                  {play.playInstance.current_player?.id != user.id ? (<button onClick={() => {updatePlayInstance({current_player: user.id});}}>Set as current player</button>)
+                    : (<span>current user</span>)}
+                  {!user.has_played ? (<button onClick={() => {updateUser(user.id, {has_played: true});}}>set has played</button>)
+                    : (<button onClick={() => {updateUser(user.id, {has_played: false});}}>unset has played</button>)}
+                </>
               )}
             </li>
           ))}
@@ -138,7 +179,6 @@ const Admin: React.FC = () => {
         <Chat
           kickUser={kickUser}
           muteUser={muteUser}
-          unmuteUser={unmuteUser}
           deleteChatMessage={deleteChatMessage}
         />
       </div>

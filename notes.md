@@ -379,3 +379,43 @@ DONE:
 * mute functionality
 * believe I fixed a bug where join was being slowed down
 * admin panel has list of users / users join
+
+# 2025-06-11
+DONE:
+* admin panel
+  * change join code
+  * change play status
+* select user backend
+
+backend:
+* on play models.py, create a UserPlayInstance model (complemented eventually by ItemPlayInstance?) - DONE
+  * fields: `is_muted`, `has_played`, `play_instance` (fk), `user` (fk). unique to `user` is a unique field per `play_instance` - DONE
+  * update `user.is_muted` in serializers, probably some other view
+  * create one of these every time a user joins an audience, if it doesn't already exist (can I do that with a signal?) - DONE, no signal
+* create a `select-user` view on backend. looks through users that haven't played, using UserPlayInstance, and returns one. can't be an admin.
+  * also updates `currentPlayer` on `PlayInstance`
+^all of that is pretty done. todo next: get the frontend portion of this working
+
+frontend:
+* user presses select new player, sends a backend request
+* gives them a pop-up modal. user can either hit confirm (literally just closes modal), or hit `re-roll`.
+* on websocket, if you're the current player, show another pop-up with just an x in the corner...
+* put buttons on audience list to just manually set current user.
+* show who the current user is in the audience, too
+* put a confirmation check/confirm modal around kicking users?
+
+start timer: hit a backend api query. update start timer optimistically. backend should reply with the rely start timer, however. websocket will handle the update.
+* under stage, create a new `Timer` component that takes in time as a prop, should be really easy to make.
+
+mark player as *has played* on backend. maybe combine this with the mute thing? just an update view, likely
+
+TODO:
+* start game timer view
+
+# 2025-06-12
+DONE:
+* select player frontend
+* refactored accounts into model view, it's so fucking good now
+* set has played on users
+* player instance view set refactor
+

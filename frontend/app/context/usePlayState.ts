@@ -8,8 +8,6 @@ import type { WsState } from "./useWsState";
 import { useNavigate } from 'react-router';
 import routes from '../constants/routes';
 
-import { toast } from 'react-toastify';
-
 export interface PlayState {
   playInstance: PlayInstance;
   setPlayInstance: (p: PlayInstance) => void;
@@ -21,21 +19,14 @@ export function usePlayState(ws: WsState, currentUser: User): PlayState {
   const [playInstance, setPlayInstance] = useState<PlayInstance>(defaultPlayInstance());
 
   const updatePlayInstance= (playInstanceData) => {
-    console.log('here', playInstanceData);
     if (!playInstanceData) return;
     setPlayInstance((prev) => {
       return { ...prev, ...playInstanceData };
     });
-    console.log('hey', playInstance);
   }
 
   // when a new websocket comes in, just set all the new data, redirect on appropriate status change...
   const wsUpdatePlayInstance = useCallback((data : PlayInstance) => {
-    if (playInstance.status === 'waiting' && data.status === 'running' && currentUser.is_joined) {
-      if (window.location.pathname !== routes.stage.link && window.location.pathname != routes.admin.link)
-        navigate(routes.stage.link);
-      toast.info('the game has begun!');
-    }
     setPlayInstance(data);
   }, [currentUser, playInstance]);
 

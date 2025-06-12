@@ -10,8 +10,9 @@ from .serializers import (
 )
 from play.serializers import PlayInstanceSerializer
 
-from .permissions import AllowInactiveUsers, UserJoinedAudience
-from rest_framework import permissions
+from .permissions import AllowInactiveUsers, UserJoinedAudience, IsStaffOrSelf
+from rest_framework import permissions, viewsets
+from rest_framework.decorators import action
 from .models import User
 from play.models import PlayInstance
 
@@ -22,6 +23,8 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.shortcuts import render
+
+from notifications.utils import send_notification
 
 from django.conf import settings
 
@@ -53,23 +56,98 @@ def send_login_email(user):
     msg.attach_alternative(html_content, "text/html")
     msg.send()
 
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    Handles user creation, retrieval, updates, and custom actions:
+      - create: anyone
+      - retrieve: authenticated
+      - partial_update: staff or self
+      - destroy: disabled
+      - list: staff only
+      - me: get tokens for current user
+      - login: activate user via uidb64/token
+      - resend_email: resend login email
+      - logout: blacklist refresh token
 
-class UserView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    mute:
+    Mutes (PUT) or unmutes (DELETE) the user. The operation is idempotent. Only admin can mute musers.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
-    def get(self, request):
+    def get_serializer_class(self):
+        if self.action in ['create']:
+            return CreateUserSerializer
+        return UserSerializer
+
+    def get_permissions(self):
+        if self.action == 'create':
+            perms = [permissions.AllowAny]
+        elif self.action in ['update', 'partial_update']:
+            perms = [permissions.IsAuthenticated, IsStaffOrSelf]
+        elif self.action in ['retrieve']:
+            perms = [permissions.IsAuthenticated]
+        elif self.action == 'destroy':
+            perms = [permissions.DenyAll]
+        return super().get_permissions()
+
+    def create(self, request, *args, **kwargs):
+        """
+        If a user with the given email exists, update them if not active; otherwise create a new user.
+        Then optionally add them to a game via join_code and send a login email.
+        """
+        try:
+            email = request.data.get('email')
+            user = User.objects.get(email=email)
+            serializer = self.get_serializer(data=request.data, instance=user, partial=True)
+            serializer.is_valid(raise_exception=True)
+            if not user.is_active:
+                user = serializer.save()
+        except User.DoesNotExist:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            user = serializer.save()
+        except Exception:
+            return Response({"details": "Invalid form"}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Add to game if join_code matches
+        join_code = request.data.get('join_code')
+        play_instance = PlayInstance.get_active()
+        if join_code and play_instance and play_instance.join_code == join_code.strip():
+            play_instance.add_user(user)
+
+        # Send login link
+        send_login_email(user)
+
+        # Prepare response data
+        user_data = UserSerializer(user).data
+        user_data['is_authenticated'] = False
+
+        return Response({
+            'details': 'Login link sent!',
+            'user': user_data,
+        }, status=status.HTTP_200_OK)
+
+    def destroy(self, request, *args, **kwargs):
+        return Response({'detail': 'DELETE not allowed.'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    @action(detail=False, methods=['get'], permission_classes=[permissions.IsAuthenticated])
+    def me(self, request):
         user = request.user
         refresh = RefreshToken.for_user(user)
         return Response({
             'refresh': str(refresh),
             'access': str(refresh.access_token),
             'user': UserSerializer(user).data,
-        });
+        })
 
-class LoginView(APIView):
-    permission_classes = [AllowInactiveUsers]
-
-    def get(self, request, uidb64, token):
+    @action(
+            detail=False,
+            methods=['get'],
+            url_path=r'login/(?P<uidb64>[^/.]+)/(?P<token>[^/.]+)',
+            permission_classes=[AllowInactiveUsers]
+    )
+    def login(self, request, uidb64=None, token=None):
         try:
             uid = urlsafe_base64_decode(uidb64).decode()
             user = User.objects.get(pk=uid)
@@ -95,73 +173,47 @@ class LoginView(APIView):
         except (TypeError, ValueError, OverflowError, User.DoesNotExist):
             return Response({"details": "Invalid link"}, status=status.HTTP_400_BAD_REQUEST)
 
-class ResendEmailView(APIView):
-    permission_classes = [AllowInactiveUsers]
-
-    def post(self, request):
+    @action(detail=False, methods=['POST'], permission_classes=[AllowInactiveUsers])
+    def resend_email(self, request):
         serializer = ResendEmailSerializer(data=request.data)
         if serializer.is_valid():
             user_id = serializer.validated_data['user_id']
             try:
                 user = User.objects.get(id=user_id)
-            except User.DoesNoteExist:
-                return Response({"details": "User not found"}, status=status.HTTP_400_BAD_REQUEST)
-
+            except User.DoesNotExist:
+                return Response({'details': 'User not found'}, status=status.HTTP_400_BAD_REQUEST)
             send_login_email(user)
             return Response({'details': 'Resent login email'}, status=status.HTTP_200_OK)
-        else:
-            return Response({"details": "Invalid request"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'details': 'Invalid request'}, status=status.HTTP_400_BAD_REQUEST)
 
-class LogoutView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    def post(self, request):
+    @action(detail=False, methods=['POST'], permission_classes=[permissions.IsAuthenticated])
+    def logout(self, request):
+        token_str = request.data.get('refresh_token')
         try:
-            refresh_token = request.data.get('refresh_token')
-            token = RefreshToken.objects.get(token=refresh_token)
+            token = RefreshToken(token_str)
             token.blacklist()
-            return Response({"details": "Successfully logged out."}, status=status.HTTP_200_OK)
-        except RefreshToken.DoesNotExist:
-            return Response({"details": "Invalid refresh token."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'details': 'Successfully logged out.'}, status=status.HTTP_200_OK)
+        except Exception:
+            return Response({'details': 'Invalid refresh token.'}, status=status.HTTP_400_BAD_REQUEST)
 
-'''
-Create a user
-Either email them a login code, or later, do oauth.
-'''
-class CreateUserView(APIView):
-    def post(self, request):
-        # if the user exists, update them if not active
-        try:
-            email = request.data['email']
-            user = User.objects.get(email=email)
-            serializer = CreateUserSerializer(data=request.data, instance=user, partial=True)
-            serializer.is_valid(raise_exception=True)
-            if not user.is_active:
-                user = serializer.save()
-        # otherwise create a new user
-        except User.DoesNotExist:
-            serializer = CreateUserSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            user = serializer.save()
-        except:
-            return Response({"details": "Invalid form"}, status=HTTP_400_BAD_REQUEST)
+    @action(detail=True, methods=["PUT", "DELETE"], permission_classes=[permissions.IsAdminUser])
+    def mute(self, request, *args, **kwargs):
+        user = self.get_object()
+        if user.is_staff:
+            return Response({"details": "Cannot mute/unmute staff users"}, status=status.HTTP_403_FORBIDDEN)
+        #user_pi = UserPlayInstance.objects.get_or_create(user=user, play_instance=PlayInstance.get_active())
+        if request.method == "PUT":
+            #user_pi.is_muted = True
+            user.is_muted = True
+            send_notification('accounts.User', 'muted', {'user_id': user.id, 'muted': True})
+        else:
+            #user_pi.is_muted = False
+            user.is_muted = False
+            send_notification('accounts.User', 'muted', {'user_id': user.id, 'muted': False})
+        #user_pi.save()
+        user.save()
+        return Response(status=status.HTTP_200_OK)
 
-        # add the user to the current game, if they have a join code
-        join_code = request.data.get('join_code')
-        play_instance = PlayInstance.get_active()
-        if join_code and play_instance and play_instance.join_code == join_code.strip():
-            play_instance.audience.add(user)
-
-        send_login_email(user)
-
-        #refresh = RefreshToken.for_user(user)
-        user_data = UserSerializer(user).data
-        user_data['is_authenticated'] = False
-        print(user_data)
-
-        return Response({
-            'details': 'Login link sent!',
-            'user': user_data,
-        }, status=status.HTTP_200_OK)
 
 
 from urllib.parse import quote

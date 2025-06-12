@@ -24,7 +24,7 @@ const LoginEmail: React.FC = () => {
 
   const resendEmail = async (): Promise<void> => {
     try {
-      var response = await Api.post(apiUrls.auth.resend, {user_id: currentUser.id});
+      var response = await Api.post(apiUrls.accounts.resend, {user_id: currentUser.id});
       console.log('successfully submitted resend form');
       setIsResendDisabled(true);
     } catch (err) {

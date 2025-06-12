@@ -10,3 +10,8 @@ class PlayInstanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlayInstance
         exclude = ('id', 'is_active', 'audience')
+
+class PlayInstanceUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PlayInstance
+        exclude = ('id', 'is_active', 'audience')

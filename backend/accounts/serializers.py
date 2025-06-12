@@ -37,7 +37,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'name', 'email', 'is_participating', 'is_admin', 'is_authenticated',
                   'balance', 'spent',
-                  'is_joined', 'is_muted']
+                  'is_joined', 'is_muted', 'has_played']
 
     def get_is_admin(self, obj):
         return obj.is_staff or obj.is_superuser
@@ -56,7 +56,7 @@ class UserListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'name', 'is_participating', 'is_admin', 'balance', 'is_muted']
+        fields = ['id', 'name', 'is_participating', 'is_admin', 'balance', 'is_muted', 'has_played']
 
     def get_is_admin(self, obj):
         return obj.is_staff or obj.is_superuser

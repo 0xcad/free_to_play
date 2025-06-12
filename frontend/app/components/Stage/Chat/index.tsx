@@ -17,7 +17,6 @@ interface PaginatedResponse {
 interface ChatProps {
   kickUser?: (user_id: string) => void;
   muteUser?: (user_id: string) => void;
-  unmuteUser?: (user_id: string) => void;
   deleteChatMessage?: (message_id: string) => void;
 }
 /*interface ChatProps {
@@ -27,7 +26,7 @@ interface ChatProps {
 
 const Chat: React.FC<ChatProps> = ({ messages, setMessages }) => {
   const { ws } = useAppContext();*/
-const Chat: React.FC<ChatProps> = ({kickUser, muteUser, unmuteUser, deleteChatMessage }) => {
+const Chat: React.FC<ChatProps> = ({kickUser, muteUser, deleteChatMessage }) => {
   const { ws, chat, currentUser, users } = useAppContext();
 
   const [prevLink, setPrevLink] = useState<string | null>(null); // prev link with cursor pagination
@@ -115,7 +114,7 @@ const Chat: React.FC<ChatProps> = ({kickUser, muteUser, unmuteUser, deleteChatMe
             <li key={msg.id}>
               <Message key={msg.id} message={msg} currentUser={currentUser} />
               {msg.user.id != currentUser.id && kickUser && (<button onClick={() => {kickUser(msg.user.id)}}>kick user</button>)}
-              {msg.user.id != currentUser.id && muteUser && !users.users[msg.user.id]?.is_muted && (<button onClick={() => {muteUser(msg.user.id)}}>mute user</button>)}
+              {msg.user.id != currentUser.id && muteUser && !users.users[msg.user.id]?.is_muted && (<button onClick={() => {muteUser(msg.user.id, true)}}>mute user</button>)}
               {deleteChatMessage && (<button onClick={() => {deleteChatMessage(msg.id)}}>delete message</button>)}
             </li>
           ))}

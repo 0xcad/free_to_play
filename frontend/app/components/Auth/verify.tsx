@@ -25,7 +25,7 @@ const Verify: React.FC = () => {
     }
 
     try {
-      var response = await Api.get(apiUrls.auth.login(uid, token));
+      var response = await Api.get(apiUrls.accounts.login(uid, token));
 
       // set the token to authenticate the user
       setToken(response.access);
