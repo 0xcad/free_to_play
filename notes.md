@@ -418,4 +418,13 @@ DONE:
 * refactored accounts into model view, it's so fucking good now
 * set has played on users
 * player instance view set refactor
+* custom modals
+
+* created the timer, with start/stop/reset controls!
+
+timer todo later:
+* make it red when there's only so much time left on the clock...
+
+misc todo later:
+* have the play instance signal only send the updated fields, if provided, else send all fields.
 

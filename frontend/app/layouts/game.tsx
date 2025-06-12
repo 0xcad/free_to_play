@@ -29,7 +29,7 @@ export default function GameLayout() {
       toast.info('the game has begun!');
     }
 
-    if (play.playInstance.current_player != data.current_player && currentUser?.id === data.current_player.id) {
+    if (data.current_player && play.playInstance.current_player?.id != data.current_player.id && currentUser?.id === data.current_player.id) {
       toast.info('go on, get!');
       setCurrentPlayerModalIsOpen(true);
     }

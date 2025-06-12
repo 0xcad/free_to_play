@@ -6,7 +6,8 @@ export interface PlayInstance {
   is_debug: bool;
   created: string;
   status: string;
-  current_game_start: string | undefined;
+  remaining_time: string | undefined;
+  end_time: string | undefined;
   join_code: string;
 }
 

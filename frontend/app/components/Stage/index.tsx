@@ -3,6 +3,7 @@ import { useAppContext } from '~/context/AppContext';
 
 import Waiting from './waiting';
 import Chat from './Chat';
+import Timer from '~/components/shared/timer';
 
 const Stage: React.FC = () => {
   const { currentUser, play/*, chat*/ } = useAppContext();
@@ -14,6 +15,8 @@ const Stage: React.FC = () => {
   return (
     <>
       <p>stage</p>
+      <p>Timer: <Timer endTime={play.playInstance.end_time} remainingTime={play.playInstance.remaining_time}/></p>
+      {play.playInstance.current_player && (<p>Current Player: <b>{play.playInstance.current_player.name}</b></p>)}
       {/*<Chat
         messages={chat.messages}
         setMessages={chat.setMessages}

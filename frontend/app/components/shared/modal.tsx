@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import './spinner.css';
+import './modal.css';
 
 interface ModalProps {
   isOpen?: boolean;

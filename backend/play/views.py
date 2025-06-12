@@ -27,12 +27,6 @@ class PlayInstanceViewSet(viewsets.ViewSet):
 
     # Disable list and delete
     def list(self, request):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def destroy(self, request, pk=None):
-        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    def retrieve(self, request, pk=None):
         """
         Return current play instance + user
         """
@@ -51,6 +45,12 @@ class PlayInstanceViewSet(viewsets.ViewSet):
             'play_instance': play_instance_data,
             'users': UserListSerializer(play_instance.audience, many=True).data,
         })
+
+    def destroy(self, request, pk=None):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def retrieve(self, request, pk=None):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
     @action(detail=False, methods=['POST'], url_path='join', permission_classes=[permissions.IsAuthenticated])
     def join(self, request):
@@ -117,3 +117,45 @@ class PlayInstanceViewSet(viewsets.ViewSet):
 
         # post-save signal should send a websocket over
         return Response({'current_player': UserListSerializer(selected_user).data}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['POST'], url_path='timer/start', permission_classes=[permissions.IsAdminUser])
+    def start_timer(self, request):
+        """
+        Start or resume the timer. Accepts optional 'duration' in seconds to override.
+        """
+        pi = self.get_object()
+        duration_sec = request.data.get('duration')
+        duration = timedelta(seconds=duration_sec) if duration_sec is not None else None
+        pi.start_timer(duration=duration)
+        return Response({
+            'end_time': pi.end_time,
+            'remaining_time': pi.remaining_time,
+        })
+
+    @action(detail=False, methods=['post'], url_path='timer/pause', permission_classes=[permissions.IsAdminUser])
+    def pause_timer(self, request):
+        """
+        Pause the timer and save remaining_time.
+        If you provide `now` in the request, it will use that as the current time.
+        """
+        pi = self.get_object()
+        pi.pause_timer(now=request.data.get('now'))
+        return Response({
+            'remaining_time': pi.remaining_time,
+            'end_time': None,
+        })
+
+    @action(detail=False, methods=['post'], url_path='timer/reset', permission_classes=[permissions.IsAdminUser])
+    def reset_timer(self, request):
+        """
+        Reset the timer to default duration and stop.
+        Accepts optional 'duration' in seconds to override.
+        """
+        pi = self.get_object()
+        duration_sec = request.data.get('duration')
+        duration = timedelta(seconds=duration_sec) if duration_sec is not None else None
+        pi.reset_timer(duration=duration)
+        return Response({
+            'remaining_time': pi.remaining_time,
+            'end_time': None,
+        })

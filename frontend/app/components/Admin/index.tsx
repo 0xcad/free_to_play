@@ -10,6 +10,7 @@ import routes from '~/constants/routes';
 
 import Chat from '~/components/Stage/Chat';
 import Modal from '~/components/shared/modal';
+import Timer from '~/components/shared/timer';
 
 const Admin: React.FC = () => {
   let navigate = useNavigate();
@@ -123,8 +124,8 @@ const Admin: React.FC = () => {
         <ul>
           <li>Join code: {play.playInstance.join_code}</li>
           <li>Status: {play.playInstance.status}</li>
-          <li>Current Player: {play.playInstance.current_player.name}</li>
-          <li>Timer: {play.playInstance.current_game_start}</li>
+          <li>Current Player: {play.playInstance.current_player?.name}</li>
+          <li>Timer: <Timer endTime={play.playInstance.end_time} remainingTime={play.playInstance.remaining_time} showControls={true}/></li>
         </ul>
 
 
@@ -133,7 +134,6 @@ const Admin: React.FC = () => {
         { play.playInstance.status == "running" && (<button onClick={() => {updatePlayInstance({status: "finished"})}}>Set status to "finished"</button>)}
         <button onClick={changeJoinCode}>Change join code</button>
         <button onClick={() => {selectPlayer()}}>Select new player</button>
-        <button onClick={() => {}}>Start timer</button>
 
         <Modal
           isOpen={isModalOpen}
@@ -164,7 +164,7 @@ const Admin: React.FC = () => {
                     <button onClick={() => {muteUser(user.id, true)}}>Mute</button>
                   )}
                   {play.playInstance.current_player?.id != user.id ? (<button onClick={() => {updatePlayInstance({current_player: user.id});}}>Set as current player</button>)
-                    : (<span>current user</span>)}
+                    : (<button onClick={() => {updatePlayInstance({current_player: null});}}>unset as current player</button>)}
                   {!user.has_played ? (<button onClick={() => {updateUser(user.id, {has_played: true});}}>set has played</button>)
                     : (<button onClick={() => {updateUser(user.id, {has_played: false});}}>unset has played</button>)}
                 </>
