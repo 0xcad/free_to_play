@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import './modal.css';
 
-interface ModalProps {
+export interface ModalProps {
   isOpen?: boolean;
   onClose?: () => void;
   children: React.ReactNode;

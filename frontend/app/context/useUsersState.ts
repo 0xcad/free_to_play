@@ -46,6 +46,9 @@ export function useUsersState(
     setUsers((prev) => {
       return { ...prev, [user.id]: { ...updated_user, ...user }};
     });
+    if (currentUser && currentUser.id === user.id) {
+      setCurrentUser({ ...currentUser, ...user });
+    }
   }
 
   const userKicked = (data) => {

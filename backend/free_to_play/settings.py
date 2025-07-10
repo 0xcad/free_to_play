@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'notifications',
     'chat',
     'play',
+    'store',
 
     'channels',
 
@@ -192,4 +193,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # TODO: change me
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
+MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_URL = '/media/'

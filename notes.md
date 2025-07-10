@@ -428,3 +428,51 @@ timer todo later:
 misc todo later:
 * have the play instance signal only send the updated fields, if provided, else send all fields.
 
+stage todo:
+* add youtube video that's currently playing
+
+accounts: - DONE
+* update name
+* update participation
+* buy gems
+
+store todo:
+* make model for items to purchase
+* make model for purchased items in play
+* in the stage, add an inventory for purchased items
+  * users have a personal inventory, the play instance has its own inventory?
+* buy gems with stripe
+
+# 2025-07-10
+God, it's been a fucking minute hasn't it?
+
+goals:
+* start working on store TODO
+
+what store api endpoints do we need?
+* list view for items to purchase, filter on visibility, too
+* a way for a user to buy an item
+* a way for a user to view their purchased items (inventory?)
+* a way to see which items have been purchased for the game
+
+TODO:
+* need to extend user model in frontend to have an inventory, a list of id's of items in the store
+* need to add dictionary of items to frontend, and populate that from the store api endpoint
+
+item viewset
+* Create/Update/Delete views are admin only
+* /items/ -- list items available to purchase, grouped by category
+* /items/<id> -- get item details
+* /items/<id>/purchase -- purchase an item, returns the item purchased
+* /items/inventory -- get the user's inventory, which items they have purchased
+* /items/play -- get the items purchased for the current play instance (purchased items that have `item_type` of `play`)
+* /buy_gems/ -- buy gems for the current user
+
+idea later:
+* maybe you should be able to buy items piecemeal. like, you can contribute half of the gems for it. crowdfunding.
+  * it would be so fucking funny to call this like, "buy this in multiple easy installments".
+
+DONE:
+* update name/participation on account works
+* basic "dummy" gem purchase flow
+* store models created

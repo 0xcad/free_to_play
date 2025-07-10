@@ -14,7 +14,7 @@ const Stage: React.FC = () => {
 
   return (
     <>
-      <p>stage</p>
+      <h1>stage</h1>
       <p>Timer: <Timer endTime={play.playInstance.end_time} remainingTime={play.playInstance.remaining_time}/></p>
       {play.playInstance.current_player && (<p>Current Player: <b>{play.playInstance.current_player.name}</b></p>)}
       {/*<Chat

@@ -70,7 +70,7 @@ class UserViewSet(viewsets.ModelViewSet):
       - logout: blacklist refresh token
 
     mute:
-    Mutes (PUT) or unmutes (DELETE) the user. The operation is idempotent. Only admin can mute musers.
+    Mutes (PUT) or unmutes (DELETE) the user. The operation is idempotent. Only admin can mute users.
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -142,10 +142,10 @@ class UserViewSet(viewsets.ModelViewSet):
         })
 
     @action(
-            detail=False,
-            methods=['get'],
-            url_path=r'login/(?P<uidb64>[^/.]+)/(?P<token>[^/.]+)',
-            permission_classes=[AllowInactiveUsers]
+        detail=False,
+        methods=['get'],
+        url_path=r'login/(?P<uidb64>[^/.]+)/(?P<token>[^/.]+)',
+        permission_classes=[AllowInactiveUsers]
     )
     def login(self, request, uidb64=None, token=None):
         try:

@@ -34,5 +34,9 @@ export const apiUrls = {
     pause_timer: 'play/timer/pause/',
     reset_timer: 'play/timer/reset/',
   },
+
+  store: {
+    buy_gems: 'store/purchase/gems/'
+  },
 };
 

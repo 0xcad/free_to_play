@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.conf import settings
 
 from django.http import HttpResponse
 
@@ -30,3 +31,7 @@ urlpatterns = [
     path('api/chat/', include('chat.urls')),
     path('api/play/', include('play.urls')),
 ]
+
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

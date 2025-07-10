@@ -18,7 +18,7 @@ import type { WsState } from "./useWsState";
 import type { ChatState } from "./useChatState";
 import type { PlayState } from "./usePlayState";
 import type { StoreState } from "./useStoreState";
-import type { UsersState } from "./useStoreState";
+import type { UsersState } from "./useUsersState";
 
 import { toast } from 'react-toastify';
 

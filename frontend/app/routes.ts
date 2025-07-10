@@ -39,6 +39,7 @@ export default [
     route("tutorial", "./components/Pages/tutorial.tsx"),
 
     route("stage", "./components/Stage/index.tsx"),
+    route("store", "./components/Store/index.tsx"),
   ]),
 
 

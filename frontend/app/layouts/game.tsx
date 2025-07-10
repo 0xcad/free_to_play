@@ -7,12 +7,13 @@ import routes from '../constants/routes';
 
 import Spinner from '../components/shared/spinner';
 import Modal from '../components/shared/modal';
+import BuyGemsModal from '../components/Store/BuyGemsModal';
 
 import { toast } from 'react-toastify';
 
 export default function GameLayout() {
   let navigate = useNavigate();
-  const { currentUser, play, ws } = useAppContext();
+  const { currentUser, play, ws, store } = useAppContext();
   const [currentPlayerModalIsOpen, setCurrentPlayerModalIsOpen] = useState(false);
 
   useEffect(() => {
@@ -49,20 +50,25 @@ export default function GameLayout() {
       <nav>
         <NavLink to="/stage" end>
           Home
-        </NavLink>
-        <NavLink to="/store" end>Store</NavLink>
+        </NavLink>{' '}
+        <NavLink to="/store" end>Store</NavLink>{' '}
         <NavLink to="/account">Account</NavLink>
       </nav>
       { play?.playInstance?.status === 'waiting' && (
         <div>Waiting for the play to start <Spinner /></div>
       )}
-      <div>Balance: {currentUser?.balance} gems</div>
+      <div onClick={() => {store.setBuyGemsModalIsOpen(true);}}>Balance: {currentUser?.balance} gems</div>
       <Modal
         isOpen={currentPlayerModalIsOpen}
         onClose={() => {setCurrentPlayerModalIsOpen(false);}}
       >
         <p>Get on up there you big idiot, you've been selected to play the game!!</p>
       </Modal>
+
+      <BuyGemsModal
+        isOpen={store.buyGemsModalIsOpen}
+        onClose={() => {store.setBuyGemsModalIsOpen(false);}}
+      />
       <Outlet />
     </>
   );

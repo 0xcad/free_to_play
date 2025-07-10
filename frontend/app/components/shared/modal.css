@@ -1,5 +1,6 @@
 .modal {
   position: relative;
+  width: min(40rem, 90vw);
 }
 
 .modal-close-btn {

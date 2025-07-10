@@ -25,6 +25,10 @@ class User(AbstractUser):
     def is_joined(self):
         return bool(self.plays.filter(is_active=True))
 
+    @property
+    def inventory(self):
+        return self.all_purchased_items.filter(play_instance__is_active=True)
+
     '''
     def get_play_user(self):
         return self.play_user.filter(play_instance__is_active=True).first()
