@@ -24,7 +24,7 @@ const BuyGemsModal: React.FC<ModalProps> = ({
     }
 
     try {
-      const response = await Api.post(apiUrls.store.buy_gems(currentUser.id), { gems });
+      const response = await Api.post(apiUrls.store.buy_gems, { gems });
       users.updateUser({id: currentUser.id, balance: response.balance});
       toast.success(`Successfully purchased ${gems} gems!`);
       onClose();
