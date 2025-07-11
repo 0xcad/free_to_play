@@ -3,29 +3,37 @@
 services:
   ftp-redis:
     image: "redis:alpine"
-    ports:
-      - "6379:6379"
+    container_name: ftp-redis
 
   ftp-backend:
     build:
       context: ./backend
     volumes:
       - ./backend:/app
-    ports:
-      - "8000:8000"
     env_file: ./backend/.env
     depends_on:
       - ftp-redis
+    container_name: ftp-backend
 
   ftp-frontend:
     build:
       context: ./frontend
     volumes:
       - ./frontend:/app
-    ports:
-      - "3000:3000"
     depends_on:
       - ftp-backend
-    environment:
-      - REACT_APP_BACKEND_ROOT=ftp.0xcad.dev:8000
+    env_file: ./frontend/.env
+    container_name: ftp-frontend
 
+  #ftp-frontend:
+  #  image: node:alpine
+  #  container_name: ftp-frontend
+  #  working_dir: /app
+  #  volumes:
+  #    - ./frontend/build/client:/app:ro
+  #  command: sh -c "npm install -g http-server && http-server -p 3000 ."
+  #  restart: unless-stopped
+
+networks:
+  default:
+      name: 0xcad-dockernet

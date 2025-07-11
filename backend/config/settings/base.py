@@ -98,19 +98,20 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 ASGI_APPLICATION = "config.asgi.application"
 
+
+REDIS_HOST = os.getenv('REDIS_HOST', '127.0.0.1')
+REDIS_PORT = 6379
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [(REDIS_HOST, REDIS_PORT)],
         },
     },
 }
 
-# These settings are used in our chat views.
-REDIS_HOST = os.getenv('REDIS_HOST', '127.0.0.1')
-REDIS_PORT = 6379
-SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 
 

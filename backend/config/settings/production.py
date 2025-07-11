@@ -2,11 +2,12 @@ import os
 from .base import *  # noqa: F401,F403
 
 DEBUG = True
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # FTP Constants ----------------------------------------------
 
-FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://ftp.0xc.ad')
-BACKEND_URL = os.getenv('BACKEND_URL', 'http://ftp-api.0xc.ad')
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'https://ftp.0xc.ad')
+BACKEND_URL = os.getenv('BACKEND_URL', 'https://ftp-api.0xc.ad')
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = os.getenv("EMAIL_HOST", 'smtp.gmail.com')
@@ -26,9 +27,9 @@ DATABASES = {
     }
 }
 
-ALLOWED_HOSTS = [BAKCEND_URL]
+ALLOWED_HOSTS = [BACKEND_URL.replace("https://","")]
 CORS_ALLOWED_ORIGINS = [
-    BACKEND_URL
+    FRONTEND_URL
 ]
 
 SESSION_COOKIE_SECURE = True
