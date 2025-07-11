@@ -24,7 +24,7 @@ class PlayInstanceSerializer(serializers.ModelSerializer):
             return obj.remaining_time.total_seconds() if obj.remaining_time else None
 
     def get_inventory(self, obj):
-        item_ids = obj.purchased_items.filter(item__item_type='play').values_list('item_id', flat=True).distinct()
+        item_ids = [item.item.id for item in obj.purchased_items.filter(item__item_type='play')]
         return item_ids
 
 
