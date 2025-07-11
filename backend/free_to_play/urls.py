@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/accounts/', include('accounts.urls')),
     path('api/chat/', include('chat.urls')),
     path('api/play/', include('play.urls')),
+    path('api/store/', include('store.urls')),
 ]
 
 if settings.DEBUG:

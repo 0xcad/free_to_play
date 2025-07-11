@@ -9,6 +9,7 @@ export interface PlayInstance {
   remaining_time: string | undefined;
   end_time: string | undefined;
   join_code: string;
+  inventory: number[];
 }
 
 export const defaultPlayInstance = (): PlayInstance => {
@@ -20,6 +21,7 @@ export const defaultPlayInstance = (): PlayInstance => {
     status: 'waiting',
     current_game_start: undefined,
     join_code: '',
+    inventory: [],
   };
 };
 

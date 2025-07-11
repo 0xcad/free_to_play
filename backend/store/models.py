@@ -11,7 +11,7 @@ ITEM_TYPE_CHOICES = [
 
 class ItemCategory(models.Model):
     name = models.CharField(max_length=50, unique=True, help_text="The name of the item category.")
-    order = models.PositiveIntegerField(default=0, help_text="Order of this category in the list, lower numbers appear first.")
+    order = models.PositiveIntegerField(null=True, blank=True, help_text="Order of this category in the list, lower numbers appear first.")
     item_type = models.CharField(max_length=10, choices=ITEM_TYPE_CHOICES, null=True, blank=True)
 
     class Meta:

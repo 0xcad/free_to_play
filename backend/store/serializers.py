@@ -2,12 +2,17 @@ from rest_framework import serializers
 from .models import Item, ItemPurchase, ItemCategory
 
 class ItemCategorySerializer(serializers.ModelSerializer):
+    items = serializers.SerializerMethodField()
     class Meta:
         model = ItemCategory
-        fields = ['name']
+        fields = ['id', 'name', 'order', 'items']
+
+    def get_items(self, obj):
+        items = obj.items.all()
+        return items.values_list('id', flat=True)
 
 class ItemSerializer(serializers.ModelSerializer):
-    category = ItemCategorySerializer(read_only=True)
+    #category = ItemCategorySerializer(read_only=True)
 
     class Meta:
         model = Item
@@ -20,7 +25,6 @@ class ItemSerializer(serializers.ModelSerializer):
                   'data',
                   'category',
                   'quantity',
-                  'order',
                   'is_available', 'is_visible',
                 ]
 

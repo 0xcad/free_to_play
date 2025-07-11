@@ -36,7 +36,11 @@ export const apiUrls = {
   },
 
   store: {
-    buy_gems: 'store/purchase/gems/'
+    buy_gems: 'store/buy-gems/',
+    list: 'store/items/',
+    detail: (id: string) : string =>  `store/items/${id}/`,
+    purchase: (id: string) : string =>  `store/items/${id}/purchase/`,
+    inventory: 'store/items/inventory/',
   },
 };
 

@@ -4,12 +4,11 @@ from . import views
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r'', views.ItemPurchaseViewSet, basename='ItemPurchase')
-
+router.register(r'', views.ItemViewSet, basename='items')
 
 app_name = "store"
 urlpatterns = [
-    path('items', views.ItemListView.as_view(), name='item_list'),
-    path('purchase', include(router.urls)),
+    path('items/', include(router.urls)),
+    path('buy-gems', views.BuyGemsView.as_view(), name='buy-gems'),
 ]
 

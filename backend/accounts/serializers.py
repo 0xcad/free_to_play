@@ -50,7 +50,7 @@ class UserSerializer(serializers.ModelSerializer):
         return obj.is_joined
 
     def get_inventory(self, obj):
-        return obj.inventory.values('id')
+        return obj.inventory.values_list('id', flat=True)
 
 class ResendEmailSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
