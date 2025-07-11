@@ -24,7 +24,6 @@ def robots(request):
     return HttpResponse('User-agent: *\nDisallow: /', content_type='text/plain')
 
 urlpatterns = [
-    path('robots.txt', robots),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('api/accounts/', include('accounts.urls')),
@@ -33,6 +32,9 @@ urlpatterns = [
     path('api/store/', include('store.urls')),
 ]
 
-if settings.DEBUG:
+if settings.SERVE_MEDIA:
     from django.conf.urls.static import static
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if settings.DEBUG:
+    urlpatterns.append(path('robots.txt', robots))

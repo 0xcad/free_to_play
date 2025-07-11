@@ -13,10 +13,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 
-# FTP Constants ----------------------------------------------
-
-FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:5173')
-
 # ------------------------------------------------------------
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,28 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=^kmgeir6j3ymf)_r3&u6icu!$vrxvog9&evus-c+kq7g2s81q'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
-
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'http://172.26.34.73:3000',
-    'http://ftp.0xcad.dev',
-    'https://ftp.0xcad.dev',
-]
 CORS_ALLOW_CREDENTIALS = True
 
 #SESSION_COOKIE_SAMESITE = 'None'
-#SESSION_COOKIE_SECURE = False    # TODO: set to True when you switch to HTTPS
 #CSRF_COOKIE_SAMESITE    = 'None'
-#CSRF_COOKIE_SECURE      = False  # TODO: likewise
-
 
 # Application definition
 
@@ -97,7 +75,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'free_to_play.urls'
+ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
@@ -116,9 +94,9 @@ TEMPLATES = [
 ]
 
 
-WSGI_APPLICATION = 'free_to_play.wsgi.application'
+WSGI_APPLICATION = 'config.wsgi.application'
 
-ASGI_APPLICATION = "free_to_play.asgi.application"
+ASGI_APPLICATION = "config.asgi.application"
 
 CHANNEL_LAYERS = {
     "default": {
@@ -190,8 +168,5 @@ AUTH_USER_MODEL = 'accounts.User'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-# TODO: change me
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'

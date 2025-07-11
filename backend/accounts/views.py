@@ -47,7 +47,7 @@ def send_login_email(user):
     msg = EmailMultiAlternatives(
         "Login to Free to Play",
         text_content,
-        "freetoplay@gmail.com",
+        settings.DEFAULT_FROM_EMAIL,
         [user.email],
         headers={"List-Unsubscribe": "<mailto:unsub@example.com>"},
     )

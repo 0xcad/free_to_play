@@ -455,19 +455,6 @@ what store api endpoints do we need?
 * a way for a user to view their purchased items (inventory?)
 * a way to see which items have been purchased for the game
 
-TODO:
-* need to extend user model in frontend to have an inventory, a list of id's of items in the store
-* need to add dictionary of items to frontend, and populate that from the store api endpoint
-
-item viewset
-* Create/Update/Delete views are admin only
-* /items/ -- list items available to purchase, grouped by category
-* /items/<id> -- get item details
-* /items/<id>/purchase -- purchase an item, returns the item purchased
-* /items/inventory -- get the user's inventory, which items they have purchased
-* /items/play -- get the items purchased for the current play instance (purchased items that have `item_type` of `play`)
-* /buy_gems/ -- buy gems for the current user
-
 idea later:
 * maybe you should be able to buy items piecemeal. like, you can contribute half of the gems for it. crowdfunding.
   * it would be so fucking funny to call this like, "buy this in multiple easy installments".
@@ -476,3 +463,23 @@ DONE:
 * update name/participation on account works
 * basic "dummy" gem purchase flow
 * store models created
+
+# 2025-07-11
+
+DONE:
+
+* need to extend user model in frontend to have an inventory, a list of id's of items in the store
+* need to add dictionary of items to frontend, and populate that from the store api endpoint
+
+item viewset -  DONE
+
+* Create/Update/Delete views are admin only
+* /items/ -- list items available to purchase, grouped by category
+* /items/<id> -- get item details
+* /items/<id>/purchase -- purchase an item, returns the item purchased
+* /items/inventory -- get the user's inventory, which items they have purchased
+* /items/play -- get the items purchased for the current play instance (purchased items that have `item_type` of `play`)
+* /buy_gems/ -- buy gems for the current user
+
+TODO:
+* deployment stuff. multiple django settings, docker, websockets working on nginx
