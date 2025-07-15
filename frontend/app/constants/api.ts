@@ -7,7 +7,8 @@ export const SESSION_KEY = '__free_to_play__';
 export const apiUrls = {
   accounts: {
     me: 'accounts/me/',
-    login: (uid: string, token: string): string => `accounts/login/${uid}/${token}`,
+    //login: (uid: string, token: string): string => `accounts/login/${uid}/${token}`,
+    login: `accounts/login/`,
     logout: 'accounts/logout/',
     resend: 'accounts/resend_email/',
 

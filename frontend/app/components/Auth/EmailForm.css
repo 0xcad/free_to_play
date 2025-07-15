@@ -1,0 +1,20 @@
+@import "../../vars.css";
+
+.email-form {
+  background-color: var(--color-active);
+  color: #333;
+  padding: 1rem 0.5rem;
+  margin-top: 1rem;
+}
+
+/*.email-form p div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+}*/
+.email-form p:first-of-type {
+  margin-top: 0;
+}

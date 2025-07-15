@@ -7,6 +7,7 @@ from .serializers import (
     CreateUserSerializer,
     UserSerializer,
     ResendEmailSerializer,
+    GoogleAuthSerializer,
 )
 from play.serializers import PlayInstanceSerializer
 
@@ -25,6 +26,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.shortcuts import render
 
 from notifications.utils import send_notification
+from .utils import get_user_data
 
 from django.conf import settings
 
@@ -55,6 +57,25 @@ def send_login_email(user):
     # attach the HTML content to the email instance and send.
     msg.attach_alternative(html_content, "text/html")
     msg.send()
+
+def login_user(user):
+    # activate the user!
+    if (not user.is_active):
+        user.is_active = True
+        user.save()
+    refresh = RefreshToken.for_user(user)
+
+    play_instance_data = {}
+    if user.is_joined:
+        play_instance = PlayInstance.get_active()
+        play_instance_data = PlayInstanceSerializer(play_instance).data
+
+    return Response({
+        'refresh': str(refresh),
+        'access': str(refresh.access_token),
+        'user': UserSerializer(user).data,
+        'play_instance': play_instance_data
+    });
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -143,35 +164,70 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=False,
-        methods=['get'],
-        url_path=r'login/(?P<uidb64>[^/.]+)/(?P<token>[^/.]+)',
+        methods=['POST'],
         permission_classes=[AllowInactiveUsers]
     )
-    def login(self, request, uidb64=None, token=None):
-        try:
-            uid = urlsafe_base64_decode(uidb64).decode()
-            user = User.objects.get(pk=uid)
-            if default_token_generator.check_token(user, token):
-                # activate the user!
-                if (not user.is_active):
-                    user.is_active = True
+    def login(self, request):
+        '''
+        Either verify user via email link, or Google login
+        '''
+        method = request.data.get('method', 'email').lower()
+
+        if method == 'email':
+            try:
+                uidb64 = request.data.get('uid')
+                token = request.data.get('token')
+
+
+                uid = urlsafe_base64_decode(uidb64).decode()
+                user = User.objects.get(pk=uid)
+                if default_token_generator.check_token(user, token):
+                    return login_user(user)
+                return Response({"details": "Invalid token"}, status=status.HTTP_401_UNAUTHORIZED)
+            except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+                return Response({"details": "Invalid link"}, status=status.HTTP_400_BAD_REQUEST)
+        elif method == 'google':
+            code = request.data.get('code')
+            user_data = get_user_data(code)
+
+            email = user_data.get('email')
+            name = user_data.get('name')
+            user, created = User.objects.get_or_create(email=email, defaults={'name': name})
+            if user.name != user_data.get('name'):
+                user.name = user_data.get('name')
+                user.save()
+            return login_user(user)
+
+
+
+    @action(detail=False,
+            methods=["POST"],
+            url_path="login/google",
+            permission_classes=[AllowInactiveUsers])
+    def login_with_google(self, request):
+        """
+        Handles Google login by verifying the token and creating or updating the user.
+        """
+        if request.data.get('credential'):
+            # use `credential` as jwt token, parse that
+            token = request.data.get('credential')
+            import google.oauth2.id_token
+            from google.auth.transport import requests as google_requests
+            try:
+                idinfo = google.oauth2.id_token.verify_oauth2_token(
+                    token, google_requests.Request(), settings.GOOGLE_CLIENT_ID
+                )
+                email = idinfo.get('email')
+                name = idinfo.get('name')
+                user, created = User.objects.get_or_create(email=email, defaults={'name': name})
+                if user.name != name:
+                    user.name = name
                     user.save()
-                refresh = RefreshToken.for_user(user)
+                return login_user(user)
+            except ValueError as e:
+                return Response({"details": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        # now what do we do here? do we redirect to the frontend?
 
-                play_instance_data = {}
-                if user.is_joined:
-                    play_instance = PlayInstance.get_active()
-                    play_instance_data = PlayInstanceSerializer(play_instance).data
-
-                return Response({
-                    'refresh': str(refresh),
-                    'access': str(refresh.access_token),
-                    'user': UserSerializer(user).data,
-                    'play_instance': play_instance_data
-                });
-            return Response({"details": "Invalid token"}, status=status.HTTP_401_UNAUTHORIZED)
-        except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-            return Response({"details": "Invalid link"}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['POST'], permission_classes=[AllowInactiveUsers])
     def resend_email(self, request):

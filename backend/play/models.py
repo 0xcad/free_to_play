@@ -37,7 +37,11 @@ class PlayInstance(models.Model):
 
     @classmethod
     def get_active(cls):
-        return cls.objects.get(is_active=True)
+        try:
+            return cls.objects.get(is_active=True)
+        except cls.DoesNotExist:
+            active_play = cls.objects.create(name="Debug", is_active=True, is_debug=True)
+            return active_play
 
     @classmethod
     def generate_join_code(cls):

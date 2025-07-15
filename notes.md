@@ -481,5 +481,17 @@ item viewset -  DONE
 * /items/play -- get the items purchased for the current play instance (purchased items that have `item_type` of `play`)
 * /buy_gems/ -- buy gems for the current user
 
-TODO:
+TODO: -- pretty much DONE!
 * deployment stuff. multiple django settings, docker, websockets working on nginx
+
+# 2025-07-14
+Goal:
+* do a first pass of css for all pages
+* get the youtube video working on the stage page (and maybe make that a model item if it isn't already, and make it changeable via the admin panel)
+
+notes:
+* to do "sign in with apple", first you have to be an apple developer, which costs $99 a year. skip that for now and likely future...
+
+DONE:
+* sign in with google implemented and finished :)) (might be a bug somewhere with env vars...)
+* first pass of css for most pages

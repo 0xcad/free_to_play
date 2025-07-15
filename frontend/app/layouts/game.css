@@ -1,0 +1,73 @@
+@import "../vars.css";
+
+.game-layout-container {
+  flex-grow: 1;
+  height: 100%;
+  position: relative;
+}
+.game-layout {
+  display: flex;
+  flex-direction: column-reverse;
+  height: 100%;
+}
+
+.game-content {
+  flex-grow: 1;
+  padding: 0 1rem 1rem 1rem;
+}
+
+.game-nav ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+}
+.game-nav li {
+  flex: 1 1 100%;
+  text-align: center;
+}
+.game-nav a {
+  width: 100%;
+  padding: 0.25rem 0.5rem;
+  box-sizing: border-box;
+  display: inline-block;
+  text-decoration: none;
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+.game-nav a.active {
+  background: var(--color-primary);
+  color: var(--color-bg-alt);
+}
+
+.waiting-bar {
+  background-color: var(--color-active);
+  color: var(--color-bg);
+  padding: 0.5rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+.waiting-bar .spinner {
+  width: 1rem; height: 1rem;
+  border-width: 4px;
+}
+
+.gems {
+  position: absolute;
+  top: 0.5rem;
+  border: 1px solid var(--color-primary);
+  border-right: none;
+  /*border-radius: 0 10px 10px 0;
+  left: 0;
+  border-left: none;
+   */
+  right: 0;
+  border-radius: 10px 0 0 10px;
+  padding: 0.25rem 1rem 0.25rem 0.5rem;
+  font-weight: 600;
+  background-color: var(--color-bg-alt);
+  cursor: pointer;
+}

@@ -13,7 +13,12 @@ const Stage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<string>('chat');
 
   if (!play || play.playInstance?.status == 'waiting') {
-    return <Waiting />
+    return (
+      <>
+      <h1>stage</h1>
+      <Waiting />
+      </>
+    );
   }
 
   return (

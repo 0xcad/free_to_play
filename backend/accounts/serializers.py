@@ -64,3 +64,7 @@ class UserListSerializer(serializers.ModelSerializer):
 
     def get_is_admin(self, obj):
         return obj.is_staff or obj.is_superuser
+
+class GoogleAuthSerializer(serializers.Serializer):
+    code = serializers.CharField(required=False)
+    error = serializers.CharField(required=False)

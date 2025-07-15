@@ -75,8 +75,8 @@ const Account: React.FC = () => {
   return (
     <>
       <h1>Account</h1>
-      <span>Email: {currentUser.email}</span><br />
-      <form>
+      <p><label>Email:</label> {currentUser.email}</p>
+      <form className='form'>
         <p>
           <label htmlFor="name">Name: </label>
           <input
@@ -110,12 +110,13 @@ const Account: React.FC = () => {
           <label htmlFor="not-participating">No</label>
         </p>
       </form>
-      <span>Balance: {currentUser.balance} gems</span> <button onClick={() => {store.setBuyGemsModalIsOpen(true);}}>Buy Gems!!</button>
+      <p><label>Balance:</label> {currentUser.balance} gems</p>
+      <button className="button primary" onClick={() => {store.setBuyGemsModalIsOpen(true);}}>Buy Gems</button>
 
-      <p>
-        {showSave && (<button onClick={updateAccount}>Save Changes</button> )} {' '}
+      <div className='buttons'>
+        {showSave && (<button className="primary" onClick={updateAccount}>Save Changes</button> )} {' '}
         <button onClick={handleLogout}>Log out</button>
-      </p>
+      </div>
     </>
   );
 };

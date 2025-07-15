@@ -18,25 +18,44 @@ const Verify: React.FC = () => {
     const token = searchParams.get("token");
     const uid = searchParams.get("uid");
 
-    if (!token || !uid) {
+    const code = searchParams.get("code");
+
+    // you either have a code (google), or a token and uid (email)
+    if (! (code || (token && uid))) {
       console.log("invalid parameters");
       navigate(routes.join.link);
       return;
     }
 
+    var data;
+    if (token && uid) {
+      data = {
+        method: 'email',
+        uid: uid,
+        token: token,
+      };
+    }
+    else if (code) {
+      data = {
+        method: 'google',
+        code: code,
+      };
+    }
+
     try {
-      var response = await Api.get(apiUrls.accounts.login(uid, token));
+      const response = await Api.post(apiUrls.accounts.login, data);
 
       // set the token to authenticate the user
-      setToken(response.access);
       response.user.is_authenticated = true;
-      setCurrentUser(response.user as User);
+      setCurrentUser(response.user);
       play.setPlayInstance(response.play_instance);
 
       if (response.user.is_joined)
         navigate(routes.stage.link);
       else
         navigate(routes.join.link);
+
+      setToken(response.access);
 
     } catch (err) {
       console.log('this is the error we get', err);
@@ -53,8 +72,7 @@ const Verify: React.FC = () => {
   return (
     <>
       <h1>Verifying...</h1>
-      <p>{ searchParams.get("token") }</p>
-      <p>{ searchParams.get("uid") }</p>
+      <p>Please wait on this page to complete sign-in...</p>
     </>
   );
 }

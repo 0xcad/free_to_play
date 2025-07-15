@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router';
 import { useFormStatus } from "react-dom";
 
 import Api from '~/utils/api';
-import { apiUrls } from '~/constants/api';
+import { SESSION_KEY, apiUrls } from '~/constants/api';
 import routes from '~/constants/routes';
+import Storage from '~/utils/storage';
 
 import LoginForm from './form.tsx';
 
@@ -12,7 +13,7 @@ import { useAppContext } from '~/context/AppContext';
 
 const JoinForm: React.FC = () => {
   let navigate = useNavigate();
-  const { currentUser, setCurrentUser } = useAppContext();
+  const { currentUser, setCurrentUser, setToken } = useAppContext();
 
   const [formData, setFormData] = useState({
     join_code: '',
@@ -41,6 +42,13 @@ const JoinForm: React.FC = () => {
     });
   };
 
+  const handleLogout = () => {
+    // TODO: make a backend request to invalidate current key. but anyways...
+    Storage.remove(SESSION_KEY);
+    setToken('');
+    setCurrentUser(null);
+  };
+
   const { pending } = useFormStatus();
 
   return (
@@ -48,7 +56,7 @@ const JoinForm: React.FC = () => {
       <h1>Enter audience join code</h1>
       <p>You've created your account, {currentUser?.name}, we just need you to enter your audience join code.</p>
 
-      <form action={handleSubmit}>
+      <form action={handleSubmit} className='form'>
         <label>
           Join Code:
           <input name="join_code" type="text" id="join_code" required={true} value={formData.join_code} onChange={handleChange}/>
@@ -58,6 +66,9 @@ const JoinForm: React.FC = () => {
           {pending ? "Submitting..." : "Submit"}
         </button>
       </form>
+
+
+      <button onClick={handleLogout} className="button">Log out</button>
     </>
   );
 }

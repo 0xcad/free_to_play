@@ -7,9 +7,11 @@ const Waiting: React.FC = () => {
   return (
     <div>
       <p>We are currently waiting for the play to start. What can you do right now?</p>
-      <p><Link to={routes.program.link}>Read the program</Link></p>
-      <p><Link to={routes.tutorial.link}>Read the tutorial</Link></p>
-      <p><a href="#" onClick={() => {store.setBuyGemsModalIsOpen(true);}}>Buy Gems</a></p>
+      <div className="buttons">
+        <Link to={routes.program.link}><button>Read the program</button></Link>
+        <Link to={routes.tutorial.link}><button>Read the tutorial</button></Link>
+        <button onClick={() => {store.setBuyGemsModalIsOpen(true);}} className="primary">Buy Gems</button>
+      </div>
     </div>
   );
 };

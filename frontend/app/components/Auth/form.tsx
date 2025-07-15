@@ -8,6 +8,9 @@ import { apiUrls } from '~/constants/api';
 import routes from '~/constants/routes';
 
 import { useAppContext } from '~/context/AppContext';
+import GoogleLoginButton from './GoogleLoginButton';
+
+import './EmailForm.css';
 
 const EmailForm: React.FC<{
   onSuccess: (result: null) => void;
@@ -59,12 +62,12 @@ const EmailForm: React.FC<{
   const { pending } = useFormStatus();
 
   return (
-    <form action={handleSubmit}>
-      <label>
-        Email:
+    <form action={handleSubmit} className="form email-form">
+      <p>
+        <label>Email</label>
         <input name="email" type="email" id="email" required={true} value={formData.email} onChange={handleChange}/>
         { emailError && (<span>Error: invalid email address</span>)}
-      </label>
+      </p>
 
       {
       /*<br />
@@ -78,22 +81,21 @@ const EmailForm: React.FC<{
       </label>*/
       }
 
-      <br />
-      <label>
-        Name:
+      <p>
+        <label>Name</label>
         <input name="name" type="text" id="name" required={true} value={formData.name} onChange={handleChange}/>
-      </label>
-      <br />
-      <label>
+      </p>
+
+      <p className='flex'>
         <input
           type="checkbox"
           name="is_participating"
+          id="is_participating"
           checked={formData.is_participating}
           onChange={handleChange}
         />
-        I want to participate in the show that calls for audience participation.
-      </label>
-      <br />
+        <label htmlFor="is_participating">I may be selected for audience participtation</label>
+      </p>
 
       <input name="join_code" type="hidden" id="join_code" value={joinCode}/>
       <button type="submit" disabled={pending}>
@@ -118,12 +120,27 @@ const LoginForm: React.FC = () => {
     toggleShowEmail(true);
   };
 
+  const [pageLoaded, setPageLoaded] = useState(false);
+
+  useEffect(() => {
+    const handleLoad = () => {
+      setPageLoaded(true);
+    };
+    window.addEventListener('load', handleLoad);
+    return () => {
+      window.removeEventListener('load', handleLoad);
+    };
+  }, []);
+
   return (
     <>
-      <h1>Join the game</h1>
-      <button disabled={true}>Continue with Apple</button>
-      <button disabled={true}>Continue with Google</button>
-      <button onClick={toggleShowEmail}>Continue with Email</button>
+      <h1>Join the Game</h1>
+      <div class='buttons'>
+        {/*<button disabled={true}>Continue with Apple</button>*/}
+        <GoogleLoginButton />
+
+        <button onClick={toggleShowEmail} className={showEmail ? "active" : ""}>Continue with Email</button>
+      </div>
 
       { showEmail && (
         <EmailForm onSuccess={onSuccess} />

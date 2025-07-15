@@ -60,9 +60,11 @@ const LoginEmail: React.FC = () => {
     <>
       <h1>One more step!</h1>
       <p>We created your account. Now check your email for a login link.</p>
-      <p>Didn't get one? <button onClick={resendEmail} disabled={isResendDisabled}>Resend code</button></p>
-      { isResendDisabled && (<p>Email resent. Try again in {resendTimer} seconds</p> )}
-      <p>Use a different email address? <button onClick={recreateAccount}>Recreate account</button></p>
+      <label>Didn't get one?
+        <button className='button' onClick={resendEmail} disabled={isResendDisabled}>Resend code</button>
+      </label>
+      { isResendDisabled && (<p className="mono txt-sm">Email resent. Try again in {resendTimer} seconds</p> )}
+      <label class="mt-1">Use a different email address? <button className="button" onClick={recreateAccount}>Recreate account</button></label>
     </>
   );
 }

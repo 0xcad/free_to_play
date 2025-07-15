@@ -5,7 +5,7 @@ const routes = {
   },
 
   join: {
-    link: '/auth/join',
+    link: '/auth/join/',
   }, // if you're joined, redirect to stage
 
   loginEmail: {
@@ -13,7 +13,7 @@ const routes = {
   }, // if you have no user, redirect to join
 
   verify: {
-    link: '/auth',
+    link: '/auth/',
   }, // if you're joined, redirect to stage
 
   program: {

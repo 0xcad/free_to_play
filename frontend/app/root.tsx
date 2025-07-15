@@ -9,6 +9,7 @@ import {
 } from "react-router";
 
 import type { Route } from "./+types/root";
+import "./vars.css";
 import "./app.css";
 
 import { AppProvider } from './context/AppContext';
@@ -39,7 +40,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
-        {children}
+        <div className="app">
+          <header>
+            <p>Free to Play</p>
+          </header>
+          {children}
+        </div>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -57,7 +63,7 @@ export default function App() {
       <Outlet />
       <ToastContainer
         hideProgressBar={true}
-        autoClose={3000}
+        autoClose={1000000}
         pauseOnHover
       />
     </AppProvider>

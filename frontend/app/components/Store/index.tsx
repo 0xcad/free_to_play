@@ -74,13 +74,13 @@ const Store: React.FC = () => {
                 <h3>{item.name}</h3>
                 <p>{item.description}</p>
                 <p>Price: {item.cost} gems</p>
-                <button onClick={() => buyItem(item.id)}>Buy {item.name}</button>
+                <button className="button" onClick={() => buyItem(item.id)}>Buy {item.name}</button>
               </li>
             )}) }
           </ul>
         </div>
       )) }
-      <button onClick={() => store.setBuyGemsModalIsOpen(true)}>Buy Gems</button>
+      <button className="button primary" onClick={() => store.setBuyGemsModalIsOpen(true)}>Buy Gems</button>
     </>
   );
 };

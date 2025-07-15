@@ -10,6 +10,7 @@ import Modal from '../components/shared/modal';
 import BuyGemsModal from '../components/Store/BuyGemsModal';
 
 import { toast } from 'react-toastify';
+import "./game.css";
 
 export default function GameLayout() {
   let navigate = useNavigate();
@@ -46,18 +47,26 @@ export default function GameLayout() {
   }, [ws.registerHandler, ws.unregisterHandler]);
 
   return (
-    <>
-      <nav>
-        <NavLink to="/stage" end>
-          Home
-        </NavLink>{' '}
-        <NavLink to="/store" end>Store</NavLink>{' '}
-        <NavLink to="/account">Account</NavLink>
-      </nav>
-      { play?.playInstance?.status === 'waiting' && (
-        <div>Waiting for the play to start <Spinner /></div>
-      )}
-      <div onClick={() => {store.setBuyGemsModalIsOpen(true);}}>Balance: {currentUser?.balance} gems</div>
+    <div className="game-layout-container">
+      <div className="game-layout">
+        <nav className="game-nav">
+          <ul>
+            <li><NavLink to="/stage" end>Home</NavLink></li>
+            <li><NavLink to="/store" end>Store</NavLink></li>
+            <li><NavLink to="/account">Account</NavLink></li>
+          </ul>
+        </nav>
+
+        { play?.playInstance?.status === 'waiting' && (
+          <div class='waiting-bar'>Waiting for the play to start <Spinner /></div>
+        )}
+
+        <div className="game-content">
+          <Outlet />
+        </div>
+      </div>
+
+      <div className="gems" onClick={() => {store.setBuyGemsModalIsOpen(true);}}>❇️ {currentUser?.balance} gems</div>
       <Modal
         isOpen={currentPlayerModalIsOpen}
         onClose={() => {setCurrentPlayerModalIsOpen(false);}}
@@ -69,7 +78,6 @@ export default function GameLayout() {
         isOpen={store.buyGemsModalIsOpen}
         onClose={() => {store.setBuyGemsModalIsOpen(false);}}
       />
-      <Outlet />
-    </>
+    </div>
   );
 };

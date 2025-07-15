@@ -12,16 +12,18 @@ import routes from './constants/routes';
 
 
 export default [
-  index("./routes/home.tsx"),
 
   route("admin", "./components/Admin/index.tsx"),
 
-  // auth
-  route("auth", "./components/Auth/login.tsx", [
-    index("./components/Auth/verify.tsx"),
-    route("join", "./components/Auth/join.tsx"),
-    //route("login", "./components/Auth/form.tsx"),
-    route("login-email", "./components/Auth/LoginEmail.tsx"),
+  layout('./layouts/main.tsx', [
+    // auth
+    route("auth", "./components/Auth/login.tsx", [
+      index("./components/Auth/verify.tsx"),
+      route("join", "./components/Auth/join.tsx"),
+      //route("login", "./components/Auth/form.tsx"),
+      route("login-email", "./components/Auth/LoginEmail.tsx"),
+    ]),
+    index("./routes/home.tsx"),
   ]),
 
 

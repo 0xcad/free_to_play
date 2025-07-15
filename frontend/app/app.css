@@ -13,3 +13,103 @@ body {
     color-scheme: dark;
   }
 }*/
+
+@import './vars.css';
+
+body, html {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  padding: 0;
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  margin: 0;
+  font-size: 1.1em;
+  line-height: 1.4;
+  height: 100%;
+}
+
+.app {
+  max-width: 35rem;
+  margin: 0 auto;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  box-sizing: border-box;
+  height: 100%;
+}
+.app header {
+  font-family: mono, monospace;
+  text-align: center;
+  background-color: var(--color-bg-alt);
+  padding: 0.25rem 0.5rem;
+}
+.app header p { margin: 0; }
+.flex-grow {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.app footer {
+  background-color: var(--color-bg-alt);
+  text-align: center;
+}
+.app main {
+  padding: 1rem;
+}
+
+.button, .buttons button, .form input[type="submit"], .form button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  width: 100%;
+  margin: 0.5rem 0;
+  border: none;
+  border-radius: 0.25rem;
+  background: var(--color-text);
+  cursor: pointer;
+}
+
+.form input[type="text"], .form input[type="email"] {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  background: var(--color-text);
+  border: 1px solid var(--color-primary);
+  font-family: var(--font-accent);
+  font-weight: 600;
+}
+.form input[type="submit"], .form button, button.primary {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+button.active {
+  background-color: var(--color-active);
+}
+label {
+  font-weight: 600;
+}
+.form input[type='checkbox'] {
+  margin-right: 0.5rem;
+  transform: scale(1.4);
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.mt-1 {
+  margin-top: 1rem;
+  display: block;
+}
+.mono {
+  font-family: var(--font-mono);
+}
+.txt-sm {
+  font-size: 0.8em;
+}
