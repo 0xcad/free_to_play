@@ -7,10 +7,11 @@ import requests
 import jwt
 
 from google_auth_oauthlib.flow import Flow
+from django.conf import settings
 
 
 def get_user_data(code):
-    REDIRECT_URI = f'http://localhost:5173/auth/'
+    REDIRECT_URI = f'{settings.FRONTEND_URL}/auth/'
 
     flow = Flow.from_client_config(
         {
