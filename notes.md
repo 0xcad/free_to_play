@@ -495,3 +495,10 @@ notes:
 DONE:
 * sign in with google implemented and finished :)) (might be a bug somewhere with env vars...)
 * first pass of css for most pages
+
+# 2025-07-17
+bugs: FIXED
+* backend env vars not working for google oauth -- fixed, I believe
+* need to have client id be an env var in frontend -- fixed, I believe
+* logout notification sending even when it shouldn't; check window pathname vs join page url in `const` folder -- could not replicate?
+

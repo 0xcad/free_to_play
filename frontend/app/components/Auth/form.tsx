@@ -135,7 +135,7 @@ const LoginForm: React.FC = () => {
   return (
     <>
       <h1>Join the Game</h1>
-      <div class='buttons'>
+      <div className='buttons'>
         {/*<button disabled={true}>Continue with Apple</button>*/}
         <GoogleLoginButton />
 

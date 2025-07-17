@@ -1,5 +1,6 @@
 export const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api/';
 export const wsBaseUrl = import.meta.env.VITE_WS_URL || 'ws://127.0.0.1:8000/ws/notifications/';
+export const frontendBaseUrl = import.meta.env.VITE_FRONTEND_URL || 'http://localhost:5173/';
 
 export const SESSION_KEY = '__free_to_play__';
 

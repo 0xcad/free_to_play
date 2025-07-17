@@ -58,7 +58,7 @@ export default function GameLayout() {
         </nav>
 
         { play?.playInstance?.status === 'waiting' && (
-          <div class='waiting-bar'>Waiting for the play to start <Spinner /></div>
+          <div className='waiting-bar'>Waiting for the play to start <Spinner /></div>
         )}
 
         <div className="game-content">
