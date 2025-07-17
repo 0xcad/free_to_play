@@ -8,10 +8,12 @@ import jwt
 
 from google_auth_oauthlib.flow import Flow
 from django.conf import settings
+from django.http import JsonResponse
 
 
 def get_user_data(code):
     REDIRECT_URI = f'{settings.FRONTEND_URL}/auth/'
+    print('hey!', REDIRECT_URI)
 
     flow = Flow.from_client_config(
         {
@@ -27,7 +29,10 @@ def get_user_data(code):
     )
     flow.redirect_uri = REDIRECT_URI
 
-    flow.fetch_token(code=code)
+    try:
+        flow.fetch_token(code=code)
+    except Exception as e:
+        return str(e)
     credentials = flow.credentials
     access_token = credentials.token
 
@@ -37,7 +42,7 @@ def get_user_data(code):
     )
 
     if response.status_code != 200:
-        return JsonResponse({"error": "Failed to fetch user info"}, status=response.status_code)
+        return "Failed to fetch user info"
 
     user_info = response.json()
     return user_info

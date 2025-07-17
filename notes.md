@@ -336,34 +336,34 @@ stage todo later:
 * so currently I send out the entire user on every chat message, both in websockets and in api return. this leads to a lot of potential user duplication. i could send out just the userID, and make the frontend do a lookup of users it has in its system??
 
 admin todo:
-* chat moderation
-* see a list of users in the audience
-* select a user that is currently logged in and hasn't been chosen, to play
+* chat moderation - DONE
+* see a list of users in the audience - DONE
+* select a user that is currently logged in and hasn't been chosen, to play - DONE
   * consider: each play needs to remember a couple of things per user. if they've played the game before, if they're muted, if they're kicked. should this be another model object?
 
 accounts:
-* update name
-* update participation
+* update name - DONE
+* update participation - DONE
 * buy gems
 
 store todo:
-* make model for items to purchase
-* make model for purchased items in play
+* make model for items to purchase - DONE
+* make model for purchased items in play - DONE
 * buy gems
 
 # 2025-06-09
 
 todo later:
-* if you get muted, admins can still see your messages, you can send new ones, just other people can't see them
+* if you get muted, admins can still see your messages, you can send new ones, just other people can't see them - TODO
 
 TODO:
-* select the new player to go next
-  * re-roll + confirm ability
-* start / pause / finish the game
-  * confirm button on game finish
-* get the join QR code thing
-* ability to view/change/update the join code
-* users should have like, a "call flight attendant" button, that just sends a websocket to the admin that they need help
+* select the new player to go next - DONE
+  * re-roll + confirm ability - DONE
+* start / pause / finish the game - DONE
+  * confirm button on game finish - TODO?
+* get the join QR code thing - DONE
+* ability to view/change/update the join code - DONE
+* users should have like, a "call flight attendant" button, that just sends a websocket to the admin that they need help - TODO
 
 what do we need to do this:
 * if a user needs help, send a websocket to the backend. admin panel has a handler where we like, highlight their name or something
@@ -437,9 +437,9 @@ accounts: - DONE
 * buy gems
 
 store todo:
-* make model for items to purchase
-* make model for purchased items in play
-* in the stage, add an inventory for purchased items
+* make model for items to purchase - DONE
+* make model for purchased items in play - DONE
+* in the stage, add an inventory for purchased items - DONE
   * users have a personal inventory, the play instance has its own inventory?
 * buy gems with stripe
 
@@ -487,7 +487,6 @@ TODO: -- pretty much DONE!
 # 2025-07-14
 Goal:
 * do a first pass of css for all pages
-* get the youtube video working on the stage page (and maybe make that a model item if it isn't already, and make it changeable via the admin panel)
 
 notes:
 * to do "sign in with apple", first you have to be an apple developer, which costs $99 a year. skip that for now and likely future...
@@ -501,4 +500,20 @@ bugs: FIXED
 * backend env vars not working for google oauth -- fixed, I believe
 * need to have client id be an env var in frontend -- fixed, I believe
 * logout notification sending even when it shouldn't; check window pathname vs join page url in `const` folder -- could not replicate?
+  * reproduced -- this actually
 
+TODO:
+* CSS for stage page
+* stripe payment flow for buying gems
+* store page CSS + changes
+* vanity purchase items for typing in chat
+* admin view css should take up full screen
+
+
+misc TODO:
+* I think "send email" link should disable the button as soon as you click it
+* bug "you need to log in again" notificaiton appears erroneously whenever you log in with email
+
+DONE:
+* fixed homepage navigate bug
+* added a way to change stream url and display youtube video (i.e, try `https://www.youtube-nocookie.com/embed/iR1OvxoFD5I?si=BIF_ZSZnx8VbQgjD`)

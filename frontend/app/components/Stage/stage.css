@@ -1,0 +1,13 @@
+.yt-embed-holder {
+  width: 100%;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.yt-embed-holder iframe {
+  width: 300%;
+  height: 100%;
+  margin-left: -100%;
+}

@@ -190,6 +190,9 @@ class UserViewSet(viewsets.ModelViewSet):
             code = request.data.get('code')
             user_data = get_user_data(code)
 
+            if type(user_data) == str:
+                return Response({"details": "Error: " + user_data}, status=status.HTTP_400_BAD_REQUEST)
+
             email = user_data.get('email')
             name = user_data.get('name')
             user, created = User.objects.get_or_create(email=email, defaults={'name': name})

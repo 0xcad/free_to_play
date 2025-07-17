@@ -1,5 +1,5 @@
 import React, { useState,  useEffect, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams, Link } from 'react-router';
 
 import { useAppContext } from '~/context/AppContext';
 
@@ -12,6 +12,7 @@ const Verify: React.FC = () => {
   let navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { setToken, setCurrentUser, play } = useAppContext();
+  const [loginFailed, setLoginFailed] = useState(false);
   const hasVerified = useRef(false);
 
   const verifyParams = async (): Promise<void> => {
@@ -59,6 +60,7 @@ const Verify: React.FC = () => {
 
     } catch (err) {
       console.log('this is the error we get', err);
+      setLoginFailed(true);
     }
   };
 
@@ -72,7 +74,11 @@ const Verify: React.FC = () => {
   return (
     <>
       <h1>Verifying...</h1>
-      <p>Please wait on this page to complete sign-in...</p>
+      {loginFailed ? (
+        <p>Login failed. <Link to={routes.join.link}>Retry?</Link></p>
+      ) : (
+        <p>Please wait on this page to complete sign-in...</p>
+      )}
     </>
   );
 }

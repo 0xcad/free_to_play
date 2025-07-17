@@ -63,7 +63,7 @@ export default function App() {
       <Outlet />
       <ToastContainer
         hideProgressBar={true}
-        autoClose={1000000}
+        autoClose={3000}
         pauseOnHover
       />
     </AppProvider>

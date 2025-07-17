@@ -12,6 +12,7 @@ class PlayInstance(models.Model):
     name = models.CharField(max_length=255, null=True)
     is_debug = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
+    stream_url = models.URLField(max_length=255, blank=True, null=True)
 
     STATUS_CHOICES = [
         ('waiting', 'Waiting'),

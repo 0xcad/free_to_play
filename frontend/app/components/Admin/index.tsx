@@ -86,18 +86,10 @@ const Admin: React.FC = () => {
     }
   }
 
-  const changeJoinCode = async () => {
-    let code = prompt(`The current join code is ${play.playInstance.join_code}.\nNew join code:`);
-    if (!code) return;
-    var oldCode = play.playInstance.join_code;
-    play.updatePlayInstance({join_code: code });
-    try {
-      await Api.post(apiUrls.play.update, {join_code: code});
-    } catch (error) {
-      play.updatePlayInstance({join_code: oldCode });
-      console.log(error);
-      toast.error("failed to update play instance...");
-    }
+  const changeField = async (field: string) => {
+    const currentValue = play.playInstance[field];
+    const newValue = prompt(`The current ${field} is ${currentValue}.\nNew ${field}:`);
+    updatePlayInstance({ [field]: newValue });
   }
 
   const selectPlayer = async (exclude?: string[]) => {
@@ -122,9 +114,10 @@ const Admin: React.FC = () => {
       <div>
         <h2>Play</h2>
         <ul>
-          <li>Join code: {play.playInstance.join_code}</li>
+          <li>Join code: {play.playInstance.join_code} <button onClick={() => {changeField('join_code')}}>Change join code</button></li>
           <li>Status: {play.playInstance.status}</li>
           <li>Current Player: {play.playInstance.current_player?.name}</li>
+          <li>Stream URL: {play.playInstance.stream_url} <button onClick={() => {changeField('stream_url')}}>Change</button></li>
           <li>Timer: <Timer endTime={play.playInstance.end_time} remainingTime={play.playInstance.remaining_time} showControls={true}/></li>
         </ul>
 
@@ -132,7 +125,6 @@ const Admin: React.FC = () => {
         { play.playInstance.status != "waiting" && (<button onClick={() => {updatePlayInstance({status: "waiting"})}}>Set status to "waiting"</button>)}
         { play.playInstance.status != "running" && (<button onClick={() => {updatePlayInstance({status: "running"})}}>Set status to "running"</button>)}
         { play.playInstance.status == "running" && (<button onClick={() => {updatePlayInstance({status: "finished"})}}>Set status to "finished"</button>)}
-        <button onClick={changeJoinCode}>Change join code</button>
         <button onClick={() => {selectPlayer()}}>Select new player</button>
 
         <Modal
