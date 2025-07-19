@@ -25,6 +25,7 @@ services:
       - ftp-backend
     env_file: ./frontend/.env
     container_name: ftp-frontend
+    restart: unless-stopped
 
   #ftp-frontend:
   #  image: node:alpine

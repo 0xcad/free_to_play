@@ -101,7 +101,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     console.log('the current token is', token);
 
     if (!token) {
-      if (!currentUser && !(window.location.pathname === routes.verify.link || window.location.pathname == routes.join.link)) {
+      // TODO: consider importing this?
+      const protectedPaths = [routes.stage.link, routes.store.link, routes.account.link];
+      if (!currentUser && protectedPaths.includes(window.location.pathname)) {
         // TODO: skip this, and just get protected routes
         toast.error('you need to log in again. no token, and no user');
         navigate(routes.join.link);

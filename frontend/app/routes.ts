@@ -14,6 +14,7 @@ import routes from './constants/routes';
 export default [
 
   route("admin", "./components/Admin/index.tsx"),
+  index("./routes/home.tsx"),
 
   layout('./layouts/main.tsx', [
     // auth
@@ -23,7 +24,6 @@ export default [
       //route("login", "./components/Auth/form.tsx"),
       route("login-email", "./components/Auth/LoginEmail.tsx"),
     ]),
-    index("./routes/home.tsx"),
   ]),
 
 

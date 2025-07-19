@@ -28,6 +28,12 @@ const routes = {
   stage: {
     link: '/stage',
   },
+  store: {
+    link: '/store',
+  },
+  account: {
+    link: '/account',
+  },
   //^end group
 
   /* only admins here */

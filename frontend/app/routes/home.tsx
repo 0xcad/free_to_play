@@ -25,11 +25,9 @@ export default function Home() {
     if (play.playInstance?.status === 'running') {
       if (currentUser?.is_authenticated && currentUser.is_joined) {
         navigate(routes.stage.link);
-        //return <Navigate to={routes.stage.link} state={{ from: location }} replace />;
       }
       else if (currentUser?.is_authenticated) {
         navigate(routes.join.link);
-        //return <Navigate to={routes.join.link} replace />;
       }
     }
   }, [currentUser, navigate]);
