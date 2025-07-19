@@ -8,6 +8,9 @@ import { apiUrls } from '~/constants/api';
 import type { ChatMessage } from '~/models/ChatMessage';
 import Message from './Message';
 
+import './Chat.css';
+import { FaPaperPlane } from 'react-icons/fa';
+
 interface PaginatedResponse {
   results: ChatMessage[];
   prev: string | null;
@@ -87,9 +90,10 @@ const Chat: React.FC<ChatProps> = ({kickUser, muteUser, deleteChatMessage }) => 
     if (!prevLink) return;
     try {
       const data = await Api.get<PaginatedResponse>(prevLink);
-      data.results.forEach((m) => addChatMessage(m));
+      data.results.forEach((m) => chat.addChatMessage(m));
       setPrevLink(data.next);
     } catch (error) {
+      console.log(error);
       toast.error('Failed to load more messages.');
     }
   };
@@ -98,20 +102,23 @@ const Chat: React.FC<ChatProps> = ({kickUser, muteUser, deleteChatMessage }) => 
     return (<p>Loading current user...</p>);
 
   return (
-    <div>
-      <button
-        onClick={loadMoreMessages}
-        disabled={!prevLink}
-      >
-        {prevLink ? 'Load More' : 'No More Messages'}
-      </button>
+    <div className='chat-container'>
+      {prevLink && (
+        <button
+          onClick={loadMoreMessages}
+          className="button"
+        >
+          {prevLink ? 'Load Older Messages' : 'No More Messages'}
+        </button>
+      )}
       <ul
         ref={containerRef}
+        className="chat-messages"
       >
         {Object.values(chat.messages)
           .sort((a, b) => new Date(a.created).getTime() - new Date(b.created).getTime())
           .map((msg) => (
-            <li key={msg.id}>
+            <li key={msg.id} className="chat-message">
               <Message key={msg.id} message={msg} currentUser={currentUser} />
               {msg.user.id != currentUser.id && kickUser && (<button onClick={() => {kickUser(msg.user.id)}}>kick user</button>)}
               {msg.user.id != currentUser.id && muteUser && !users.users[msg.user.id]?.is_muted && (<button onClick={() => {muteUser(msg.user.id, true)}}>mute user</button>)}
@@ -119,7 +126,7 @@ const Chat: React.FC<ChatProps> = ({kickUser, muteUser, deleteChatMessage }) => 
             </li>
           ))}
       </ul>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="form">
         <input
           type="text"
           value={inputText}
@@ -129,7 +136,7 @@ const Chat: React.FC<ChatProps> = ({kickUser, muteUser, deleteChatMessage }) => 
         <button
           type="submit"
         >
-          Send
+          <FaPaperPlane />
         </button>
       </form>
     </div>

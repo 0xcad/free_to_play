@@ -80,3 +80,15 @@ class ItemPurchase(models.Model):
 
     class Meta:
         ordering = ['play_instance', 'item__category__order', 'item__order', 'item__name']
+
+class StripeCheckoutSession(models.Model):
+    """
+    Represents a Stripe Checkout session.
+    """
+    session_id = models.CharField(max_length=255, unique=True, help_text="The unique ID of the Stripe Checkout session.")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='stripe_checkouts', help_text="The user who initiated the checkout.")
+    created_at = models.DateTimeField(auto_now_add=True, help_text="When the checkout session was created.")
+    completed = models.BooleanField(default=False, help_text="Whether the checkout session has been completed.")
+
+    def __str__(self):
+        return f"Checkout {self.session_id} for {self.user.username}"

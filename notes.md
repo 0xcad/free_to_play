@@ -422,7 +422,7 @@ DONE:
 
 * created the timer, with start/stop/reset controls!
 
-timer todo later:
+timer todo later: - DONE
 * make it red when there's only so much time left on the clock...
 
 misc todo later:
@@ -502,13 +502,6 @@ bugs: FIXED
 * logout notification sending even when it shouldn't; check window pathname vs join page url in `const` folder -- could not replicate?
   * reproduced -- this actually
 
-TODO:
-* CSS for stage page
-* stripe payment flow for buying gems
-* store page CSS + changes
-* vanity purchase items for typing in chat
-* admin view css should take up full screen
-
 
 misc TODO:
 * I think "send email" link should disable the button as soon as you click it
@@ -517,3 +510,43 @@ misc TODO:
 DONE:
 * fixed homepage navigate bug
 * added a way to change stream url and display youtube video (i.e, try `https://www.youtube-nocookie.com/embed/iR1OvxoFD5I?si=BIF_ZSZnx8VbQgjD`)
+* admin view css takes up full screen
+
+# 2025-07-18
+
+TODO:
+* redo CSS; just make everything dark mode, don't do this green shit.
+* CSS for stage page
+* stripe payment flow for buying gems
+* store page CSS + changes
+* vanity purchase items for typing in chat
+  * pay money to customize how your name appears -- choose an icon, choose your color from hex, etc
+* admin css
+
+DONE:
+* timer now red when time is running out
+* added icons
+* some stage css -- but getting messages to scroll instead of overflow is killing me
+
+
+stripe
+* currently, I know how to make items to purchase in stripe, and charge the user for them
+* show: a store page, with items to purchase (pile of gems, box of gems, crate of gems)
+* user clicks on an item, which makes a backend request to create a stripe checkout session
+* then, display the stripe checkout form
+* on success, close the page
+* a strip webhook that listens for successful purchases, and updates the user's balance - DONE
+* TODO: in my webhook function, figure out how to get the quantity of gems purchased - DONE
+  * done, I store this as metadata on the stripe *price* object, which is good because it's one fewer API call
+  * If I want to deploy this, set up an event to listen to the endpoint, and make sure to copy over the new stripe webhook secret
+  * https://dashboard.stripe.com/test/workbench/webhooks/we_1Rmf8D4N2pJVojh2Q3banRaE?fromWizard=true
+
+# 2025-07-19
+DONE:
+* stripe webhooks now largely work.
+
+next for stripe, create a backend model that gets all the products I have from stripe.
+* frontend should call that exactly once, with the shop, then just save that information in state
+* frontend should list those items on the store page
+* you click on an item, which brings up the stripe checkout form. add the stripe product id to the checkout session url or post request.
+* this gets the exact checkout form that we want. yay!

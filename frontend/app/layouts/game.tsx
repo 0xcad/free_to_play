@@ -11,6 +11,7 @@ import BuyGemsModal from '../components/Store/BuyGemsModal';
 
 import { toast } from 'react-toastify';
 import "./game.css";
+import { FaGem } from "react-icons/fa";
 
 export default function GameLayout() {
   let navigate = useNavigate();
@@ -47,6 +48,10 @@ export default function GameLayout() {
   }, [ws.registerHandler, ws.unregisterHandler]);
 
   return (
+    <div className="app-content">
+    <header>
+      <p>Free to Play</p>
+    </header>
     <div className="game-layout-container">
       <div className="game-layout">
         <nav className="game-nav">
@@ -66,7 +71,7 @@ export default function GameLayout() {
         </div>
       </div>
 
-      <div className="gems" onClick={() => {store.setBuyGemsModalIsOpen(true);}}>❇️ {currentUser?.balance} gems</div>
+      <div className="gems" onClick={() => {store.setBuyGemsModalIsOpen(true);}}><FaGem /> {currentUser?.balance} gems</div>
       <Modal
         isOpen={currentPlayerModalIsOpen}
         onClose={() => {setCurrentPlayerModalIsOpen(false);}}
@@ -78,6 +83,7 @@ export default function GameLayout() {
         isOpen={store.buyGemsModalIsOpen}
         onClose={() => {store.setBuyGemsModalIsOpen(false);}}
       />
+    </div>
     </div>
   );
 };

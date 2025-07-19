@@ -19,24 +19,25 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { currentUser } = useAppContext();
-
-  console.log("currentUser", currentUser);
+  const { currentUser, play } = useAppContext();
 
   useEffect(() => {
-    if (currentUser?.is_authenticated && currentUser.is_joined) {
-      navigate(routes.stage.link);
-      //return <Navigate to={routes.stage.link} state={{ from: location }} replace />;
-    }
-    else if (currentUser?.is_authenticated) {
-      navigate(routes.join.link);
-      //return <Navigate to={routes.join.link} replace />;
+    if (play.playInstance?.status === 'running') {
+      if (currentUser?.is_authenticated && currentUser.is_joined) {
+        navigate(routes.stage.link);
+        //return <Navigate to={routes.stage.link} state={{ from: location }} replace />;
+      }
+      else if (currentUser?.is_authenticated) {
+        navigate(routes.join.link);
+        //return <Navigate to={routes.join.link} replace />;
+      }
     }
   }, [currentUser, navigate]);
 
   return (
     <div>
       <h1>Free to Play Home</h1>
+      <p>Free to Play, or Pay What You Will, is an upcoming experimental interactive theatre performance.</p>
     </div>
   );
 }

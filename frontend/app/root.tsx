@@ -41,9 +41,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <div className="app">
-          <header>
-            <p>Free to Play</p>
-          </header>
           {children}
         </div>
         <ScrollRestoration />

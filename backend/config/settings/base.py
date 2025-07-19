@@ -150,7 +150,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
 
@@ -175,3 +175,11 @@ MEDIA_URL = '/media/'
 ## google oauth imports
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
+
+## strip env vars
+STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', '')
+STRIPE_PK = os.getenv('STRIPE_PK', '')
+STRIPE_SK = os.getenv('STRIPE_SK', '')
+STRIPE_TEST_PK = os.getenv('STRIPE_TEST_PK', '')
+STRIPE_TEST_SK = os.getenv('STRIPE_TEST_SK', '')
+

@@ -5,6 +5,9 @@
   --color-primary: #45914a;
   --color-active: #eff0ed;
 
+  --color-error: red;
+  --color-gems: lightblue;
+
   --font-accent: mono, monospace;
   --font-mono: mono, monospace;
 }

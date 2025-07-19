@@ -3,6 +3,11 @@ import Api from '~/utils/api';
 import { apiUrls } from '~/constants/api';
 
 import { toast } from 'react-toastify';
+import { FaPlay, FaPause } from "react-icons/fa";
+
+import classnames from 'classnames';
+
+import "./timer.css";
 
 interface TimerProps {
   remainingTime: string;
@@ -81,7 +86,6 @@ const Timer: React.FC<TimerProps> = ({
     return `${m}:${s}`;
   };
 
-
   return (
     <>
       {showControls && (
@@ -95,7 +99,12 @@ const Timer: React.FC<TimerProps> = ({
           {myEndTime && (<button onClick={pauseTimer}>pause timer</button>)}
         </>
       )}
-      <span>{formatTime(myRemainingTime)}</span>
+      <div className={classnames('timer',
+                                 myRemainingTime <= 0 ? 'expired' : (myRemainingTime <= 60 ? 'warning' : ''),
+                                )}>
+        <span className='icon'>{myEndTime ? (<FaPlay />) : (<FaPause />)}</span>
+        <span className='time'>{formatTime(myRemainingTime)}</span>
+      </div>
     </>
   );
 }

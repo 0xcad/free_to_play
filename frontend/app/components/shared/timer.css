@@ -1,0 +1,28 @@
+@import "../../vars.css";
+
+.timer {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+}
+
+.timer .icon {
+  display: contents;
+}
+
+.timer.warning, .timer.expired {
+  color: var(--color-error);
+}
+.timer.expired .time {
+  animation: blink 1s infinite;
+  -webkit-animation: blink 1s infinite;
+}
+
+@keyframes blink {
+      0% { opacity: 1; }
+   49% { opacity: 1; }
+   50% { opacity: 0; }
+  100% { opacity: 0; }
+}

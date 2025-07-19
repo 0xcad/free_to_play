@@ -1,0 +1,17 @@
+.chat-messages {
+  padding: 0;
+  margin: 0;
+}
+
+li.chat-message {
+  font-size: 0.8em;
+  list-style: none;
+  margin: 0.25rem 0;
+}
+li.chat-message:nth-child(even) {
+  background-color: var(--color-bg-alt);
+}
+.chat-message__date {
+  color: #999;
+  display: none;
+}

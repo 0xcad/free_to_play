@@ -1,3 +1,5 @@
+@import "../../vars.css";
+
 .yt-embed-holder {
   width: 100%;
   overflow: hidden;
@@ -10,4 +12,68 @@
   width: 300%;
   height: 100%;
   margin-left: -100%;
+}
+
+.stage-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--color-bg-alt);
+  padding: 0 0.5rem;
+}
+
+.tabs {
+  margin-top: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.tab-list {
+  background-color: var(--color-text);
+}
+
+.tab {
+  padding: 0.5rem 0.75rem;
+  border: none;
+  font-size: 1em;
+  background: var(--color-text);
+}
+
+.tab.active {
+  background: var(--color-primary);
+  color: var(--color-text);
+}
+
+.tab-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.chat-container .form {
+  display: flex;
+}
+
+.chat-container .form button {
+  width: auto;
+  border-radius: 0;
+}
+
+.chat-container .form * {
+  margin: 0 !important;
 }

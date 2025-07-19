@@ -1,0 +1,27 @@
+@import "../../vars.css";
+
+.user-info {
+  display: inline;
+  border-radius: 10px;
+  font-family: var(--font-mono);
+  font-weight: bold;
+
+  /*justify-content: center;
+  align-items: center;*/
+}
+
+.user-info__icon {
+  margin-right: 0.25rem;
+}
+.user-info.admin {
+  color: red;
+}
+
+.user-info__tag {
+  margin-left: 0.25rem;
+  background-color: #aaa;
+  color: #333;
+  padding: 0.1em;
+
+  font-size: 0.8em;
+}

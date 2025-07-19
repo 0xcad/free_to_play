@@ -28,23 +28,24 @@ body, html {
   height: 100%;
 }
 
-.app {
+.app { width: 100%; height: 100%;}
+.app-content {
   max-width: 35rem;
   margin: 0 auto;
   border: 1px solid black;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   box-sizing: border-box;
-  height: 100%;
 }
-.app header {
+.app-content header {
   font-family: mono, monospace;
   text-align: center;
   background-color: var(--color-bg-alt);
   padding: 0.25rem 0.5rem;
 }
-.app header p { margin: 0; }
+.app-content header p { margin: 0; }
 .flex-grow {
   flex-grow: 1;
   display: flex;

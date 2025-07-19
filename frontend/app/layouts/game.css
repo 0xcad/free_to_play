@@ -1,10 +1,10 @@
 @import "../vars.css";
 
 .game-layout-container {
-  flex-grow: 1;
   height: 100%;
   position: relative;
 }
+
 .game-layout {
   display: flex;
   flex-direction: column-reverse;
@@ -13,7 +13,8 @@
 
 .game-content {
   flex-grow: 1;
-  padding: 0 1rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .game-nav ul {
@@ -22,10 +23,12 @@
   list-style: none;
   display: flex;
 }
+
 .game-nav li {
   flex: 1 1 100%;
   text-align: center;
 }
+
 .game-nav a {
   width: 100%;
   padding: 0.25rem 0.5rem;
@@ -37,7 +40,7 @@
 }
 .game-nav a.active {
   background: var(--color-primary);
-  color: var(--color-bg-alt);
+  color: var(--color-text);
 }
 
 .waiting-bar {
@@ -70,4 +73,12 @@
   font-weight: 600;
   background-color: var(--color-bg-alt);
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.gems svg {
+  color: var(--color-gems);
 }
