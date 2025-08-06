@@ -545,8 +545,31 @@ stripe
 DONE:
 * stripe webhooks now largely work.
 
-next for stripe, create a backend model that gets all the products I have from stripe.
-* frontend should call that exactly once, with the shop, then just save that information in state
-* frontend should list those items on the store page
-* you click on an item, which brings up the stripe checkout form. add the stripe product id to the checkout session url or post request.
-* this gets the exact checkout form that we want. yay!
+next for stripe, create a backend model (just a view?) that gets all the products I have from stripe. - DONE
+* frontend should call that exactly once, with the shop, then just save that information in state -- if buygemsmodal doesn't unmount, then done
+* frontend should list those items on the store page - DONE
+* you click on an item, which brings up the stripe checkout form. add the stripe product id to the checkout session url or post request. - DONE
+* this gets the exact checkout form that we want. yay! - DONE
+
+addictive design (funny)
+* when you click, show immediate feedback in like, fireworks or something like that
+* animations on tab switching. animations on whatever page you're visiting in nav
+* bubble UI. lots of gradients
+* the shop button should just repeatedly start glowing, like flashing yellow (drop shadow?)
+* definitely needs to have sound effects, especially whenever you buy something
+* the "navigating" loading screen needs to have a spinner and a fun icon/image
+
+# 2025-08-06
+oh damn it's been a while
+
+need a backend endpoint that's probably post, or even get, where user somehow passes in the stripe product id, and then we create a checkout session for that product. this is so that the frontend can just call it, and get the checkout session url.
+
+DONE:
+* created `/api/store/stripe/products/` endpoint that returns all the products in stripe
+  * added a cache to this, so it doesn't hit the stripe api every time
+  * TODO: add an order metadata field to the stripe product, so we can order them in the frontend
+* modified backend checkout session endpoint to take a product id, and create a checkout session for that product. made frontend use that.
+* ^ essentially, purchasing gems now works lmao it's so good
+
+TODO later:
+* make checkout page take up more space, add a "close" button

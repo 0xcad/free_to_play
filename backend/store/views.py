@@ -14,6 +14,7 @@ from accounts.models import User
 import stripe
 from django.conf import settings
 from django.http import HttpResponse
+from django.core.cache import cache
 
 def fulfill_checkout(session_id):
     '''
@@ -49,6 +50,18 @@ def fulfill_checkout(session_id):
         CheckoutSession.completed = True
         CheckoutSession.save()
 
+def authorize_stripe():
+    '''
+    add api key to stripe
+    return play_instance
+    '''
+    play_instance = PlayInstance.get_active()
+    if play_instance.is_debug:
+        stripe.api_key = settings.STRIPE_TEST_SK
+    else:
+        stripe.api_key = settings.STRIPE_SK
+    return play_instance
+
 class StripeViewSet(viewsets.ViewSet):
     @action(detail=False, methods=['POST'], permission_classes=[permissions.IsAuthenticated])
     def create_checkout_session(self, request):
@@ -56,12 +69,10 @@ class StripeViewSet(viewsets.ViewSet):
         Create a Stripe checkout session for purchasing gems.
         """
         user = request.user
+        authorize_stripe()
 
-        play_instance = PlayInstance.get_active()
-        if play_instance.is_debug:
-            stripe.api_key = settings.STRIPE_TEST_SK
-        else:
-            stripe.api_key = settings.STRIPE_SK
+        price_id = request.data.get('price_id')
+        # ^user supplies which product they want to buy
 
         try:
             session = stripe.checkout.Session.create(
@@ -71,7 +82,7 @@ class StripeViewSet(viewsets.ViewSet):
                 line_items=[
                     {
                         # Provide the exact Price ID (for example, price_1234) of the product you want to sell
-                        'price': 'price_1RmJUU4N2pJVojh2AHi5nGjQ',
+                        'price': price_id,
                         'quantity': 1,
                     },
                 ],
@@ -86,14 +97,44 @@ class StripeViewSet(viewsets.ViewSet):
 
         return Response({'clientSecret': session.client_secret}, status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=['GET'], permission_classes=[permissions.IsAuthenticated])
+    def products(self, request):
+        """
+        List available products for purchase.
+        """
+        CACHE_KEY = 'stripe_products'
+        cached_products = cache.get(CACHE_KEY)
+        if cached_products:
+            return Response(cached_products, status=status.HTTP_200_OK)
+
+        authorize_stripe()
+        stripe_prices = stripe.Price.list(expand=['data.product'], limit=10)
+        products = []
+
+        # poor man's serializer
+        for price in stripe_prices.data:
+            product = price.product
+            product_info = {
+                'name': product.name,
+                'description': product.description,
+                'id': price.id,
+                'images': product.images,
+                'gems': int(price.metadata.get('gems', 0)),
+                'price': price.unit_amount / 100,  # Convert cents to dollars
+            }
+            products.append(product_info)
+
+        CACHE_TIMEOUT = 60 if settings.DEBUG else 60 * 60  # 60 seconds in debug, 1 hour in production
+        cache.set(CACHE_KEY, products, timeout=CACHE_TIMEOUT)
+        return Response(products, status=status.HTTP_200_OK)
+
     @csrf_exempt
     @action(detail=False, methods=['POST', "GET"], permission_classes=[permissions.AllowAny])
     def webhook(self, request):
-        play_instance = PlayInstance.get_active()
-        if play_instance.is_debug:
-            stripe.api_key = settings.STRIPE_TEST_SK
-        else:
-            stripe.api_key = settings.STRIPE_SK
+        '''
+        Stripe purchases call this webhook when a purchase is completed
+        '''
+        authorize_stripe()
 
         payload = request.body
         sig_header = request.META['HTTP_STRIPE_SIGNATURE']

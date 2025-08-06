@@ -39,13 +39,13 @@ export const apiUrls = {
   },
 
   store: {
-    buy_gems: 'store/buy-gems/',
     list: 'store/items/',
     detail: (id: string) : string =>  `store/items/${id}/`,
     purchase: (id: string) : string =>  `store/items/${id}/purchase/`,
     inventory: 'store/items/inventory/',
     create_checkout_session: 'store/stripe/create_checkout_session/',
     session_status: (session_id: string) : string => `store/stripe/session_status/${session_id}/`,
+    gems: 'store/stripe/products/',
   },
 };
 
