@@ -1,9 +1,30 @@
+@import "../../../vars.css";
+
 .modal input {
   width: 100%;
   box-sizing: border-box;
 }
 
-img {
-  width: 100%;
-  height: auto;
+.gem-products img {
+  height: 200px;
+  width: auto;
+  margin: 0 auto;
+  display: block;
+}
+
+.gem-products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+}
+
+.gem-products li {
+  border: 2px solid var(--color-gray);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  text-align: center;
+  background-color: var(--color-text);
+  color: var(--color-text-alt);
 }

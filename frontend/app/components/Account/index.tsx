@@ -111,7 +111,7 @@ const Account: React.FC = () => {
         </p>
       </form>
       <p><label>Balance:</label> {currentUser.balance} gems</p>
-      <button className="button primary" onClick={() => {store.setBuyGemsModalIsOpen(true);}}>Buy Gems</button>
+      <button className="button primary my-2 py-2" onClick={() => {store.setBuyGemsModalIsOpen(true);}}>Buy Gems</button>
 
       <div className='buttons'>
         {showSave && (<button className="primary" onClick={updateAccount}>Save Changes</button> )} {' '}

@@ -7,11 +7,11 @@ import routes from '../constants/routes';
 
 import Spinner from '../components/shared/spinner';
 import Modal from '../components/shared/modal';
+import Icon from '../components/shared/Icon';
 import BuyGemsModal from '../components/Store/BuyGemsModal';
 
 import { toast } from 'react-toastify';
 import "./game.css";
-import { FaGem } from "react-icons/fa";
 
 export default function GameLayout() {
   let navigate = useNavigate();
@@ -56,14 +56,14 @@ export default function GameLayout() {
       <div className="game-layout">
         <nav className="game-nav">
           <ul>
-            <li><NavLink to="/stage" end>Home</NavLink></li>
-            <li><NavLink to="/store" end>Store</NavLink></li>
-            <li><NavLink to="/account">Account</NavLink></li>
+            <li><NavLink to="/stage" end className="button flex-center"><Icon icon='theater'/> Home</NavLink></li>
+            <li><NavLink to="/store" end className="button flex-center"><Icon icon='chest' /> Store</NavLink></li>
+            <li><NavLink to="/account" className="button flex-center"><Icon icon='user' /> Account</NavLink></li>
           </ul>
         </nav>
 
         { play?.playInstance?.status === 'waiting' && (
-          <div className='waiting-bar'>Waiting for the play to start <Spinner /></div>
+          <div className='waiting-bar flex-center'>Waiting for the play to start <Spinner /></div>
         )}
 
         <div className="game-content">
@@ -71,8 +71,9 @@ export default function GameLayout() {
         </div>
       </div>
 
-      <div className="gems" onClick={() => {store.setBuyGemsModalIsOpen(true);}}><FaGem /> {currentUser?.balance} gems</div>
+      <div className="gems flex-center" onClick={() => {store.setBuyGemsModalIsOpen(true);}}><Icon icon='gem' /> {currentUser?.balance} gems</div>
       <Modal
+        title="You've been selected!"
         isOpen={currentPlayerModalIsOpen}
         onClose={() => {setCurrentPlayerModalIsOpen(false);}}
       >

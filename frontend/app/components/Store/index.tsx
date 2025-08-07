@@ -80,7 +80,7 @@ const Store: React.FC = () => {
           </ul>
         </div>
       )) }
-      <button className="button primary" onClick={() => store.setBuyGemsModalIsOpen(true)}>Buy Gems</button>
+      <button className="button primary py-2" onClick={() => store.setBuyGemsModalIsOpen(true)}>Buy Gems</button>
     </>
   );
 };

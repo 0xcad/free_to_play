@@ -551,14 +551,6 @@ next for stripe, create a backend model (just a view?) that gets all the product
 * you click on an item, which brings up the stripe checkout form. add the stripe product id to the checkout session url or post request. - DONE
 * this gets the exact checkout form that we want. yay! - DONE
 
-addictive design (funny)
-* when you click, show immediate feedback in like, fireworks or something like that
-* animations on tab switching. animations on whatever page you're visiting in nav
-* bubble UI. lots of gradients
-* the shop button should just repeatedly start glowing, like flashing yellow (drop shadow?)
-* definitely needs to have sound effects, especially whenever you buy something
-* the "navigating" loading screen needs to have a spinner and a fun icon/image
-
 # 2025-08-06
 oh damn it's been a while
 
@@ -573,3 +565,25 @@ DONE:
 
 TODO later:
 * make checkout page take up more space, add a "close" button
+
+
+addictive design (funny)
+* when you click, show immediate feedback in like, fireworks or something like that
+* animations on tab switching. animations on whatever page you're visiting in nav
+* bubble UI. lots of gradients
+* the shop button should just repeatedly start glowing, like flashing yellow (drop shadow?)
+* definitely needs to have sound effects, especially whenever you buy something
+* the "navigating" loading screen needs to have a spinner and a fun icon/image
+
+* the store button should just be shiny, and repeatedly flash. same with buy gems.
+
+DONE:
+* added icon shared class
+* bubble UI buttons / modals
+* new font
+* active page is animated :))
+
+TODO:
+* the profile page labels should look different
+* animate tab switches?
+* clicking anywhere should make little sparkles appear

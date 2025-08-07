@@ -1,13 +1,24 @@
-:root {
-  --color-bg: #0a1a0b;
-  --color-bg-alt: #0e220f;
-  --color-text: #cad9c9;
-  --color-primary: #45914a;
-  --color-active: #eff0ed;
+@font-face {
+  font-family: '04b';
+  src: url(./fonts/04b.ttf) format('truetype');
+}
 
-  --color-error: red;
-  --color-gems: lightblue;
+:root {
+  --color-bg: #020202; /* #0a1a0b */
+  --color-bg-alt: #0a1a0b; /* #0e220f */
+  --color-text: #edf2f5; /* #cad9c9 */
+  --color-text-alt: #7b3e30;
+  --color-primary: #26B24C; /* #45914a */
+  --color-primary-light: #30EC63; /* #45914a */
+  --color-active: #eff0ed;
+  --color-gray: #bbb;
+  --color-dark-gray: #999;
+  --color-darker-gray: #666;
+
+  --color-error: #d00;
+  --color-gems: #94e5ff;
 
   --font-accent: mono, monospace;
   --font-mono: mono, monospace;
+  --font-title: '04b', sans-serif;
 }

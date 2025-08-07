@@ -10,7 +10,7 @@ const Waiting: React.FC = () => {
       <div className="buttons">
         <Link to={routes.program.link}><button>Read the program</button></Link>
         <Link to={routes.tutorial.link}><button>Read the tutorial</button></Link>
-        <button onClick={() => {store.setBuyGemsModalIsOpen(true);}} className="primary">Buy Gems</button>
+        <button onClick={() => {store.setBuyGemsModalIsOpen(true);}} className="primary py-2">Buy Gems</button>
       </div>
     </div>
   );

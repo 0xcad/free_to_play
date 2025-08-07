@@ -7,8 +7,10 @@ import Timer from '~/components/shared/timer';
 import Inventory from '~/components/Store/Inventory';
 
 import UserInfo from '~/components/shared/UserInfo';
+import Icon from '~/components/shared/Icon';
 
 import {useState} from 'react';
+import classnames from 'classnames';
 
 import "./stage.css";
 
@@ -38,8 +40,12 @@ const Stage: React.FC = () => {
       </div>
       <div className='tabs'>
         <div className='tab-list'>
-          <button className={`tab ${selectedTab === 'chat' ? 'active' : ''}`} onClick={() => setSelectedTab('chat')}>Chat</button>
-          <button className={`tab ${selectedTab === 'inventory' ? 'active' : ''}`} onClick={() => setSelectedTab('inventory')}>Inventory</button>
+          <button className={classnames('tab button w-auto flex-center', selectedTab === 'chat' ? 'active' : '')} onClick={() => setSelectedTab('chat')}>
+            <Icon icon='chat' /> Chat
+          </button>
+          <button className={classnames('tab button w-auto flex-center', selectedTab === 'inventory' ? 'active' : '')} onClick={() => setSelectedTab('inventory')}>
+            <Icon icon='inventory' /> Inventory
+          </button>
         </div>
         <div className='tab-content'>
           {selectedTab === 'chat' && <Chat />}

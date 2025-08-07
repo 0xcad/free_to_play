@@ -83,20 +83,20 @@ const BuyGemsModal: React.FC<ModalProps> = ({
 
   return (
     <Modal
+      title="Buy Gems"
       isOpen={isOpen}
       onClose={onClose}
     >
       <ul className="gem-products">
       { gemProducts.map((product) => (
         <li key={product.id}>
-          <h3>{product.name}</h3>
           {product.images && product.images.length > 0 && (
             <img src={product.images[0]} alt={product.name} />
           )}
-          <p>{product.description}</p>
-          <p>Price: ${product.price} USD</p>
-          <button onClick={() => {buyProduct(product)}}>
-            Buy Now
+          <h3>{product.name}</h3>
+          {/*<p>{product.description}</p>*/}
+          <button className="button primary py-3" onClick={() => {buyProduct(product)}}>
+            ${product.price} USD
           </button>
         </li>
       ))}

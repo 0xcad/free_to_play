@@ -7,9 +7,9 @@ import { apiUrls } from '~/constants/api';
 
 import type { ChatMessage } from '~/models/ChatMessage';
 import Message from './Message';
+import Icon from '~/components/shared/Icon';
 
 import './Chat.css';
-import { FaPaperPlane } from 'react-icons/fa';
 
 interface PaginatedResponse {
   results: ChatMessage[];
@@ -136,7 +136,7 @@ const Chat: React.FC<ChatProps> = ({kickUser, muteUser, deleteChatMessage }) => 
         <button
           type="submit"
         >
-          <FaPaperPlane />
+        <Icon icon="send"/>
         </button>
       </form>
     </div>
