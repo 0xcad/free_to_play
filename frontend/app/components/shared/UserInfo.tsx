@@ -23,7 +23,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
   }, [currentUser, user]);
 
   return (
-    <div className={classnames(
+    <span className={classnames(
         'user-info',
         isCurrentUser ? 'me' : '',
         user.is_admin ? 'admin' : '',
@@ -37,7 +37,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
         </span>
       )}
       <span>{user.name}</span>
-    </div>
+    </span>
   );
 }
 

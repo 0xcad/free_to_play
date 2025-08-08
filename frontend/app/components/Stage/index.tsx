@@ -12,7 +12,42 @@ import Icon from '~/components/shared/Icon';
 import {useState} from 'react';
 import classnames from 'classnames';
 
+import { motion } from "motion/react"
+
 import "./stage.css";
+
+{/* TODO: make this a tab component, make tabs not unmount when you click off... */}
+const Tabs: React.FC<{selectedTab: string, setSelectedTab: (tab: string) => void}> = ({selectedTab, setSelectedTab}) => {
+  return (
+    <div className='tabs'>
+      <div className='tab-list'>
+        <button className={classnames('tab button w-auto flex-center', selectedTab === 'chat' ? 'active' : '')} onClick={() => setSelectedTab('chat')}>
+          {selectedTab == 'chat' ?  <motion.div
+              className="underline"
+              layoutId="underline"
+              id="underline"
+              transition={{ type: "spring", bounce: 0.25 }}
+          /> : null}
+          <span className="flex-center w-100 option__text"><Icon icon='chat' /> Chat</span>
+        </button>
+        <button className={classnames('tab button w-auto flex-center', selectedTab === 'inventory' ? 'active' : '')} onClick={() => setSelectedTab('inventory')}>
+        {selectedTab == 'inventory' ? <motion.div
+                className="underline"
+                layoutId="underline"
+                id="underline"
+                transition={{ type: "spring", bounce: 0.25 }}
+          /> : null}
+
+          <span className="flex-center w-100 option__text"><Icon icon='inventory' /> Inventory</span>
+        </button>
+      </div>
+      <div className='tab-content'>
+        {selectedTab === 'chat' && <Chat />}
+        {selectedTab === 'inventory' && <Inventory />}
+      </div>
+   </div>
+  );
+}
 
 const Stage: React.FC = () => {
   const { currentUser, play/*, chat*/ } = useAppContext();
@@ -38,7 +73,8 @@ const Stage: React.FC = () => {
         <p>{play.playInstance?.current_player ? (<><UserInfo user={play.playInstance.current_player} currentUser={currentUser} /> is playing</>) : 'Waiting for player selection...'}</p>
         <Timer endTime={play.playInstance.end_time} remainingTime={play.playInstance.remaining_time}/>
       </div>
-      <div className='tabs'>
+      <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+      {/*<div className='tabs'>
         <div className='tab-list'>
           <button className={classnames('tab button w-auto flex-center', selectedTab === 'chat' ? 'active' : '')} onClick={() => setSelectedTab('chat')}>
             <Icon icon='chat' /> Chat
@@ -51,7 +87,7 @@ const Stage: React.FC = () => {
           {selectedTab === 'chat' && <Chat />}
           {selectedTab === 'inventory' && <Inventory />}
         </div>
-     </div>
+     </div>*/}
     </>
   );
 };

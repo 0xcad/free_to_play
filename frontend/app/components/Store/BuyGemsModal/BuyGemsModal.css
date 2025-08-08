@@ -6,7 +6,8 @@
 }
 
 .gem-products img {
-  height: 200px;
+  max-height: 200px;
+  max-width: 100%;
   width: auto;
   margin: 0 auto;
   display: block;
@@ -14,10 +15,14 @@
 
 .gem-products {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
   list-style: none;
   padding: 0;
+}
+.gem-products h3 {
+  text-shadow: 0 2px 0 var(--color-gray);
+  margin-bottom: 0;
 }
 
 .gem-products li {
@@ -27,4 +32,39 @@
   text-align: center;
   background-color: var(--color-text);
   color: var(--color-text-alt);
+  position: relative;
+}
+
+.gem-products li::before {
+  content: "Limited Offer!";
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--color-text);
+  background: var(--color-error);
+  padding: 0.25rem 2rem;
+  text-wrap: nowrap;
+  border-radius: 50px;
+  text-shadow: 0 1px 0 var(--color-gray);
+  font-family: var(--font-title);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.05); }
+  100% { transform: translateX(-50%) scale(1); }
+}
+
+
+.gems-amount {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 1rem 0;
+  color: var(--color-text-alt);
+  text-shadow: 0 4px 0 var(--color-gems);
+  font-family: var(--font-title);
+}
+.gems-amount .icon {
+  filter: drop-shadow(0 4px 0 var(--color-gems)) drop-shadow(0 0 12px var(--color-gems));
 }

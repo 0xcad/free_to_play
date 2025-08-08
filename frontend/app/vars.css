@@ -11,6 +11,8 @@
   --color-primary: #26B24C; /* #45914a */
   --color-primary-light: #30EC63; /* #45914a */
   --color-active: #eff0ed;
+  --color-light-gray: #eee;
+  --color-lighter-gray: #ccc;
   --color-gray: #bbb;
   --color-dark-gray: #999;
   --color-darker-gray: #666;

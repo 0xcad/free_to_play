@@ -36,7 +36,6 @@ export function useUsersState(
       const updated = { ...prev };
       delete updated[user_id];
       return updated;
-      return { ...prev, [user.id]: user };
     });
   };
 

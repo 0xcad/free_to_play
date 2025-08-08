@@ -566,6 +566,7 @@ DONE:
 TODO later:
 * make checkout page take up more space, add a "close" button
 
+# 2025-08-07
 
 addictive design (funny)
 * when you click, show immediate feedback in like, fireworks or something like that
@@ -581,9 +582,24 @@ DONE:
 * added icon shared class
 * bubble UI buttons / modals
 * new font
-* active page is animated :))
+* active page icon is animated :))
+
 
 TODO:
-* the profile page labels should look different
-* animate tab switches?
 * clicking anywhere should make little sparkles appear
+* animate page switching
+* add chat novelty purchases.
+    * ability to send reaction images.
+    * mark the user text as gold, give them a special icon in chat. put laurels around their name
+    * ability to change your name color, or select a custom icon. you can do this in the account page.
+
+# 2025-08-08
+
+turns out all those stripe CSP issues were because of privacy badger, and also tamper monkey for some reason? should be fixed.
+
+DONE:
+* animated tabs, added motion library
+* add gems count to gem store, duh
+* redid account page styles, added more animations
+* "limited time offer" for everything in store
+* animate the modal pop ups

@@ -8,6 +8,8 @@ import { useAppContext } from '~/context/AppContext';
 import Api from '~/utils/api';
 import { apiUrls, stripePublicKey } from '~/constants/api';
 
+import Icon from '~/components/shared/Icon';
+
 import {loadStripe} from '@stripe/stripe-js';
 import {
   EmbeddedCheckoutProvider,
@@ -95,6 +97,7 @@ const BuyGemsModal: React.FC<ModalProps> = ({
           )}
           <h3>{product.name}</h3>
           {/*<p>{product.description}</p>*/}
+          <div className="gems-amount flex-center"><Icon icon='gem' /> {product.gems} gems</div>
           <button className="button primary py-3" onClick={() => {buyProduct(product)}}>
             ${product.price} USD
           </button>

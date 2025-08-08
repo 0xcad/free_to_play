@@ -41,12 +41,21 @@
   border-radius: 0;
   font-size: 1em;
   display: inline-flex !important;
-  border-bottom: 4px solid transparent;
+  /*border-bottom: 4px solid transparent;*/
   padding-right: 2rem;
+  color: var(--color-darker-gray);
+  background: var(--color-light-gray);
+  transition: 0.2s;
 }
 
 .tab.active {
-  border-bottom: 4px solid var(--color-primary);
+  /*border-bottom: 4px solid var(--color-primary);*/
+  /*color: var(--color-bg);*/
+  color: var(--color-text);
+  background: var(--color-text);
+}
+.tab.active.button {
+  text-shadow: 0 1px 0 var(--color-darker-gray);
 }
 
 .tab-content {
