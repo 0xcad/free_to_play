@@ -26,7 +26,7 @@ const Tabs: React.FC<{selectedTab: string, setSelectedTab: (tab: string) => void
               className="underline"
               layoutId="underline"
               id="underline"
-              transition={{ type: "spring", bounce: 0.25 }}
+              transition={{ type: "spring", bounce: 0.4 }}
           /> : null}
           <span className="flex-center w-100 option__text"><Icon icon='chat' /> Chat</span>
         </button>
@@ -35,7 +35,7 @@ const Tabs: React.FC<{selectedTab: string, setSelectedTab: (tab: string) => void
                 className="underline"
                 layoutId="underline"
                 id="underline"
-                transition={{ type: "spring", bounce: 0.25 }}
+                transition={{ type: "spring", bounce: 0.4 }}
           /> : null}
 
           <span className="flex-center w-100 option__text"><Icon icon='inventory' /> Inventory</span>
@@ -55,15 +55,23 @@ const Stage: React.FC = () => {
 
   if (!play || play.playInstance?.status == 'waiting') {
     return (
-      <>
+      <motion.div
+        initial={{ marginRight: -200 }}
+        animate={{ marginRight: 0 }}
+        transition={{ type: "spring", bounce: 0.25 }}
+      >
       <h1>stage</h1>
       <Waiting />
-      </>
+      </motion.div>
     );
   }
 
   return (
-    <>
+    <motion.div
+      initial={{ marginRight: -200 }}
+      animate={{ marginRight: 0 }}
+      transition={{ type: "spring", bounce: 0.25 }}
+    >
       { play.playInstance?.stream_url && (
       <div className='yt-embed-holder'>
         <iframe width="560" height="315" src={play.playInstance.stream_url + "&autoplay=1&controls=0&color=white&playsinline=1&enablejsapi=1"} title="Free to Play video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -74,21 +82,7 @@ const Stage: React.FC = () => {
         <Timer endTime={play.playInstance.end_time} remainingTime={play.playInstance.remaining_time}/>
       </div>
       <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-      {/*<div className='tabs'>
-        <div className='tab-list'>
-          <button className={classnames('tab button w-auto flex-center', selectedTab === 'chat' ? 'active' : '')} onClick={() => setSelectedTab('chat')}>
-            <Icon icon='chat' /> Chat
-          </button>
-          <button className={classnames('tab button w-auto flex-center', selectedTab === 'inventory' ? 'active' : '')} onClick={() => setSelectedTab('inventory')}>
-            <Icon icon='inventory' /> Inventory
-          </button>
-        </div>
-        <div className='tab-content'>
-          {selectedTab === 'chat' && <Chat />}
-          {selectedTab === 'inventory' && <Inventory />}
-        </div>
-     </div>*/}
-    </>
+    </motion.div>
   );
 };
 

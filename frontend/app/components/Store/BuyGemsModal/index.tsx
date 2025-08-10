@@ -16,6 +16,9 @@ import {
   EmbeddedCheckout
 } from '@stripe/react-stripe-js';
 
+import useSound from 'use-sound';
+import gemsSfx from '~/assets/sounds/gems.mp3';
+
 type GemProduct = {
   id: string;
   name: string;
@@ -33,6 +36,8 @@ const BuyGemsModal: React.FC<ModalProps> = ({
   const [gemProducts, setGemProducts] = useState<GemProduct[]>([]);
   const [priceId, setPriceId] = useState<string | null>(null);
 
+  const [playSuccess] = useSound(gemsSfx, { volume: 0.25, });
+
   const stripePromise = loadStripe(stripePublicKey);
 
   const handleCheckoutComplete = useCallback(() => {
@@ -41,7 +46,7 @@ const BuyGemsModal: React.FC<ModalProps> = ({
       ...currentUser,
       balance: currentUser.balance + gems
     });
-    console.log(gems, currentUser);
+    playSuccess();
     onClose();
     // in the backend, we update the user's balence using a webhook. just optimistically display that in the frontend
   }, [gems, currentUser, setCurrentUser, onClose]);
@@ -98,7 +103,7 @@ const BuyGemsModal: React.FC<ModalProps> = ({
           <h3>{product.name}</h3>
           {/*<p>{product.description}</p>*/}
           <div className="gems-amount flex-center"><Icon icon='gem' /> {product.gems} gems</div>
-          <button className="button primary py-3" onClick={() => {buyProduct(product)}}>
+          <button className="button primary py-3 txt-md" onClick={() => {buyProduct(product)}}>
             ${product.price} USD
           </button>
         </li>

@@ -2,6 +2,8 @@ import {
   FaGem,
   FaRegUserCircle,
   FaPaperPlane,
+  FaPlay, FaPause,
+  FaRegQuestionCircle,
 } from "react-icons/fa";
 
 import {
@@ -12,6 +14,7 @@ import {
   PiTreasureChestDuotone,
   PiChatDotsDuotone,
   PiBackpackDuotone,
+  PiBookOpenBold,
 } from "react-icons/pi";
 
 export const iconMap = {
@@ -19,7 +22,11 @@ export const iconMap = {
   chest: PiTreasureChestDuotone,
   gem: FaGem,
   inventory: PiBackpackDuotone,
+  pause: FaPause,
+  play: FaPlay,
+  program: PiBookOpenBold,
   send: FaPaperPlane,
+  help: FaRegQuestionCircle,
   theater: LuTheater,
   user: FaRegUserCircle,
 };

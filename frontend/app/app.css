@@ -20,8 +20,7 @@ body, html {
   background-color: var(--color-bg);
   color: var(--color-text);
   padding: 0;
-  font-family: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-family: var(--font-text);
   margin: 0;
   font-size: 1.1em;
   line-height: 1.4;
@@ -41,13 +40,34 @@ h1 { font-family: var(--font-title); }
   box-sizing: border-box;
 }
 .app-content header {
+  position: relative;
   font-family: var(--font-title);
   text-transform: uppercase;
   text-align: center;
   background-color: var(--color-bg-alt);
   padding: 0.25rem 0.5rem;
+  border-bottom: 1px solid var(--color-darker-gray);
+  height: var(--header-height);
+  max-height: var(--header-height);
 }
-.app-content header p { margin: 0; }
+.app-content header p {
+  margin: 0;
+  background: linear-gradient(to bottom, #dec938 27%, #d8f365 40%, #ba4023 78%);
+  /*background: linear-gradient(to bottom, #cfc09f 27%, #ffecb3 40%, #3a2c0f 78%);*/
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  z-index: 2;
+}
+.app-content header::before {
+  background: none;
+  content: "Free To Play";
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  text-shadow: -1px 0 1px #c6bb9f, 0 1px 1px #c6bb9f, 5px 5px 10px rgba(0, 0, 0, 0.4), -5px -5px 10px rgba(0, 0, 0, 0.4);
+}
 .flex-grow {
   flex-grow: 1;
   display: flex;
@@ -87,6 +107,8 @@ h1 { font-family: var(--font-title); }
     0 2px 0 var(--color-dark-gray);
   transition: 0.2s;
   transition-timing-function: ease-out;
+
+  font-family: var(--font-accent);
 }
 .shade { position: relative; }
 .button::before, .buttons button::before, .gems::before {
@@ -128,7 +150,7 @@ h1 { font-family: var(--font-title); }
 		0 1.10em 6px rgba(255, 255, 255, .1) inset;
 }
 
-
+a { text-decoration: none; }
 .form input[type="text"], .form input[type="email"] {
   width: 100%;
   box-sizing: border-box;
@@ -137,7 +159,7 @@ h1 { font-family: var(--font-title); }
   margin: 0.5rem 0;
   background: var(--color-text);
   border: 1px solid var(--color-primary);
-  font-family: var(--font-accent);
+  font-family: var(--font-text-alt);
   font-weight: 600;
 }
 .form input[type="submit"], .form button, button.primary {
@@ -157,6 +179,7 @@ label {
   border-bottom: 2px solid var(--color-primary-light);
   margin: 0.5rem 0;
   font-weight: 600;
+  font-size: 1.1em;
 }
 .form input[type='checkbox'] {
   margin-right: 0.5rem;
@@ -210,26 +233,29 @@ label {
 .mono {
   font-family: var(--font-mono);
 }
+.font-alt {
+  font-family: var(--font-text-alt);
+}
+.txt-md {
+  font-size: 1.05em !important;
+}
 .txt-sm {
   font-size: 0.8em;
 }
 
 .p-2 { padding: 0.5rem; }
 .p-3 { padding: 1rem; }
-.my-2 {
-  margin: 0.5rem 0;
-}
+.my-2 { margin: 0.5rem 0; }
+.my-3 { margin: 1rem 0; }
 .py-2 {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
 }
 .py-3 {
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
 }
-.button.py-3 {
-  font-size: 1.2em;
-}
+
 .w-auto {
   width: auto;
 }

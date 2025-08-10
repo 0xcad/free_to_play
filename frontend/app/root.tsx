@@ -15,6 +15,7 @@ import "./app.css";
 import { AppProvider } from './context/AppContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Navigating from './components/Navigating';
 
 
 /*export const links: Route.LinksFunction = () => [
@@ -56,7 +57,7 @@ export default function App() {
 
   return (
     <AppProvider>
-      {isNavigating && <p>navigating...</p>}
+      {isNavigating && <Navigating />}
       <Outlet />
       <ToastContainer
         hideProgressBar={true}

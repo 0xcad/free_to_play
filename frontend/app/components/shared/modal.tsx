@@ -58,7 +58,7 @@ const Modal: React.FC<ModalProps> = ({
         <div className='modal-header shade'>
           <h2 className="modal-title">{title ? (<>{title}</>) : "Free to Play"}</h2>
 
-          <button className="modal-close-btn button w-auto flex-center" onClick={handleCloseModal}>
+          <button className="modal-close-btn button w-auto flex-center font-alt" onClick={handleCloseModal}>
             &#10006;
           </button>
         </div>

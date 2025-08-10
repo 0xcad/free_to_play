@@ -13,6 +13,11 @@ import BuyGemsModal from '../components/Store/BuyGemsModal';
 import { toast } from 'react-toastify';
 import "./game.css";
 
+import useSound from 'use-sound';
+import playSfx from '~/assets/sounds/play.mp3';
+
+import { motion } from "motion/react"
+
 export default function GameLayout() {
   let navigate = useNavigate();
   const { currentUser, play, ws, store } = useAppContext();
@@ -23,6 +28,8 @@ export default function GameLayout() {
       navigate(routes.join.link);
     }
   }, [currentUser]);
+
+  const [playPlaying] = useSound(playSfx, { volume: 0.5, });
 
   // when a new websocket comes in, just set all the new data, redirect on appropriate status change...
   const wsGameUpdatePlayInstance = useCallback((data : PlayInstance) => {
@@ -35,6 +42,7 @@ export default function GameLayout() {
     if (data.current_player && play.playInstance.current_player?.id != data.current_player.id && currentUser?.id === data.current_player.id) {
       toast.info('go on, get!');
       setCurrentPlayerModalIsOpen(true);
+      playPlaying();
     }
   }, [currentUser, play.playInstance]);
 
@@ -63,12 +71,15 @@ export default function GameLayout() {
         </nav>
 
         { play?.playInstance?.status === 'waiting' && (
-          <div className='waiting-bar flex-center'>Waiting for the play to start <Spinner /></div>
+          <div className='waiting-bar flex-center'>Waiting for the play to start... <Spinner /></div>
         )}
 
-        <div className="game-content">
+        <motion.div className="game-content"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
           <Outlet />
-        </div>
+        </motion.div>
       </div>
 
       <div className="gems flex-center" onClick={() => {store.setBuyGemsModalIsOpen(true);}}><Icon icon='gem' /> {currentUser?.balance} gems</div>

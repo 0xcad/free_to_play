@@ -1,6 +1,16 @@
 @font-face {
   font-family: '04b';
-  src: url(./fonts/04b.ttf) format('truetype');
+  src: url(./assets/fonts/04b.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: "PressStart2P";
+  src: url(./assets/fonts/PressStart2P.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: "RetroGaming";
+  src: url(./assets/fonts/RetroGaming.ttf) format('truetype');
 }
 
 :root {
@@ -18,9 +28,15 @@
   --color-darker-gray: #666;
 
   --color-error: #d00;
+  --color-dark-error: #600;
   --color-gems: #94e5ff;
 
-  --font-accent: mono, monospace;
+  --font-accent: "RetroGaming", mono, monospace;
   --font-mono: mono, monospace;
   --font-title: '04b', sans-serif;
+  --font-text-alt: "Inter", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-text: "RetroGaming", var(--font-text-alt);
+
+  --header-height: 40px;
 }

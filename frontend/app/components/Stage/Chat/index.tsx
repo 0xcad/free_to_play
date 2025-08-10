@@ -118,7 +118,7 @@ const Chat: React.FC<ChatProps> = ({kickUser, muteUser, deleteChatMessage }) => 
         {Object.values(chat.messages)
           .sort((a, b) => new Date(a.created).getTime() - new Date(b.created).getTime())
           .map((msg) => (
-            <li key={msg.id} className="chat-message">
+            <li key={msg.id} className="chat-message font-alt">
               <Message key={msg.id} message={msg} currentUser={currentUser} />
               {msg.user.id != currentUser.id && kickUser && (<button onClick={() => {kickUser(msg.user.id)}}>kick user</button>)}
               {msg.user.id != currentUser.id && muteUser && !users.users[msg.user.id]?.is_muted && (<button onClick={() => {muteUser(msg.user.id, true)}}>mute user</button>)}

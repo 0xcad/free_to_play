@@ -85,7 +85,11 @@ const Account: React.FC = () => {
   if (!currentUser)
     return (<p>Loading current user...</p>);
   return (
-    <>
+    <motion.div
+      initial={{ marginLeft: -200 }}
+      animate={{ marginLeft: 0 }}
+      transition={{ type: "spring", bounce: 0.25 }}
+    >
       <h1>Account</h1>
       <p><label className="label flex">@ Email</label> {currentUser.email}</p>
       <form className='form'>
@@ -100,7 +104,7 @@ const Account: React.FC = () => {
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
         </p>
-        <p>
+        <div className="my-3">
           <label className="label flex"><Icon icon="theater" /> Participating</label>
           <div className='switch'>
             <div className={classnames('option button w-auto', selectedOption === 'yes' ? 'active' : '')} onClick={toggleParticipation}>
@@ -108,7 +112,7 @@ const Account: React.FC = () => {
                   className="underline"
                   layoutId="underline"
                   id="underline"
-                  transition={{ type: "spring", bounce: 0.25 }}
+                  transition={{ type: "spring", bounce: 0.4 }}
                 /> : null}
               <span className='option__text'>Yes</span>
             </div>
@@ -117,33 +121,15 @@ const Account: React.FC = () => {
                 className="underline"
                 layoutId="underline"
                 id="underline"
-                transition={{ type: "spring", bounce: 0.25 }}
+                transition={{ type: "spring", bounce: 0.4 }}
                 /> : null}
               <span className='option__text'>No</span>
             </div>
           </div>
-          {/*<input
-            type="radio"
-            name="participating"
-            id="participating"
-            value="true"
-            onChange={(e) => setFormData({ ...formData, is_participating: e.target.value === 'true' })}
-            checked={formData.is_participating === true}
-          />
-          <label htmlFor="participating">Yes</label>
-          <input
-            type="radio"
-            name="participating"
-            id="not-participating"
-            value="false"
-            onChange={(e) => setFormData({ ...formData, is_participating: e.target.value === 'true' })}
-            checked={formData.is_participating === false}
-          />
-          <label htmlFor="not-participating">No</label>*/}
-        </p>
+        </div>
       </form>
       <p><label className="label flex"><Icon icon="gem" /> Balance</label> {currentUser.balance} gems</p>
-      <button className="button primary my-2 py-2" onClick={() => {store.setBuyGemsModalIsOpen(true);}}>Buy Gems</button>
+      <button className="button primary my-2 py-2 txt-md" onClick={() => {store.setBuyGemsModalIsOpen(true);}}>Buy Gems</button>
 
       <div className='buttons'>
         <AnimatePresence>
@@ -154,6 +140,7 @@ const Account: React.FC = () => {
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0 }}
+              transition={{ type: "spring", bounce: 0.4 }}
               key="save-button"
             >
               Save Changes
@@ -162,7 +149,7 @@ const Account: React.FC = () => {
         </AnimatePresence>
         <button onClick={handleLogout}>Log out</button>
       </div>
-    </>
+    </motion.div>
   );
 };
 

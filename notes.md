@@ -584,15 +584,6 @@ DONE:
 * new font
 * active page icon is animated :))
 
-
-TODO:
-* clicking anywhere should make little sparkles appear
-* animate page switching
-* add chat novelty purchases.
-    * ability to send reaction images.
-    * mark the user text as gold, give them a special icon in chat. put laurels around their name
-    * ability to change your name color, or select a custom icon. you can do this in the account page.
-
 # 2025-08-08
 
 turns out all those stripe CSP issues were because of privacy badger, and also tamper monkey for some reason? should be fixed.
@@ -603,3 +594,24 @@ DONE:
 * redid account page styles, added more animations
 * "limited time offer" for everything in store
 * animate the modal pop ups
+
+TODO:
+* clicking anywhere should make little sparkles appear
+* add chat novelty purchases.
+    * ability to send reaction images.
+    * mark the user text as gold, give them a special icon in chat. put laurels around their name
+    * ability to change your name color, or select a custom icon. you can do this in the account page.
+* IMPORTANT! special chat notification for when a user buys gems
+* click animation: maybe just mimic the cashnado slot machine thing? that might be easier than sparkles
+* idea: pay "indulgences" to increase odds of being selected to play next?
+* idea: a "continue" button with gems that lets you restart. you get one continue, it costs five dollars (in gems). you see a countdown for like 10 seconds, and then you get to play again.
+* make the credit card form take up more space in the modal
+* fix the overflow (most pages have this problem -- account, home
+
+# 2025-08-09
+DONE:
+* styled timer (easy)
+* new font
+* sound effects on buying gems, and sound effect on being called up to play
+* animate page switching
+* navigating icon

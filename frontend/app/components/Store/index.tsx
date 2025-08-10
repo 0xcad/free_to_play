@@ -9,6 +9,8 @@ import { toast } from 'react-toastify';
 
 import type {ItemCategory, Item} from '~/models/Item';
 
+import { motion } from "motion/react"
+
 const Store: React.FC = () => {
   const { currentUser, play, store, setCurrentUser } = useAppContext();
 
@@ -59,7 +61,11 @@ const Store: React.FC = () => {
   }, [store.setItems]);
 
   return (
-    <>
+    <motion.div
+      initial={{ marginLeft: -200 }}
+      animate={{ marginLeft: 0 }}
+      transition={{ type: "spring", bounce: 0.25 }}
+    >
       <h1>store</h1>
       <p>TODO: build this out more! add more items</p>
       { store.categories && Object.keys(store.categories).map((categoryId) => (
@@ -80,8 +86,8 @@ const Store: React.FC = () => {
           </ul>
         </div>
       )) }
-      <button className="button primary py-2" onClick={() => store.setBuyGemsModalIsOpen(true)}>Buy Gems</button>
-    </>
+      <button className="button primary py-2 txt-md" onClick={() => store.setBuyGemsModalIsOpen(true)}>Buy Gems</button>
+    </motion.div>
   );
 };
 

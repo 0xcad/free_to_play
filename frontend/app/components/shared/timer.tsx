@@ -3,7 +3,7 @@ import Api from '~/utils/api';
 import { apiUrls } from '~/constants/api';
 
 import { toast } from 'react-toastify';
-import { FaPlay, FaPause } from "react-icons/fa";
+import Icon from '~/components/shared/Icon';
 
 import classnames from 'classnames';
 
@@ -99,10 +99,10 @@ const Timer: React.FC<TimerProps> = ({
           {myEndTime && (<button onClick={pauseTimer}>pause timer</button>)}
         </>
       )}
-      <div className={classnames('timer',
+      <div className={classnames('timer flex-center',
                                  myRemainingTime <= 0 ? 'expired' : (myRemainingTime <= 60 ? 'warning' : ''),
                                 )}>
-        <span className='icon'>{myEndTime ? (<FaPlay />) : (<FaPause />)}</span>
+        {myEndTime ? (<Icon icon='play' />) : (<Icon icon='pause' />)}
         <span className='time'>{formatTime(myRemainingTime)}</span>
       </div>
     </>
