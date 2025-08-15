@@ -10,11 +10,11 @@ import { apiUrls, stripePublicKey } from '~/constants/api';
 
 import Icon from '~/components/shared/Icon';
 
-import {loadStripe} from '@stripe/stripe-js';
+/*import {loadStripe} from '@stripe/stripe-js';
 import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout
-} from '@stripe/react-stripe-js';
+} from '@stripe/react-stripe-js';*/
 
 import useSound from 'use-sound';
 import gemsSfx from '~/assets/sounds/gems.mp3';
@@ -38,7 +38,7 @@ const BuyGemsModal: React.FC<ModalProps> = ({
 
   const [playSuccess] = useSound(gemsSfx, { volume: 0.25, });
 
-  const stripePromise = loadStripe(stripePublicKey);
+  //const stripePromise = loadStripe(stripePublicKey);
 
   const handleCheckoutComplete = useCallback(() => {
     toast.success("Checkout completed successfully! Your gems will be added to your account.");
@@ -114,7 +114,7 @@ const BuyGemsModal: React.FC<ModalProps> = ({
       {/* TODO: add a loading spinner while the checkout session is being created
         Add a "close" button to this window, that sets priceId to null again
         Make this take up more space... */}
-      {priceId && (
+      {/*priceId && (
         <EmbeddedCheckoutProvider
           key={priceId}
           stripe={stripePromise}
@@ -122,7 +122,7 @@ const BuyGemsModal: React.FC<ModalProps> = ({
         >
           <EmbeddedCheckout />
         </EmbeddedCheckoutProvider>
-      )}
+      }(*/}
     </Modal>
   );
 }

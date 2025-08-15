@@ -595,19 +595,6 @@ DONE:
 * "limited time offer" for everything in store
 * animate the modal pop ups
 
-TODO:
-* clicking anywhere should make little sparkles appear
-* add chat novelty purchases.
-    * ability to send reaction images.
-    * mark the user text as gold, give them a special icon in chat. put laurels around their name
-    * ability to change your name color, or select a custom icon. you can do this in the account page.
-* IMPORTANT! special chat notification for when a user buys gems
-* click animation: maybe just mimic the cashnado slot machine thing? that might be easier than sparkles
-* idea: pay "indulgences" to increase odds of being selected to play next?
-* idea: a "continue" button with gems that lets you restart. you get one continue, it costs five dollars (in gems). you see a countdown for like 10 seconds, and then you get to play again.
-* make the credit card form take up more space in the modal
-* fix the overflow (most pages have this problem -- account, home
-
 # 2025-08-09
 DONE:
 * styled timer (easy)
@@ -615,3 +602,22 @@ DONE:
 * sound effects on buying gems, and sound effect on being called up to play
 * animate page switching
 * navigating icon
+
+# 2025-08-15
+DONE:
+* css refactor. it works! tabs scroll n everything!!
+  * fixed a lot of overflow issues, scroling issues
+
+TODO:
+* eventually throttle chat api
+* I uncommented Stripe because it was really slow. find out why.
+* click animation: maybe just mimic the cashnado slot machine thing? that might be easier than sparkles
+* make the credit card form take up more space in the modal
+* add css to notifications -- the close x should be way bigger on mobile
+* add chat novelty purchases.
+    * ability to send reaction images.
+    * mark the user text as gold, give them a special icon in chat. put laurels around their name
+    * ability to change your name color, or select a custom icon. you can do this in the account page.
+* IMPORTANT! special chat notification for when a user buys gems
+* idea: pay "indulgences" to increase odds of being selected to play next?
+* idea: a "continue" button with gems that lets you restart. you get one continue, it costs five dollars (in gems). you see a countdown for like 10 seconds, and then you get to play again.

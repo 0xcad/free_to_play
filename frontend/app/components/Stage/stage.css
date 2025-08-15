@@ -2,10 +2,10 @@
 
 .yt-embed-holder {
   width: 100%;
-  overflow: hidden;
   aspect-ratio: 16 / 9;
   pointer-events: none;
   z-index: 0;
+  max-height: 40dvh;
 }
 
 .yt-embed-holder iframe {
@@ -24,11 +24,9 @@
 
 .tabs {
   margin: 1rem 0.5rem;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
   border-radius: 8px;
-  overflow: hidden;
+  min-height: 0;
+  flex: 1 1 0;
 }
 
 .tab-list {
@@ -39,7 +37,6 @@
 .tab {
   border: none;
   border-radius: 0;
-  font-size: 1em;
   display: inline-flex !important;
   /*border-bottom: 4px solid transparent;*/
   padding-right: 2rem;
@@ -59,23 +56,11 @@
 }
 
 .tab-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+  flex: 1 1 0;
   min-height: 0;
 }
-
 .chat-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
   min-height: 0;
-  overflow: hidden;
-}
-
-.chat-messages {
-  flex: 1;
-  overflow-y: auto;
 }
 
 .chat-container .form {

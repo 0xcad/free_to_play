@@ -48,7 +48,7 @@ const Modal: React.FC<ModalProps> = ({
       <AnimatePresence>
       {isOpen && (
       <motion.div
-        className='modal'
+        className='modal flex-column'
         onClick={(e) => e.stopPropagation()}
         initial={{ scale: 0.8, opacity: 0, y: -50 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}

@@ -89,6 +89,7 @@ const Account: React.FC = () => {
       initial={{ marginLeft: -200 }}
       animate={{ marginLeft: 0 }}
       transition={{ type: "spring", bounce: 0.25 }}
+      className="p-2 flex-grow"
     >
       <h1>Account</h1>
       <p><label className="label flex">@ Email</label> {currentUser.email}</p>

@@ -13,7 +13,6 @@ from django.http import JsonResponse
 
 def get_user_data(code):
     REDIRECT_URI = f'{settings.FRONTEND_URL}/auth/'
-    print('hey!', REDIRECT_URI)
 
     flow = Flow.from_client_config(
         {

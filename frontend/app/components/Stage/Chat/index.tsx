@@ -102,7 +102,7 @@ const Chat: React.FC<ChatProps> = ({kickUser, muteUser, deleteChatMessage }) => 
     return (<p>Loading current user...</p>);
 
   return (
-    <div className='chat-container'>
+    <div className='chat-container flex-column flex-grow'>
       {prevLink && (
         <button
           onClick={loadMoreMessages}
@@ -113,7 +113,7 @@ const Chat: React.FC<ChatProps> = ({kickUser, muteUser, deleteChatMessage }) => 
       )}
       <ul
         ref={containerRef}
-        className="chat-messages"
+        className="chat-messages flex-grow overflow-y-auto"
       >
         {Object.values(chat.messages)
           .sort((a, b) => new Date(a.created).getTime() - new Date(b.created).getTime())

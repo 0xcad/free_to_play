@@ -22,9 +22,6 @@
   border-radius: 10px;
   overflow: hidden;
   background-color: var(--color-bg-alt);
-
-  display: flex;
-  flex-direction: column;
 }
 
 .modal-close-btn {

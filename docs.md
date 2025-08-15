@@ -1,5 +1,8 @@
 # Docs
 
+## you ran into some bullshit while testing. what probably went wrong?
+* you big dummy, did you even `source` the `.env` file?
+
 ## How to add products to Stripe?
 * Stripe product catalog > add product
 * In *price* metadata add `gems` with number of gems it buys

@@ -5,7 +5,7 @@ import Spinner from '../shared/spinner';
 
 const Navigating: React.FC = () => {
   return (
-    <div className="navigating">
+    <div className="navigating flex-column p-3">
       <Spinner />
       Loading...
     </div>

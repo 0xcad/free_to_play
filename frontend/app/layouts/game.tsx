@@ -56,33 +56,27 @@ export default function GameLayout() {
   }, [ws.registerHandler, ws.unregisterHandler]);
 
   return (
-    <div className="app-content">
-    <header>
-      <p>Free to Play</p>
-    </header>
-    <div className="game-layout-container">
-      <div className="game-layout">
-        <nav className="game-nav">
-          <ul>
-            <li><NavLink to="/stage" end className="button flex-center"><Icon icon='theater'/> Home</NavLink></li>
-            <li><NavLink to="/store" end className="button flex-center"><Icon icon='chest' /> Store</NavLink></li>
-            <li><NavLink to="/account" className="button flex-center"><Icon icon='user' /> Account</NavLink></li>
-          </ul>
-        </nav>
-
-        { play?.playInstance?.status === 'waiting' && (
-          <div className='waiting-bar flex-center'>Waiting for the play to start... <Spinner /></div>
-        )}
-
-        <motion.div className="game-content"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          <Outlet />
-        </motion.div>
+    <div className="app-content flex-column">
+      <header>
+        <p>Free to Play</p>
+      </header>
+      <div className="game-layout flex-grow position-relative flex-column overflow-y-auto">
+        <div className="gems flex-center" onClick={() => {store.setBuyGemsModalIsOpen(true);}}><Icon icon='gem' /> {currentUser?.balance} gems</div>
+        <Outlet />
       </div>
 
-      <div className="gems flex-center" onClick={() => {store.setBuyGemsModalIsOpen(true);}}><Icon icon='gem' /> {currentUser?.balance} gems</div>
+      { play?.playInstance?.status === 'waiting' && (
+        <div className='waiting-bar flex-center'>Waiting for the play to start... <Spinner /></div>
+      )}
+
+      <nav className="game-nav">
+        <ul>
+          <li><NavLink to="/stage" end className="button flex-center"><Icon icon='theater'/> Home</NavLink></li>
+          <li><NavLink to="/store" end className="button flex-center"><Icon icon='chest' /> Store</NavLink></li>
+          <li><NavLink to="/account" className="button flex-center"><Icon icon='user' /> Account</NavLink></li>
+        </ul>
+      </nav>
+
       <Modal
         title="You've been selected!"
         isOpen={currentPlayerModalIsOpen}
@@ -95,7 +89,6 @@ export default function GameLayout() {
         isOpen={store.buyGemsModalIsOpen}
         onClose={() => {store.setBuyGemsModalIsOpen(false);}}
       />
-    </div>
     </div>
   );
 };
