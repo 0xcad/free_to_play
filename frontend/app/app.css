@@ -54,7 +54,7 @@ h1 { font-family: var(--font-title); }
 
 .app { width: 100%; height: 100%;}
 .app-content {
-  /*max-width: 35rem;*/
+  max-width: 35rem;
   margin: 0 auto;
   height: 100dvh;
   overflow: hidden;
