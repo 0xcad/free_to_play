@@ -130,3 +130,29 @@
     opacity: 1;
   }
 }
+
+.tap {
+  position: fixed;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: radial-gradient(circle,rgba(255, 255, 255, 0.8) 15%, rgba(255, 255, 255, 0.07) 70%, rgba(255, 255, 255, 0) 100%);
+  transform: translate(-50%, -50%);
+  animation: grow 0.5s ease-in-out forwards;
+  pointer-events: none;
+}
+
+@keyframes grow {
+  0% {
+    transform: translate(-50%, -50%) scale(0.2);
+    opacity: 1;
+  }
+  70% {
+    transform: translate(-50%, -50%) scale(1.0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+}

@@ -68,7 +68,6 @@ const BuyGemsModal: React.FC<ModalProps> = ({
   const fetchGems = useCallback(async () => {
     try {
       const response: GemProduct[] = await Api.get(apiUrls.store.gems);
-      console.log("Gems fetched:", response);
       setGemProducts(response || []);
     } catch (error) {
       console.error("Error fetching gems:", error);

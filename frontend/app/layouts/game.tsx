@@ -55,8 +55,32 @@ export default function GameLayout() {
     };
   }, [ws.registerHandler, ws.unregisterHandler]);
 
+  const tapContainer = React.useRef<HTMLDivElement>(null);
+  const spawnTap = (e: React.MouseEvent<HTMLDivElement>) => {
+    // create a new div. set it's position to the click position
+    if (!tapContainer.current) return;
+    const clickX = e.clientX - tapContainer.current.getBoundingClientRect().left;
+    const clickY = e.clientY - tapContainer.current.getBoundingClientRect().top;
+
+    // create a new div
+    const spawnDiv = document.createElement('div');
+    spawnDiv.className = 'tap';
+    spawnDiv.style.left = `${clickX}px`;
+    spawnDiv.style.top = `${clickY}px`;
+
+    // append it to the app content
+    tapContainer.current.appendChild(spawnDiv);
+
+    // remove it after 1 second
+    setTimeout(() => {
+      spawnDiv.remove();
+    }, 1000);
+  };
+
+
+
   return (
-    <div className="app-content flex-column">
+    <div className="app-content flex-column" onClick={spawnTap} ref={tapContainer}>
       <header>
         <p>Free to Play</p>
       </header>
