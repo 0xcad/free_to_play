@@ -1,13 +1,12 @@
 import type { Route } from "./+types/home";
-import { Navigate, useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useAppContext } from '~/context/AppContext';
 
-import React, { useEffect } from 'react';
-
-import GameLayout from '~/layouts/game';
-import Stage from '~/components/Stage/';
+import { useEffect } from 'react';
 
 import routes from '~/constants/routes';
+
+import { Link } from "react-router";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -17,7 +16,6 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function Home() {
-  const location = useLocation();
   const navigate = useNavigate();
   const { currentUser, play } = useAppContext();
 
@@ -34,8 +32,14 @@ export default function Home() {
 
   return (
     <div>
-      <h1>Free to Play Home</h1>
+      <h1>Free to Play</h1>
       <p>Free to Play, or Pay What You Will, is an upcoming experimental interactive theatre performance.</p>
+
+      {play.playInstance && (
+        <Link to={routes.join.link}>
+          <button className='button primary mt-3'>Join the Play</button>
+        </Link>
+      )}
     </div>
   );
 }

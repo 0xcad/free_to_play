@@ -5,7 +5,7 @@ class ItemCategorySerializer(serializers.ModelSerializer):
     items = serializers.SerializerMethodField()
     class Meta:
         model = ItemCategory
-        fields = ['id', 'name', 'order', 'items']
+        fields = ['id', 'name', 'description', 'order', 'items']
 
     def get_items(self, obj):
         items = obj.items.all()
@@ -22,17 +22,13 @@ class ItemSerializer(serializers.ModelSerializer):
                   'image',
                   'cost',
                   'description',
-                  'data',
                   'category',
                   'quantity',
-                  'is_available', 'is_visible',
+                  'is_available',
                 ]
 
     def get_is_available(self, obj):
         return obj.is_available
-
-    def get_is_visible(self, obj):
-        return obj.is_visible
 
 class ItemPurchaseSerializer(serializers.ModelSerializer):
     item = ItemSerializer(read_only=True)

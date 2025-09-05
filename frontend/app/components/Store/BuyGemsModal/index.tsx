@@ -10,14 +10,16 @@ import { apiUrls, stripePublicKey } from '~/constants/api';
 
 import Icon from '~/components/shared/Icon';
 
-/*import {loadStripe} from '@stripe/stripe-js';
+import {loadStripe} from '@stripe/stripe-js';
 import {
   EmbeddedCheckoutProvider,
   EmbeddedCheckout
-} from '@stripe/react-stripe-js';*/
+} from '@stripe/react-stripe-js';
 
 import useSound from 'use-sound';
 import gemsSfx from '~/assets/sounds/gems.mp3';
+
+import { AnimatePresence, motion } from "motion/react";
 
 type GemProduct = {
   id: string;
@@ -31,14 +33,14 @@ type GemProduct = {
 const BuyGemsModal: React.FC<ModalProps> = ({
   isOpen, onClose
 }) => {
-  const { users, currentUser, setCurrentUser } = useAppContext();
+  const { currentUser, setCurrentUser } = useAppContext();
   const [gems, setGems] = useState(100);
   const [gemProducts, setGemProducts] = useState<GemProduct[]>([]);
   const [priceId, setPriceId] = useState<string | null>(null);
 
   const [playSuccess] = useSound(gemsSfx, { volume: 0.25, });
 
-  //const stripePromise = loadStripe(stripePublicKey);
+  const stripePromise = loadStripe(stripePublicKey);
 
   const handleCheckoutComplete = useCallback(() => {
     toast.success("Checkout completed successfully! Your gems will be added to your account.");
@@ -53,9 +55,7 @@ const BuyGemsModal: React.FC<ModalProps> = ({
 
   const fetchClientSecret = useCallback(async () => {
     // Create a Checkout Session
-    console.log("Fetching client secret for checkout session...");
     const response = await Api.post(apiUrls.store.create_checkout_session, {price_id: priceId});
-    console.log(response.clientSecret);
     return response.clientSecret;
   }, [priceId]);
 
@@ -93,7 +93,41 @@ const BuyGemsModal: React.FC<ModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
     >
-      <ul className="gem-products">
+
+      {/* TODO: add a loading spinner while the checkout session is being created
+        Add a "close" button to this window, that sets priceId to null again
+        Make this take up more space... */}
+      <AnimatePresence>
+      {priceId ? (
+        <motion.div 
+          className="stripe-wrapper"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0 }}
+          transition={{ type: "spring", bounce: 0.4 }}
+        >
+          <button 
+            className="modal-close-btn button w-auto flex-center font-alt"
+            onClick={() => {setPriceId(null)}}
+          >
+            <Icon icon='back' />
+          </button>
+          <EmbeddedCheckoutProvider
+            key={priceId}
+            stripe={stripePromise}
+            options={options}
+          >
+            <EmbeddedCheckout />
+          </EmbeddedCheckoutProvider>
+        </motion.div>
+      ) : (
+      <motion.ul 
+        className="gem-products p-2"
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0 }}
+        transition={{ type: "spring", bounce: 0.2 }}
+      >
       { gemProducts.map((product) => (
         <li key={product.id}>
           {product.images && product.images.length > 0 && (
@@ -107,21 +141,9 @@ const BuyGemsModal: React.FC<ModalProps> = ({
           </button>
         </li>
       ))}
-      </ul>
-
-
-      {/* TODO: add a loading spinner while the checkout session is being created
-        Add a "close" button to this window, that sets priceId to null again
-        Make this take up more space... */}
-      {/*priceId && (
-        <EmbeddedCheckoutProvider
-          key={priceId}
-          stripe={stripePromise}
-          options={options}
-        >
-          <EmbeddedCheckout />
-        </EmbeddedCheckoutProvider>
-      }(*/}
+      </motion.ul>
+      )}
+      </AnimatePresence>
     </Modal>
   );
 }

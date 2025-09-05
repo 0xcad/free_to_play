@@ -1,6 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import './modal.css';
 
+import Icon from '~/components/shared/Icon';
+
 import { motion, AnimatePresence } from "motion/react"
 
 export interface ModalProps {
@@ -59,7 +61,7 @@ const Modal: React.FC<ModalProps> = ({
           <h2 className="modal-title">{title ? (<>{title}</>) : "Free to Play"}</h2>
 
           <button className="modal-close-btn button w-auto flex-center font-alt" onClick={handleCloseModal}>
-            &#10006;
+            <Icon icon='close' />
           </button>
         </div>
         <div className='modal-content'>

@@ -1,10 +1,13 @@
 import {
+  FaArrowLeft,
   FaGem,
   FaRegUserCircle,
   FaPaperPlane,
   FaPlay, FaPause,
   FaRegQuestionCircle,
 } from "react-icons/fa";
+
+import { FaXmark } from "react-icons/fa6";
 
 import {
   LuTheater,
@@ -18,8 +21,10 @@ import {
 } from "react-icons/pi";
 
 export const iconMap = {
+  back: FaArrowLeft,
   chat: PiChatDotsDuotone,
   chest: PiTreasureChestDuotone,
+  close: FaXmark,
   gem: FaGem,
   inventory: PiBackpackDuotone,
   pause: FaPause,

@@ -15,17 +15,17 @@ export const apiUrls = {
     resend: 'accounts/resend_email/',
 
     create: 'accounts/',
-    update: (id: string) : string => `accounts/${id}/`,
-    detail: (id: string) : string => `accounts/${id}/`,
-    mute: (id: string) : string => `accounts/${id}/mute/`,
+    update: (id: string | number) : string => `accounts/${id}/`,
+    detail: (id: string | number) : string => `accounts/${id}/`,
+    mute: (id: string | number) : string => `accounts/${id}/mute/`,
   },
 
   chat: {
     list: 'chat/',
     create: 'chat/',
     kick: 'chat/kick/',
-    detail: (id: string) : string => `chat/${id}/`,
-    delete: (id: string) : string => `chat/${id}/`,
+    detail: (id: string | number) : string => `chat/${id}/`,
+    delete: (id: string | number) : string => `chat/${id}/`,
   },
 
   play: {
@@ -40,8 +40,8 @@ export const apiUrls = {
 
   store: {
     list: 'store/items/',
-    detail: (id: string) : string =>  `store/items/${id}/`,
-    purchase: (id: string) : string =>  `store/items/${id}/purchase/`,
+    detail: (id: string | number) : string =>  `store/items/${id}/`,
+    purchase: (id: string | number) : string =>  `store/items/${id}/purchase/`,
     inventory: 'store/items/inventory/',
     create_checkout_session: 'store/stripe/create_checkout_session/',
     session_status: (session_id: string) : string => `store/stripe/session_status/${session_id}/`,

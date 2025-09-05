@@ -11,6 +11,9 @@ ITEM_TYPE_CHOICES = [
 
 class ItemCategory(models.Model):
     name = models.CharField(max_length=50, unique=True, help_text="The name of the item category.")
+    description = models.TextField(null=True, blank=True)
+    image = models.ImageField(upload_to='items/', blank=True, null=True)
+    icon = models.CharField(max_length=15, null=True, blank=True)
     order = models.PositiveIntegerField(null=True, blank=True, help_text="Order of this category in the list, lower numbers appear first.")
     item_type = models.CharField(max_length=10, choices=ITEM_TYPE_CHOICES, null=True, blank=True)
 
@@ -29,6 +32,7 @@ class Item(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, blank=True, null=True)
     image = models.ImageField(upload_to='items/', blank=True, null=True)
+    icon = models.CharField(max_length=15, blank=True, null=True)
     cost = models.IntegerField(default=0)
     description = models.TextField(blank=True, null=True)
     data = models.JSONField(blank=True, null=True)

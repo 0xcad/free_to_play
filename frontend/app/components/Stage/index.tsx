@@ -76,7 +76,15 @@ const Stage: React.FC = () => {
     >
       { play.playInstance?.stream_url && (
       <div className='yt-embed-holder overflow-hidden'>
-        <iframe width="560" height="315" src={play.playInstance.stream_url + "&autoplay=1&controls=0&color=white&playsinline=1&enablejsapi=1"} title="Free to Play video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        {/*<iframe width="560" height="315" src={play.playInstance.stream_url + "&autoplay=1&controls=0&color=white&playsinline=1&enablejsapi=1"} title="Free to Play video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>*/}
+        <iframe
+          src={play.playInstance.stream_url}
+          height="100%"
+          width="100%"
+          allowFullScreen
+        >
+        </iframe>
+
       </div>
       )}
       <div className='stage-status'>

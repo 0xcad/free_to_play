@@ -1,10 +1,9 @@
-import React, { useState,  useEffect, useCallback } from 'react';
 import { Outlet  } from "react-router";
 
 export default function MainLayout() {
   return (
     <>
-    <div className="app-content flex-column">
+    <div className="app-content flex-column overflow-y-auto">
       <header>
         <p>Free to Play</p>
       </header>

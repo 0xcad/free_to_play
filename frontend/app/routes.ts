@@ -3,10 +3,9 @@ import {
   route,
   index,
   layout,
-  prefix,
 } from "@react-router/dev/routes";
 
-import routes from './constants/routes';
+//import routes from './constants/routes';
 
 //import { RequireAuth, RequireJoin } from './layouts/guard';
 
@@ -14,9 +13,9 @@ import routes from './constants/routes';
 export default [
 
   route("admin", "./components/Admin/index.tsx"),
-  index("./routes/home.tsx"),
-
   layout('./layouts/main.tsx', [
+
+    index("./routes/home.tsx"),
     // auth
     route("auth", "./components/Auth/login.tsx", [
       index("./components/Auth/verify.tsx"),

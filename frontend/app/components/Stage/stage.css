@@ -3,15 +3,22 @@
 .yt-embed-holder {
   width: 100%;
   aspect-ratio: 16 / 9;
-  pointer-events: none;
-  z-index: 0;
+  /*pointer-events: none;
+  z-index: 0;*/
   max-height: 40dvh;
+  position: relative;
 }
 
 .yt-embed-holder iframe {
-  width: 300%;
+  /*width: 300%;
   height: 100%;
-  margin-left: -100%;
+  margin-left: -100%;*/
+  min-width: 400px;
+  min-height: 300px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .stage-status {

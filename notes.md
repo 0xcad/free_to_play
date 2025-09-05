@@ -611,7 +611,6 @@ DONE:
 TODO:
 * eventually throttle chat api
 * I uncommented Stripe because it was really slow. find out why.
-* click animation: maybe just mimic the cashnado slot machine thing? that might be easier than sparkles
 * make the credit card form take up more space in the modal
 * add css to notifications -- the close x should be way bigger on mobile
 * add chat novelty purchases.
@@ -621,3 +620,68 @@ TODO:
 * IMPORTANT! special chat notification for when a user buys gems
 * idea: pay "indulgences" to increase odds of being selected to play next?
 * idea: a "continue" button with gems that lets you restart. you get one continue, it costs five dollars (in gems). you see a countdown for like 10 seconds, and then you get to play again.
+
+# 2025-08-16
+in and out, 15 minute programming project. can i get fun clicking to work?
+
+DONE:
+* every click spawns a white div that spends like 80% of the time getting slightly larger, then "pops" to get smaller until it disappears, then deletes itself from the dom
+
+TODO:
+* click and drag animation??
+* when the timer gets to red (and isn't expired) it should start pulsing like the game nav icons
+
+# 2025-09-01
+
+TODO:
+* set the domain name (freetoplay.tech)
+* favicon :))
+* logo from cole?
+* replace inventory with freelance typing game (read script, lol)
+* nix timer. replace that with a counter for how many gems have been purchased
+* get Lucia's font, switch that on the website
+* super chat obv
+    * "power type" effect from sublime text, lol
+* terms of service + privacy policy in google thing
+* tutorial + program
+* page on the website where you can see all purchases as they come in
+
+September 19th and 20th the show
+
+website by the 9th or 10th
+
+misc ideas
+* button on admin panel you can press that plays sirens on everyone's phones
+
+
+# 2025-09-03
+DONE
+* fixed `isLoading` on email button
+* homepage is a link to the join button
+* streaming in twitch works (try `https://player.twitch.tv/?channel=0xcad&parent=localhost&autoplay=true`)
+* fixed bugs with tap
+
+typing game
+* needs to appear on waiting screen before starts, and in the play once it has started
+* it should definitely just replace the inventory. i can even copy the chat send button with like, "Post" or something
+* how does it work? frontend and backend validation. frontend makes a request to backend. backend replies with *one* sentence. frontend will display sentence to user, and validate it. if correct makes the request to the backend. backend increments the play revenue, progresses the user's index in the sentences, and sends back the next sentence
+* to add: collective revenue field to play. sentences (hard coded in the backend). freelanceIndex field on the user.
+
+# 2025-09-05
+goals
+* build out the shop. review microtransactions
+* start chat features?
+    * chat should just send user ids. every user should have a list of users that they compare that against. trust me this is better
+    * twitter verified badge you can pay money for
+
+
+shop todo
+* images for icons
+* play a sound effect on purchase
+* idea of "restockable" items: (simlish, accompaniment). you literally just increment the quantity, and then save it again...
+* make different categories tabs instead of whatever i have now
+* TODO: need a management script that i can run that will `create_or_update` all items based on a slug
+
+DONE
+* added stripe back, fixed color problem, added back button from payment screen
+* did some shop css. added a few item fields

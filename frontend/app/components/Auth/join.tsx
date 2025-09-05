@@ -62,13 +62,13 @@ const JoinForm: React.FC = () => {
           <input name="join_code" type="text" id="join_code" required={true} value={formData.join_code} onChange={handleChange}/>
         </label>
 
-        <button type="submit" disabled={pending}>
+        <button type="submit" className="mt-05" disabled={pending}>
           {pending ? "Submitting..." : "Submit"}
         </button>
       </form>
 
 
-      <button onClick={handleLogout} className="button">Log out</button>
+      <button onClick={handleLogout} className="button mt-3">Log out</button>
     </>
   );
 }

@@ -5,9 +5,6 @@ import type { PlayInstance } from '../models/PlayInstance';
 import type { User } from '../models/User';
 import type { WsState } from "./useWsState";
 
-import { useNavigate } from 'react-router';
-import routes from '../constants/routes';
-
 export interface PlayState {
   playInstance: PlayInstance;
   setPlayInstance: (p: PlayInstance) => void;
@@ -15,10 +12,9 @@ export interface PlayState {
 }
 
 export function usePlayState(ws: WsState, currentUser: User): PlayState {
-  let navigate = useNavigate();
   const [playInstance, setPlayInstance] = useState<PlayInstance>(defaultPlayInstance());
 
-  const updatePlayInstance= (playInstanceData) => {
+  const updatePlayInstance= (playInstanceData : PlayInstance) => {
     if (!playInstanceData) return;
     setPlayInstance((prev) => {
       return { ...prev, ...playInstanceData };

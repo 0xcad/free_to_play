@@ -13,7 +13,7 @@ import classnames from 'classnames';
 import Api from '~/utils/api';
 
 import { toast } from 'react-toastify';
-import { AnimatePresence, motion } from "motion/react"
+import { AnimatePresence, motion } from "motion/react";
 
 export function meta({}: Route.MetaArgs) {
   return [

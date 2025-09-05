@@ -27,6 +27,7 @@ const EmailForm: React.FC<{
   });
   const [emailError, setEmailError] = useState(false);
   const [joinCode, setJoinCode] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -34,22 +35,30 @@ const EmailForm: React.FC<{
       setJoinCode(params.get('join_code', ""));
   }, []);
 
-  const handleSubmit = async (values): Promise<void> => {
-    // todo: make name a minimum of 5 chars?
-    if (emailError || values.email === "" || values.name === "" || values.is_participating === "") {
-      return;
-    }
+  const handleSubmit = (values) => {
+    setIsLoading(true);
+    const asyncSubmit = async (values): Promise<void> => {
+      // todo: make name a minimum of 5 chars?
+      if (emailError || values.email === "" || values.name === "" || values.is_participating === "") {
+        return;
+      }
 
-    try {
-      const response = await Api.post(apiUrls.accounts.create, values);
-      setCurrentUser(response.user);
-      onSuccess(response);
-    } catch (err) {
-      console.log('this is the error we get', err);
-      if (response.email)
-        setEmailError(response.email);
+      try {
+        const response = await Api.post(apiUrls.accounts.create, values);
+        setCurrentUser(response.user);
+        onSuccess(response);
+      } catch (err) {
+        console.log('this is the error we get', err);
+      } finally {
+        setIsLoading(false);
+      }
     }
-  };
+    asyncSubmit(values);
+  }
+
+  useEffect(() => {
+    console.log('isLoading here', isLoading); // This will log the updated value of isLoading
+  }, [isLoading]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -58,8 +67,6 @@ const EmailForm: React.FC<{
       [name]: type === 'checkbox' ? checked : value, // Handle checkbox differently
     });
   };
-
-  const { pending } = useFormStatus();
 
   return (
     <form action={handleSubmit} className="form email-form">
@@ -98,8 +105,8 @@ const EmailForm: React.FC<{
       </p>
 
       <input name="join_code" type="hidden" id="join_code" value={joinCode}/>
-      <button type="submit" disabled={pending}>
-        {pending ? "Submitting..." : "Submit"}
+      <button className='button' type="submit" disabled={isLoading}>
+        {isLoading ? "Submitting..." : "Submit"}
       </button>
     </form>
   );

@@ -24,8 +24,7 @@ const LoginEmail: React.FC = () => {
 
   const resendEmail = async (): Promise<void> => {
     try {
-      var response = await Api.post(apiUrls.accounts.resend, {user_id: currentUser.id});
-      console.log('successfully submitted resend form');
+      await Api.post(apiUrls.accounts.resend, {user_id: currentUser?.id});
       setIsResendDisabled(true);
     } catch (err) {
       console.log('this is the error we get', err);
@@ -60,11 +59,12 @@ const LoginEmail: React.FC = () => {
     <>
       <h1>One more step!</h1>
       <p>We created your account. Now check your email for a login link.</p>
+      {currentUser?.email && (<p>Your email: {currentUser.email}</p>)}
       <label>Didn't get one?
-        <button className='button' onClick={resendEmail} disabled={isResendDisabled}>Resend code</button>
+        <button className='button mt-05' onClick={resendEmail} disabled={isResendDisabled}>Resend code</button>
       </label>
       { isResendDisabled && (<p className="mono txt-sm">Email resent. Try again in {resendTimer} seconds</p> )}
-      <label className="mt-1">Use a different email address? <button className="button" onClick={recreateAccount}>Recreate account</button></label>
+      <label className="mt-1">Use a different email address? <button className="button mt-05" onClick={recreateAccount}>Recreate account</button></label>
     </>
   );
 }

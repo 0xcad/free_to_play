@@ -102,6 +102,8 @@ class UserViewSet(viewsets.ModelViewSet):
         return UserSerializer
 
     def get_permissions(self):
+        '''
+        TODO: fixme
         if self.action == 'create':
             perms = [permissions.AllowAny]
         elif self.action in ['update', 'partial_update']:
@@ -110,6 +112,7 @@ class UserViewSet(viewsets.ModelViewSet):
             perms = [permissions.IsAuthenticated]
         elif self.action == 'destroy':
             perms = [permissions.DenyAll]
+        '''
         return super().get_permissions()
 
     def create(self, request, *args, **kwargs):

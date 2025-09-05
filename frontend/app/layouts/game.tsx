@@ -16,7 +16,7 @@ import "./game.css";
 import useSound from 'use-sound';
 import playSfx from '~/assets/sounds/play.mp3';
 
-import { motion } from "motion/react"
+import type { PlayInstance } from '../models/PlayInstance';
 
 export default function GameLayout() {
   let navigate = useNavigate();
@@ -33,7 +33,7 @@ export default function GameLayout() {
 
   // when a new websocket comes in, just set all the new data, redirect on appropriate status change...
   const wsGameUpdatePlayInstance = useCallback((data : PlayInstance) => {
-    if (play.playInstance.status === 'waiting' && data.status === 'running' && currentUser.is_joined) {
+    if (play.playInstance.status === 'waiting' && data.status === 'running' && currentUser?.is_joined) {
       if (window.location.pathname !== routes.stage.link)
         navigate(routes.stage.link);
       toast.info('the game has begun!');
@@ -41,11 +41,11 @@ export default function GameLayout() {
 
     if (data.current_player && play.playInstance.current_player?.id != data.current_player.id && currentUser?.id === data.current_player.id) {
       toast.info('go on, get!');
-      setCurrentPlayerModalIsOpen(true);
       playPlaying();
+      setCurrentPlayerModalIsOpen(true);
     }
   }, [currentUser, play.playInstance]);
-
+  
   // if the play instance updates, set a new one
   useEffect(() => {
     ws.registerHandler("play.PlayInstance.updated", wsGameUpdatePlayInstance);
@@ -59,8 +59,8 @@ export default function GameLayout() {
   const spawnTap = (e: React.MouseEvent<HTMLDivElement>) => {
     // create a new div. set it's position to the click position
     if (!tapContainer.current) return;
-    const clickX = e.clientX - tapContainer.current.getBoundingClientRect().left;
-    const clickY = e.clientY - tapContainer.current.getBoundingClientRect().top;
+    const clickX = e.clientX;
+    const clickY = e.clientY;
 
     // create a new div
     const spawnDiv = document.createElement('div');
@@ -106,7 +106,7 @@ export default function GameLayout() {
         isOpen={currentPlayerModalIsOpen}
         onClose={() => {setCurrentPlayerModalIsOpen(false);}}
       >
-        <p>Get on up there you big idiot, you've been selected to play the game!!</p>
+        <p className="p-3">Get on up there you big idiot, you've been selected to play the game!!</p>
       </Modal>
 
       <BuyGemsModal
