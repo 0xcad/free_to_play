@@ -12,6 +12,8 @@
 
 .user-info__icon {
   margin-right: 0.25rem;
+  display: inline-flex;
+  align-items: center;
 }
 .user-info.admin {
   color: red;
@@ -25,3 +27,5 @@
 
   font-size: 0.8em;
 }
+
+.spacer { margin-left: 0.25rem;  display: inline-block; }

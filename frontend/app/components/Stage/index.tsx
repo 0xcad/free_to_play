@@ -3,8 +3,6 @@ import { useAppContext } from '~/context/AppContext';
 
 import Waiting from './waiting';
 import Chat from './Chat';
-import Timer from '~/components/shared/timer';
-import Inventory from '~/components/Store/Inventory';
 
 import UserInfo from '~/components/shared/UserInfo';
 import Icon from '~/components/shared/Icon';
@@ -21,29 +19,21 @@ const Tabs: React.FC<{selectedTab: string, setSelectedTab: (tab: string) => void
   return (
     <div className='tabs overflow-hidden flex-column'>
       <div className='tab-list'>
-        <button className={classnames('tab button w-auto flex-center', selectedTab === 'chat' ? 'active' : '')} onClick={() => setSelectedTab('chat')}>
-          {selectedTab == 'chat' ?  <motion.div
-              className="underline"
-              layoutId="underline"
-              id="underline"
-              transition={{ type: "spring", bounce: 0.4 }}
-          /> : null}
-          <span className="flex-center w-100 option__text"><Icon icon='chat' /> Chat</span>
-        </button>
-        <button className={classnames('tab button w-auto flex-center', selectedTab === 'inventory' ? 'active' : '')} onClick={() => setSelectedTab('inventory')}>
-        {selectedTab == 'inventory' ? <motion.div
+        {["chat", "freelance"].map((tab) => (
+          <button key={tab} className={classnames('tab button w-auto flex-center', selectedTab === tab ? 'active' : '')} onClick={() => setSelectedTab(tab)}>
+            {selectedTab == tab ?  <motion.div
                 className="underline"
                 layoutId="underline"
                 id="underline"
                 transition={{ type: "spring", bounce: 0.4 }}
-          /> : null}
-
-          <span className="flex-center w-100 option__text"><Icon icon='inventory' /> Inventory</span>
-        </button>
+            /> : null}
+            <span className="flex-center w-100 option__text"><Icon icon={tab} /> {tab.charAt(0).toUpperCase() + tab.slice(1)}</span>
+          </button>
+        ))}
       </div>
       <div className='tab-content flex-column'>
         {selectedTab === 'chat' && <Chat />}
-        {selectedTab === 'inventory' && <Inventory />}
+        {selectedTab === 'freelance' && (<p>TODO</p>) }
       </div>
    </div>
   );
@@ -89,7 +79,6 @@ const Stage: React.FC = () => {
       )}
       <div className='stage-status'>
         <p>{play.playInstance?.current_player ? (<><UserInfo user={play.playInstance.current_player} currentUser={currentUser} /> is playing</>) : 'Waiting for player selection...'}</p>
-        <Timer endTime={play.playInstance.end_time} remainingTime={play.playInstance.remaining_time}/>
       </div>
       <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
     </motion.div>

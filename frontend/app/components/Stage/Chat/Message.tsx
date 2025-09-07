@@ -5,16 +5,16 @@ import UserInfo from '~/components/shared/UserInfo';
 
 interface MessageProps {
   message: ChatMessage;
-  currentUser: User;
+  user: User;
 }
 
-const Message: React.FC<MessageProps> = ({ message, currentUser }) => {
+const Message: React.FC<MessageProps> = ({ message, user }) => {
   return (
     <div>
       <div className='chat-message__date'>{new Date(message.created).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</div>
 
       <div className='chat-message__content'>
-        <UserInfo user={message.user} currentUser={currentUser} />
+        <UserInfo user={user} />
         {': '}
         {message.content}
       </div>

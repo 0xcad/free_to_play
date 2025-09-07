@@ -7,11 +7,13 @@ import {
   FaRegQuestionCircle,
 } from "react-icons/fa";
 
-import { FaXmark } from "react-icons/fa6";
+import { FaCrown, FaXmark } from "react-icons/fa6";
 
 import {
   LuTheater,
 } from "react-icons/lu";
+
+import { RiVerifiedBadgeFill } from "react-icons/ri";
 
 import {
   PiTreasureChestDuotone,
@@ -20,11 +22,15 @@ import {
   PiBookOpenBold,
 } from "react-icons/pi";
 
+import { GiPayMoney, GiReceiveMoney } from "react-icons/gi";
+
 export const iconMap = {
+  admin: FaCrown,
   back: FaArrowLeft,
   chat: PiChatDotsDuotone,
   chest: PiTreasureChestDuotone,
   close: FaXmark,
+  freelance: GiReceiveMoney,
   gem: FaGem,
   inventory: PiBackpackDuotone,
   pause: FaPause,
@@ -33,7 +39,9 @@ export const iconMap = {
   send: FaPaperPlane,
   help: FaRegQuestionCircle,
   theater: LuTheater,
+  swag: GiPayMoney,
   user: FaRegUserCircle,
+  verified: RiVerifiedBadgeFill,
 };
 
 export const iconSizes = {

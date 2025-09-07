@@ -71,9 +71,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const ws = useWsState();
   const play = usePlayState(ws, currentUser);
-  const chat = useChatState(ws);
-  const store = useStoreState(ws);
+  const chat = useChatState(ws, currentUser);
   const users = useUsersState(ws, currentUser, setCurrentUser);
+  const store = useStoreState(ws, currentUser, users);
 
 
   // get the current user & refresh their access token

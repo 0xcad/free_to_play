@@ -10,11 +10,14 @@ import routes from '~/constants/routes';
 
 import Chat from '~/components/Stage/Chat';
 import Modal from '~/components/shared/modal';
-import Timer from '~/components/shared/timer';
+
+import Inventory from '~/components/Store/Inventory';
+
+import "./admin.css";
 
 const Admin: React.FC = () => {
   let navigate = useNavigate();
-  const { currentUser, ws, users, chat, play } = useAppContext();
+  const { currentUser, ws, users, chat, play, store } = useAppContext();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState(undefined);
@@ -104,13 +107,19 @@ const Admin: React.FC = () => {
     }
   }
 
+  // get items on page load
+  useEffect(() => {
+    store.fetchItems();
+  }, []);
+
   if (!currentUser) {
     return <p>Loading...</p>;
   }
 
   return (
     <>
-      <h1>Admin Panel</h1>
+    <h1>Admin Panel</h1>
+    <div className='admin-grid'>
       <div>
         <h2>Play</h2>
         <ul>
@@ -118,7 +127,6 @@ const Admin: React.FC = () => {
           <li>Status: {play.playInstance.status}</li>
           <li>Current Player: {play.playInstance.current_player?.name}</li>
           <li>Stream URL: {play.playInstance.stream_url} <button onClick={() => {changeField('stream_url')}}>Change</button></li>
-          <li>Timer: <Timer endTime={play.playInstance.end_time} remainingTime={play.playInstance.remaining_time} showControls={true}/></li>
         </ul>
 
 
@@ -174,6 +182,12 @@ const Admin: React.FC = () => {
           deleteChatMessage={deleteChatMessage}
         />
       </div>
+
+      <div>
+        <h2>Inventory</h2>
+        <Inventory isAdmin={true} />
+      </div>
+    </div>
     </>
   );
 };

@@ -13,11 +13,88 @@ import Modal from '../shared/modal';
 import Icon from '../shared/Icon';
 
 import "./store.css";
+
+import type { StoreState } from '~/context/useStoreState';
+import type { User } from '~/models/User';
+import Inventory from '~/components/Store/Inventory';
+import ItemDisplay from './ItemDisplay';
+
+import useSound from 'use-sound';
+import buySfx from '~/assets/sounds/item.mp3';
+
 import classnames from 'classnames';
+
+
+{/* TODO: make this a tab component, make tabs not unmount when you click off... */}
+const Tabs: React.FC<{store : StoreState, currentUser: User, buyItem: (item : Item) => void}> = ({store, currentUser, buyItem}) => {
+  const [selectedTab, setSelectedTab] = useState<number>(0);
+
+  useEffect(() => {
+    if (store.categories && Object.values(store.categories).length > 0) {
+      setSelectedTab(Object.values(store.categories)[0].id);
+    }
+  }, [store.categories]);
+
+  const selectedCategory = store.categories ? Object.values(store.categories).find((c) => c.id === selectedTab) : undefined;
+  const items = selectedCategory ? selectedCategory.items.map((itemId : number) => store.items[itemId]).filter((item) => item !== undefined) : [];
+
+  return (
+    <div className='tabs flex-column'>
+      <div className='tab-list'>
+        {store.categories && Object.values(store.categories).map((category) => (
+          <button className={classnames('tab button w-auto flex-center', selectedTab === category.id ? 'active' : '')} onClick={() => setSelectedTab(category.id)} key={category.id}>
+            {selectedTab == category.id ?  <motion.div
+                className="underline"
+                layoutId="underline"
+                id="underline"
+                transition={{ type: "spring", bounce: 0.4 }}
+            /> : null}
+            <span className="flex-center w-100 option__text">{category?.icon && (<><Icon icon={category.icon} />{' '}</>)} {category.name}</span>
+          </button>
+        ))}
+        <button className={classnames('tab button w-auto flex-center', selectedTab === -1 ? 'active' : '')} onClick={() => setSelectedTab(-1)} key={-1}>
+          {selectedTab == -1 ?  <motion.div
+              className="underline"
+              layoutId="underline"
+              id="underline"
+              transition={{ type: "spring", bounce: 0.4 }}
+          /> : null}
+          <span className="flex-center w-100 option__text"><Icon icon='inventory' /> Purchases</span>
+        </button>
+      </div>
+
+      <div className='flex-column'>
+        { selectedCategory && selectedCategory.items.length && (
+          <>
+          { selectedCategory.description && (<p className='mt-3 my-0'>{selectedCategory.description}</p>)}
+          <ul className="item-wrapper">
+            { items.sort((a, b) => {
+                if (a.is_available === b.is_available) return 0;
+                return a.is_available ? -1 : 1;
+              }).map((item) => (
+                <ItemDisplay
+                  key={item.id}
+                  item={item}
+                  buyItem={buyItem}
+                  user={currentUser}
+                />
+            ))}
+          </ul>
+          </>
+        )}
+        { selectedTab === -1 && (
+          <Inventory />
+        )}
+      </div>
+   </div>
+  );
+}
 
 const Store: React.FC = () => {
   const { currentUser, play, store, setCurrentUser } = useAppContext();
-  const [ showInsufficientFunds, setShowInsufficientFunds ] = useState(false); 
+  const [ showInsufficientFunds, setShowInsufficientFunds ] = useState(false);
+
+  const [buyItemPlaying] = useSound(buySfx, { volume: 0.5, });
 
   const buyItem = useCallback(async (item: Item) => {
     const itemId = item.id;
@@ -29,20 +106,14 @@ const Store: React.FC = () => {
 
     try {
       const response = await Api.post(apiUrls.store.purchase(itemId));
-      // update user balance and inventory
+      // update user balance
       setCurrentUser({
         ...currentUser,
-        balance: currentUser.balance - response.cost,
-        inventory: [...currentUser.inventory, itemId]
+        balance: currentUser.balance - item.cost,
       });
 
-      // update play inventory
-      if (response.item_type === 'play') {
-        play.updatePlayInstance({
-          inventory: [...play.playInstance.inventory, itemId]
-        });
-      }
-      toast.success(`Successfully purchased ${response.name}!`);
+      buyItemPlaying();
+      toast.success(`Successfully purchased ${item.name}!`);
     }
     catch (error) {
       console.error("Error purchasing item:", error);
@@ -51,26 +122,10 @@ const Store: React.FC = () => {
   }, [currentUser, setShowInsufficientFunds]);
 
 
-  //get items on page load
+  // get items on page load
   useEffect(() => {
-    const initialLoad = async () => {
-      try {
-        const response = await Api.get(apiUrls.store.list);
-        // populate dictionary
-        const dict: Record<string, Item> = {};
-        response.items.forEach((m) => { dict[m.id] = m; });
-        store.setItems(dict);
-
-        const categoryDict: Record<string, ItemCategory> = {};
-        response.categories.forEach((c) => { categoryDict[c.id] = c; });
-        store.setCategories(categoryDict);
-      } catch (error) {
-        console.log(error);
-        toast.error('Failed to load items.');
-      }
-    }
-    initialLoad();
-  }, [store.setItems]);
+    store.fetchItems();
+  }, []);
 
   return (
     <motion.div
@@ -81,36 +136,12 @@ const Store: React.FC = () => {
     >
       <h1>store</h1>
       <p>All purchases go to <s>our incredible team</s> John Money, and will be used to deliver value to key stakeholders.</p>
-      { store.categories && Object.values(store.categories).map((category) => (
-        <div key={category.id}>
-          <h2>{category.name}</h2>
-          {category.description && (<p>{category.description}</p>)}
-          <ul className="item-wrapper">
-            { category.items.map((itemId : number) => {
-              const item = store.items[itemId];
+      <Tabs
+        store={store}
+        currentUser={currentUser}
+        buyItem={buyItem}
+      />
 
-              return item && (
-              <li key={item.id} className="item p-2">
-                <div className="flex gap-4">
-                  <img src="https://placehold.co/100x100/EEE/31343C" />
-                  <div>
-                    <h3 className="my-2">{item.name}</h3>
-                    <p>{item.description}</p>
-                    <div className="grid my-2">
-                      <span className='item__field'>Cost</span> 
-                      <span className={classnames(currentUser?.balance !== undefined && item.cost > currentUser.balance ? 'error' : '')}
-                      >{item.cost} gems</span>
-                      <span className='item__field'>Limit</span> 
-                      <span>{item.quantity} left</span>
-                    </div>
-                  </div>
-                </div>
-                <button className="button mt-2" onClick={() => buyItem(item)}>Exchange</button>
-              </li>
-            )}) }
-          </ul>
-        </div>
-      )) }
       <button className="button primary py-2 txt-md" onClick={() => store.setBuyGemsModalIsOpen(true)}>Buy Gems</button>
 
       <Modal

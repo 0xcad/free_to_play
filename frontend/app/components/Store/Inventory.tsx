@@ -3,56 +3,69 @@ import { useAppContext } from '~/context/AppContext';
 
 import Api from '~/utils/api';
 import { apiUrls } from '~/constants/api';
+import type {ItemPurchase, Item} from '~/models/Item';
 
-const Inventory: React.FC = ({}) => {
-  const { store, currentUser, play } = useAppContext();
+import { toast } from 'react-toastify';
 
-  // if a user has an item in their inventory that isn't in `items`, fetch inventory
+import ItemDisplay from './ItemDisplay';
+
+
+const Inventory: React.FC<{isAdmin?: boolean}> = ({isAdmin}) => {
+  const { store, users, currentUser } = useAppContext();
+
+  const playItemPurchases = !isAdmin ? (
+    Object.values(store.itemPurchases).filter((item) => item.item_type === 'play')
+  ) : Object.values(store.itemPurchases).sort((a, b) => new Date(b.created).getTime() - new Date(a.created).getTime());
+  const userItemPurchases = !isAdmin ? (
+    Object.values(store.itemPurchases).filter((item) => item.item_type === 'user')
+  ) : [];
+
+  // get item purchases on load
   useEffect(() => {
-    if (play.playInstance?.inventory && play.playInstance.inventory.length > 0) {
-      const missingItems = play.playInstance.inventory.filter(item_id => !store.items[item_id]);
-      const missingUserItems = currentUser.inventory.filter(item_id => !store.items[item_id]);
-      missingItems.push(...missingUserItems);
-      if (missingItems.length > 0) {
-        Api.get(apiUrls.store.inventory).then(response => {
-          const itemsDict: Record<string, any> = {};
-          response.play.forEach(item => { itemsDict[item.id] = item; });
-          store.setItems(prevItems => ({ ...prevItems, ...itemsDict }));
+    const initialLoad = async () => {
+      try {
+        const response = await Api.get(apiUrls.store.inventory);
 
-          // update play inventory
-          play.updatePlayInstance({
-            inventory: Object.keys(itemsDict)
-          });
-        }).catch(error => {
-          console.error("Error fetching items:", error);
-        });
+        const dict: Record<string, User> = {};
+        response.forEach((m) => { dict[m.id] = m; });
+        store.setItemPurchases(dict);
+
+      } catch (error) {
+        toast.error('Failed to load inventory.');
+      } finally {
+        store.setLastUpdatedInventory(new Date());
       }
     }
-  }, [play.playInstance?.inventory, currentUser?.inventory, store.items, store.setItems]);
+
+    if (Date.now() - store.lastUpdatedInventory.getTime() > 10 * 1000) { // throttle 10 seconds
+      initialLoad();
+    }
+   }, [store.items, store.lastUpdatedInventory, store.setLastUpdatedInventory]);
 
   return (
     <div>
     <h3>Play Inventory</h3>
-    { play.playInstance?.inventory && play.playInstance.inventory.length > 0 ? (
-      <ul>
-        {play.playInstance.inventory.map((item_id) => (
-          <li key={item_id}>
-            {store.items[item_id]?.name || `Item ${item_id} not found`}
-            {store.items[item_id]?.description && <p>{store.items[item_id].description}</p>}
-          </li>
-        ))}
+    { playItemPurchases.length > 0 ? (
+      <ul className="item-wrapper">
+        {Object.values(playItemPurchases).map((itemPurchase) => {
+          const user = {...users.users[itemPurchase.user_id], is_me: currentUser?.id === itemPurchase.user_id};
+          return (
+            <ItemDisplay
+              key={itemPurchase.id}
+              item={store.items[itemPurchase.item_id]}
+              user={user}
+              purchaseDate={isAdmin ? itemPurchase.created : undefined}
+            />
+        )})}
       </ul>
     ) : (
       <p>No items in inventory.</p>
     )}
     <h3>User Inventory</h3>
-    { currentUser?.inventory && currentUser.inventory.length > 0 ? (
-      <ul>
-        {currentUser.inventory.map((item_id) => (
-          <li key={item_id}>
-            {store.items[item_id]?.name || `Item ${item_id} not found`}
-            {store.items[item_id]?.description && <p>{store.items[item_id].description}</p>}
-          </li>
+    { userItemPurchases.length > 0 ? (
+      <ul className="item-wrapper">
+        {Object.values(userItemPurchases).map((itemPurchase) => (
+          <ItemDisplay key={itemPurchase.id} item={store.items[itemPurchase.item_id]} />
         ))}
       </ul>
     ) : (

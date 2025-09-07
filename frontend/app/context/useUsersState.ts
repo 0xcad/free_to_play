@@ -84,7 +84,7 @@ export function useUsersState(
     });
   }
 
-  // if a websocket comes in with a new chat message, post it
+  // handle user websockets
   useEffect(() => {
     ws.registerHandler("accounts.User.kicked", userKicked);
     ws.registerHandler("accounts.User.muted", userMuted);

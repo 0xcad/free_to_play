@@ -4,12 +4,12 @@ from accounts.serializers import UserListSerializer
 
 
 class ChatMessageSerializer(serializers.ModelSerializer):
-    user = UserListSerializer(read_only=True)
+    user_id = serializers.PrimaryKeyRelatedField(source='user', read_only=True)
     created = serializers.DateTimeField(format='%Y-%m-%dT%H:%M:%S.%fZ')
 
     class Meta:
         model = ChatMessage
-        fields = ['id', 'user', 'content', 'created']
+        fields = ['id', 'user_id', 'content', 'created']
 
     def validate_content(self, value):
         if not value:

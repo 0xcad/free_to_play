@@ -10,11 +10,14 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Item, ItemPurchase, ItemCategory, StripeCheckoutSession
 from play.models import PlayInstance
 from accounts.models import User
+from django.db.models import Q
 
 import stripe
 from django.conf import settings
 from django.http import HttpResponse
 from django.core.cache import cache
+
+from notifications.utils import send_notification
 
 def fulfill_checkout(session_id):
     '''
@@ -211,7 +214,7 @@ class ItemViewSet(viewsets.ModelViewSet):
         user = request.user
         play_instance = PlayInstance.get_active()
 
-        if not item.is_available:
+        if not item.is_available(user):
             return Response({"details": "Item is not available"}, status=status.HTTP_400_BAD_REQUEST)
 
         if user.balance < item.cost:
@@ -224,31 +227,29 @@ class ItemViewSet(viewsets.ModelViewSet):
         user.balance -= item.cost
         user.save()
 
-        serializer = self.get_serializer(item)
+        # serializer = self.get_serializer(item)
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serialized = ItemPurchaseSerializer(purchase).data
+        send_notification('store.ItemPurchase', 'created', serialized)
+
+        return Response(serialized, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['get'], permission_classes=[UserJoinedAudience])
     def inventory(self, request):
         """
         Get the user's inventory and play inventory
         """
-        user = request.user
-        user_purchases = Item.objects.filter(
-            id__in=user.inventory.values_list('item_id', flat=True)
-        )
 
         play = PlayInstance.get_active()
-        play_purchases = Item.objects.filter(
-            id__in=play.purchased_items.filter(item__item_type='play').values_list('item_id', flat=True)
+        # query set: get item purchases where
+        # 1. play_instance is the active play instance
+        # 2. item_type is 'play', or user is the current user and item_type is 'user'
+        purchases = ItemPurchase.objects.filter(
+            play_instance=play
+        ).filter(
+            Q(item__item_type='play') |
+            Q(user=request.user, item__item_type='user')
         )
+        return Response(ItemPurchaseSerializer(purchases, many=True).data, status=status.HTTP_200_OK)
 
-        print('User purchases:', user_purchases)
-        print('Play purchases:', play_purchases)
-
-        data = {
-            'user': ItemSerializer(user_purchases, many=True).data,
-            'play': ItemSerializer(play_purchases, many=True).data
-        }
-        return Response(data, status=status.HTTP_200_OK)
 

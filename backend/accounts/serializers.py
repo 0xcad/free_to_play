@@ -28,17 +28,27 @@ class CreateUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['name', 'email', 'is_participating']
 
-class UserSerializer(serializers.ModelSerializer):
+class ItemMixin(serializers.Serializer):
+    verified = serializers.SerializerMethodField()
+    has_superchat = serializers.SerializerMethodField()
+
+    def get_verified(self, obj):
+        return obj.all_purchased_items.filter(play_instance__is_active=True, item__slug='verified').count()
+
+    def get_has_superchat(self, obj):
+        return obj.all_purchased_items.filter(play_instance__is_active=True, item__slug='super-chat').exists()
+
+class UserSerializer(ItemMixin, serializers.ModelSerializer):
     is_admin = serializers.SerializerMethodField()
     is_authenticated = serializers.SerializerMethodField()
     is_joined = serializers.SerializerMethodField()
-    inventory = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = ['id', 'name', 'email', 'is_participating', 'is_admin', 'is_authenticated',
                   'balance', 'spent',
-                  'is_joined', 'is_muted', 'has_played', 'inventory']
+                  'is_joined', 'is_muted', 'has_played',
+                  'verified', 'has_superchat']
 
     def get_is_admin(self, obj):
         return obj.is_staff or obj.is_superuser
@@ -49,18 +59,16 @@ class UserSerializer(serializers.ModelSerializer):
     def get_is_joined(self, obj):
         return obj.is_joined
 
-    def get_inventory(self, obj):
-        return obj.inventory.values_list('id', flat=True)
-
 class ResendEmailSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
 
-class UserListSerializer(serializers.ModelSerializer):
+class UserListSerializer(ItemMixin, serializers.ModelSerializer):
     is_admin = serializers.SerializerMethodField()
 
     class Meta:
         model = User
-        fields = ['id', 'name', 'is_participating', 'is_admin', 'balance', 'is_muted', 'has_played']
+        fields = ['id', 'name', 'is_admin', 'is_muted', 'has_played',
+                  'verified', 'has_superchat']
 
     def get_is_admin(self, obj):
         return obj.is_staff or obj.is_superuser

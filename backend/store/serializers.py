@@ -5,14 +5,15 @@ class ItemCategorySerializer(serializers.ModelSerializer):
     items = serializers.SerializerMethodField()
     class Meta:
         model = ItemCategory
-        fields = ['id', 'name', 'description', 'order', 'items']
+        fields = ['id', 'name', 'description', 'icon', 'order', 'items']
 
     def get_items(self, obj):
         items = obj.items.all()
         return items.values_list('id', flat=True)
 
 class ItemSerializer(serializers.ModelSerializer):
-    #category = ItemCategorySerializer(read_only=True)
+    count = serializers.SerializerMethodField()
+    is_available = serializers.SerializerMethodField()
 
     class Meta:
         model = Item
@@ -22,17 +23,28 @@ class ItemSerializer(serializers.ModelSerializer):
                   'image',
                   'cost',
                   'description',
-                  'category',
+                  'count',
                   'quantity',
                   'is_available',
+                  'item_type',
                 ]
 
     def get_is_available(self, obj):
-        return obj.is_available
+        request = self.context.get('request')
+        return obj.is_available(request.user) if request else False
+
+    def get_count(self, obj):
+        if obj.item_type == 'user':
+            request = self.context.get('request')
+            return obj.purchased_items.filter(user=request.user).count()
+        return obj.count
 
 class ItemPurchaseSerializer(serializers.ModelSerializer):
-    item = ItemSerializer(read_only=True)
+    item_id = serializers.PrimaryKeyRelatedField(source='item', read_only=True)
+    item_type = serializers.CharField(source='item.item_type', read_only=True)
+    user_id = serializers.PrimaryKeyRelatedField(source='user', read_only=True)
+    created = serializers.DateTimeField(format='%Y-%m-%dT%H:%M:%S.%fZ')
 
     class Meta:
         model = ItemPurchase
-        fields = ['id', 'user', 'item']
+        fields = ['id', 'user_id', 'item_id', 'item_type', 'created']

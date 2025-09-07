@@ -10,7 +10,6 @@ export interface PlayInstance {
   end_time: string | undefined;
   join_code: string;
   stream_url: string;
-  inventory: number[];
 }
 
 export const defaultPlayInstance = (): PlayInstance => {
@@ -23,7 +22,6 @@ export const defaultPlayInstance = (): PlayInstance => {
     current_game_start: undefined,
     join_code: '',
     stream_url: '',
-    inventory: [],
   };
 };
 

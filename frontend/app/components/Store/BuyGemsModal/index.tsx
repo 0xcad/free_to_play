@@ -49,6 +49,7 @@ const BuyGemsModal: React.FC<ModalProps> = ({
       balance: currentUser.balance + gems
     });
     playSuccess();
+    setPriceId(null);
     onClose();
     // in the backend, we update the user's balence using a webhook. just optimistically display that in the frontend
   }, [gems, currentUser, setCurrentUser, onClose]);
@@ -99,14 +100,14 @@ const BuyGemsModal: React.FC<ModalProps> = ({
         Make this take up more space... */}
       <AnimatePresence>
       {priceId ? (
-        <motion.div 
+        <motion.div
           className="stripe-wrapper"
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0 }}
           transition={{ type: "spring", bounce: 0.4 }}
         >
-          <button 
+          <button
             className="modal-close-btn button w-auto flex-center font-alt"
             onClick={() => {setPriceId(null)}}
           >
@@ -121,7 +122,7 @@ const BuyGemsModal: React.FC<ModalProps> = ({
           </EmbeddedCheckoutProvider>
         </motion.div>
       ) : (
-      <motion.ul 
+      <motion.ul
         className="gem-products p-2"
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}

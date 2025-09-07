@@ -51,6 +51,12 @@ const Verify: React.FC = () => {
       setCurrentUser(response.user);
       play.setPlayInstance(response.play_instance);
 
+      // TODO: this code is so fucking bad, why is this here?
+      const dict: Record<string, User> = {};
+      response.users.forEach((m) => { dict[m.id] = m; });
+
+      users.setUsers(dict);
+
       if (response.user.is_joined)
         navigate(routes.stage.link);
       else

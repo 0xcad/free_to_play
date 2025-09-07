@@ -8,10 +8,14 @@ export interface ChatState {
   setMessages: (msgs: Record<string, ChatMessage>) => void;
   addChatMessage: (msgs: ChatMessage) => void;
   removeChatMessage: (msgId: string) => void;
+  lastUpdated: Date;
+  setLastUpdated: (date: Date) => void;
 }
 
 export function useChatState(ws: WsState): ChatState {
   const [messages, setMessages] = useState<Record<string, ChatMessage>>({});
+
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date(0));
 
   // function to create chat messages
   const addChatMessage = (msg: ChatMessage) => {
@@ -46,5 +50,12 @@ export function useChatState(ws: WsState): ChatState {
     };
   }, [ws.registerHandler, ws.unregisterHandler]);
 
-  return { messages, setMessages, addChatMessage, removeChatMessage };
+  return {
+    messages,
+    setMessages,
+    addChatMessage,
+    removeChatMessage,
+    lastUpdated,
+    setLastUpdated,
+  };
 }

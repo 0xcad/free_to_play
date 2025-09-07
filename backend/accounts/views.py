@@ -10,6 +10,7 @@ from .serializers import (
     GoogleAuthSerializer,
 )
 from play.serializers import PlayInstanceSerializer
+from accounts.serializers import UserListSerializer
 
 from .permissions import AllowInactiveUsers, UserJoinedAudience, IsStaffOrSelf
 from rest_framework import permissions, viewsets
@@ -74,7 +75,8 @@ def login_user(user):
         'refresh': str(refresh),
         'access': str(refresh.access_token),
         'user': UserSerializer(user).data,
-        'play_instance': play_instance_data
+        'play_instance': play_instance_data,
+        'users': UserListSerializer(play_instance.audience, many=True).data,
     });
 
 class UserViewSet(viewsets.ModelViewSet):

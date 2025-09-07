@@ -1,0 +1,68 @@
+@import "../../vars.css";
+.item-wrapper {
+  list-style: none;
+  padding: 0;
+}
+
+.item {
+  border: 2px solid var(--color-darker-gray);
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  background-color: rgba(255,255,255,0.1);
+  font-size: 0.9em;
+  position: relative;
+}
+
+.item h3 {
+  font-size: 1.1em;
+  border-bottom: 2px solid var(--color-darker-gray);
+}
+.item__field {
+  border-radius: 50px;
+  background-color: var(--color-gray);
+  padding: 0.25rem 1.25rem;
+  color: var(--color-text-alt);
+  text-align: center;
+}
+.item .grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  row-gap: 0.5rem;
+  column-gap: 1rem;
+  font-size: 0.9em;
+  align-items: center;
+}
+
+.item.limited::before, .item.sold-out::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -0.75rem;
+  color: var(--color-text);
+  background: var(--color-error);
+  font-size: 0.6em;
+  transform: rotate(-10deg);
+  padding: 0.25rem 0.5rem;
+  text-wrap: nowrap;
+  border-radius: 50px;
+  text-shadow: 0 1px 0 var(--color-gray);
+  font-family: var(--font-title);
+}
+.item.sold-out { opacity: 0.6; }
+.item.sold-out::before { content: "Sold Out"; }
+.item.limited::before {
+  content: "Limited Offer!";
+  animation: pulse-2 2s infinite;
+}
+
+@keyframes pulse-2 {
+  0% { transform: rotate(-10deg) scale(1); }
+  50% { transform: rotate(-10deg) scale(1.05); }
+  100% { transform: rotate(-10deg) scale(1); }
+}
+
+@media (max-width: 500px) {
+  .item {
+    font-size: 0.8em;
+  }
+}

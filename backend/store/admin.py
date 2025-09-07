@@ -10,15 +10,12 @@ class ItemCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ('name', 'slug', 'cost', 'category', 'description', 'quantity', 'is_available', 'is_visible')
+    list_display = ('name', 'slug', 'cost', 'category', 'description', 'quantity', 'get_is_available')
     search_fields = ('name', 'slug', 'description')
     list_filter = ('category',)
 
     def get_is_available(self, obj):
-        return obj.is_available
-
-    def get_is_visible(self, obj):
-        return obj.is_visible
+        return not obj.quantity or obj.count < obj.quantity
 
 @admin.register(ItemPurchase)
 class ItemPurchaseAdmin(admin.ModelAdmin):

@@ -30,7 +30,7 @@ interface ChatProps {
 const Chat: React.FC<ChatProps> = ({ messages, setMessages }) => {
   const { ws } = useAppContext();*/
 const Chat: React.FC<ChatProps> = ({kickUser, muteUser, deleteChatMessage }) => {
-  const { ws, chat, currentUser, users } = useAppContext();
+  const { chat, currentUser, users } = useAppContext();
 
   const [prevLink, setPrevLink] = useState<string | null>(null); // prev link with cursor pagination
   const [inputText, setInputText] = useState('');
@@ -46,13 +46,19 @@ const Chat: React.FC<ChatProps> = ({kickUser, muteUser, deleteChatMessage }) => 
         response.results.forEach((m) => { dict[m.id] = m; });
         chat.setMessages(dict);
         setPrevLink(response.next);
+
       } catch (error) {
         console.log(error);
         toast.error('Failed to load messages.');
+      } finally {
+        chat.setLastUpdated(new Date());
       }
     }
-    initialLoad();
-  }, [chat.setMessages]);
+
+    if (Date.now() - chat.lastUpdated.getTime() > 10 * 1000) { // throttle 10 seconds
+      initialLoad();
+    }
+  }, [chat.setMessages, chat.lastUpdated, chat.setLastUpdated]);
 
   // scroll to bottom when messages appear
   useEffect(() => {
@@ -103,28 +109,31 @@ const Chat: React.FC<ChatProps> = ({kickUser, muteUser, deleteChatMessage }) => 
 
   return (
     <div className='chat-container flex-column flex-grow'>
-      {prevLink && (
-        <button
-          onClick={loadMoreMessages}
-          className="button"
-        >
-          {prevLink ? 'Load Older Messages' : 'No More Messages'}
-        </button>
-      )}
       <ul
         ref={containerRef}
         className="chat-messages flex-grow overflow-y-auto"
       >
+        {prevLink && (
+          <button
+            onClick={loadMoreMessages}
+            className="button"
+          >
+            {prevLink ? 'Load Older Messages' : 'No More Messages'}
+          </button>
+        )}
         {Object.values(chat.messages)
           .sort((a, b) => new Date(a.created).getTime() - new Date(b.created).getTime())
-          .map((msg) => (
-            <li key={msg.id} className="chat-message font-alt">
-              <Message key={msg.id} message={msg} currentUser={currentUser} />
-              {msg.user.id != currentUser.id && kickUser && (<button onClick={() => {kickUser(msg.user.id)}}>kick user</button>)}
-              {msg.user.id != currentUser.id && muteUser && !users.users[msg.user.id]?.is_muted && (<button onClick={() => {muteUser(msg.user.id, true)}}>mute user</button>)}
-              {deleteChatMessage && (<button onClick={() => {deleteChatMessage(msg.id)}}>delete message</button>)}
-            </li>
-          ))}
+          .map((msg) => {
+            const lookupUser = users.users[msg.user_id];
+            const user = {...lookupUser, is_me: lookupUser?.id === currentUser.id};
+            return (
+              <li key={msg.id} className="chat-message font-alt">
+                <Message key={msg.id} message={msg} user={user} />
+                {!user.is_me && kickUser && (<button onClick={() => {kickUser(msg.user_id)}}>kick user</button>)}
+                {!user.is_me && muteUser && !user?.is_muted && (<button onClick={() => {muteUser(msg.user_id, true)}}>mute user</button>)}
+                {deleteChatMessage && (<button onClick={() => {deleteChatMessage(msg.id)}}>delete message</button>)}
+              </li>
+          )})}
       </ul>
       <form onSubmit={handleSubmit} className="form">
         <input

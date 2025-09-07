@@ -27,7 +27,7 @@ class User(AbstractUser):
 
     @property
     def inventory(self):
-        return self.all_purchased_items.filter(play_instance__is_active=True)
+        return self.all_purchased_items.filter(play_instance__is_active=True, item__item_type="user")
 
     '''
     def get_play_user(self):

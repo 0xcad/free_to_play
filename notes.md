@@ -515,10 +515,10 @@ DONE:
 # 2025-07-18
 
 TODO:
-* redo CSS; just make everything dark mode, don't do this green shit.
-* CSS for stage page
-* stripe payment flow for buying gems
-* store page CSS + changes
+* redo CSS; just make everything dark mode, don't do this green shit. - DONE
+* CSS for stage page - DONE
+* stripe payment flow for buying gems - DONE
+* store page CSS + changes - DONE
 * vanity purchase items for typing in chat
   * pay money to customize how your name appears -- choose an icon, choose your color from hex, etc
 * admin css
@@ -564,7 +564,7 @@ DONE:
 * ^ essentially, purchasing gems now works lmao it's so good
 
 TODO later:
-* make checkout page take up more space, add a "close" button
+* make checkout page take up more space, add a "close" button - DONE
 
 # 2025-08-07
 
@@ -610,16 +610,16 @@ DONE:
 
 TODO:
 * eventually throttle chat api
-* I uncommented Stripe because it was really slow. find out why.
-* make the credit card form take up more space in the modal
+* I uncommented Stripe because it was really slow. find out why. - DONE
+* make the credit card form take up more space in the modal - DONE
 * add css to notifications -- the close x should be way bigger on mobile
 * add chat novelty purchases.
-    * ability to send reaction images.
-    * mark the user text as gold, give them a special icon in chat. put laurels around their name
-    * ability to change your name color, or select a custom icon. you can do this in the account page.
+    * ability to send reaction images. - NOPE
+    * mark the user text as gold, give them a special icon in chat. put laurels around their name - NOPE
+    * ability to change your name color, or select a custom icon. you can do this in the account page. - NOPE
 * IMPORTANT! special chat notification for when a user buys gems
-* idea: pay "indulgences" to increase odds of being selected to play next?
-* idea: a "continue" button with gems that lets you restart. you get one continue, it costs five dollars (in gems). you see a countdown for like 10 seconds, and then you get to play again.
+* idea: pay "indulgences" to increase odds of being selected to play next? - NOPE
+* idea: a "continue" button with gems that lets you restart. you get one continue, it costs five dollars (in gems). you see a countdown for like 10 seconds, and then you get to play again. - NOPE
 
 # 2025-08-16
 in and out, 15 minute programming project. can i get fun clicking to work?
@@ -638,10 +638,8 @@ TODO:
 * favicon :))
 * logo from cole?
 * replace inventory with freelance typing game (read script, lol)
-* nix timer. replace that with a counter for how many gems have been purchased
 * get Lucia's font, switch that on the website
 * super chat obv
-    * "power type" effect from sublime text, lol
 * terms of service + privacy policy in google thing
 * tutorial + program
 * page on the website where you can see all purchases as they come in
@@ -679,9 +677,54 @@ shop todo
 * images for icons
 * play a sound effect on purchase
 * idea of "restockable" items: (simlish, accompaniment). you literally just increment the quantity, and then save it again...
-* make different categories tabs instead of whatever i have now
 * TODO: need a management script that i can run that will `create_or_update` all items based on a slug
 
 DONE
 * added stripe back, fixed color problem, added back button from payment screen
 * did some shop css. added a few item fields
+
+# 2025-09-06
+DONE:
+* shop now has tabs for categories, looks pretty good
+* management script for `create_or_update` items
+* throttled loading chat
+* throttled loading items
+* slight refactor of users on chat messages. users only show up as an id, and frontend does a lookup in its user dictionary
+* fixed a bug with users not displaying but it's so bad, this code is horrible
+* revamped inventory page
+* purchase item screen. purchased items show up here
+  * need to show who purchased an item, too
+* adjust the shop to say how many items are left out of total quantity
+* verified checkmark
+
+TODO:
+* superchat
+* donations (and in backend give priority)
+* purchased items show up in chat.
+  * can probably doing this without creating additional backend chat objects, just hijack the ItemPurchase object
+* on the account page, show the user what their chat thing looks like
+* instead of fetching users with the play api, just fetch users in `useUsersState`. change this on login, too, and backend.
+
+
+how should items in the inventory even work? imagine designing from scratch:
+* want to see the item, right, that's stored in the state. so we need the item id
+* also want to see the user id of who purchased it.
+* also want to see if it was a play purchase or a user purchase (we can get that from item id, but personally I think that should be in the serializer)
+
+Q: do we need a play inventory field? a user inventory field?
+
+ok, the store will have a `purchases` state (to replace `inventory` state).  - DONE
+
+when a user purchases an item
+* a sound effect plays - DONE
+* the backend sends a websocket to all users with the new purchase `{user_id, item_id, item_type, timestamp}`, so they add it to their own `purchases` state - DONE
+  * we do need a websocket because the admin panel has to show all purchases. very important.
+* if a purchase comes in, lookup the item in the store `items` state, and decrement the quantity if necessary - DONE
+
+* for the inventory view, the play does not have an inventory, but it does have item purchases. item purchases are only sent out on the inventory view, nowhere else - DONE
+* display the item purchases in the inventory view - DONE
+* display the user's purchases in the inventory view. user does not need an inventory field, just use the view - DONE
+
+-----
+
+then modify chat messages to include just a user id, not actually a user serializer - DONE

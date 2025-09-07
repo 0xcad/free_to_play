@@ -3,6 +3,7 @@ export interface User {
   name: string;
   email?: string;
   is_participating: bool;
+  is_me?: bool;
   is_admin: bool;
   is_authenticated: bool;
   balance?: number;
