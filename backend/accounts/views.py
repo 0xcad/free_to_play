@@ -67,8 +67,8 @@ def login_user(user):
     refresh = RefreshToken.for_user(user)
 
     play_instance_data = {}
+    play_instance = PlayInstance.get_active()
     if user.is_joined:
-        play_instance = PlayInstance.get_active()
         play_instance_data = PlayInstanceSerializer(play_instance).data
 
     return Response({

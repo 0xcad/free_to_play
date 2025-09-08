@@ -6,8 +6,8 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 
 # FTP Constants ----------------------------------------------
 
-FRONTEND_URL = os.getenv('FRONTEND_URL', 'https://ftp.0xc.ad')
-BACKEND_URL = os.getenv('BACKEND_URL', 'https://ftp-api.0xc.ad')
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'https://freetoplay.tech')
+BACKEND_URL = os.getenv('BACKEND_URL', 'https://api.freetoplay.tech')
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = os.getenv("EMAIL_HOST", 'smtp.gmail.com')

@@ -11,7 +11,7 @@ import routes from '~/constants/routes';
 const Verify: React.FC = () => {
   let navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { setToken, setCurrentUser, play } = useAppContext();
+  const { setToken, setCurrentUser, play, users } = useAppContext();
   const [loginFailed, setLoginFailed] = useState(false);
   const hasVerified = useRef(false);
 
