@@ -36,7 +36,7 @@ class ItemMixin(serializers.Serializer):
         return obj.all_purchased_items.filter(play_instance__is_active=True, item__slug='verified').count()
 
     def get_has_superchat(self, obj):
-        return obj.all_purchased_items.filter(play_instance__is_active=True, item__slug='super-chat').exists()
+        return obj.has_superchat
 
 class UserSerializer(ItemMixin, serializers.ModelSerializer):
     is_admin = serializers.SerializerMethodField()

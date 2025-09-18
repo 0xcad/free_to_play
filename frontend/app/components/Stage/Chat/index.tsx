@@ -75,7 +75,7 @@ const Chat: React.FC<ChatProps> = ({kickUser, muteUser, deleteChatMessage }) => 
     const optimisticMsg: ChatMessage = {
       id: tempId,
       content: inputText,
-      user: currentUser,
+      user_id: currentUser.id,
       created: new Date().toISOString(),
     } as ChatMessage;
     chat.addChatMessage(optimisticMsg);

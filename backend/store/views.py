@@ -11,6 +11,8 @@ from .models import Item, ItemPurchase, ItemCategory, StripeCheckoutSession
 from play.models import PlayInstance
 from accounts.models import User
 from django.db.models import Q
+from chat.models import ChatMessage
+from chat.serializers import ChatMessageSerializer
 
 import stripe
 from django.conf import settings
@@ -231,6 +233,14 @@ class ItemViewSet(viewsets.ModelViewSet):
 
         serialized = ItemPurchaseSerializer(purchase).data
         send_notification('store.ItemPurchase', 'created', serialized)
+
+        chat = ChatMessage.objects.create(
+            user=user,
+            play_instance=play_instance,
+            content=item.name,
+            system=True,
+        )
+        send_notification('chat.ChatMessage', 'created', ChatMessageSerializer(chat).data)
 
         return Response(serialized, status=status.HTTP_201_CREATED)
 

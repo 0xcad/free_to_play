@@ -29,6 +29,14 @@ class User(AbstractUser):
     def inventory(self):
         return self.all_purchased_items.filter(play_instance__is_active=True, item__item_type="user")
 
+    @property
+    def has_superchat(self):
+        return self.all_purchased_items.filter(play_instance__is_active=True, item__slug='super-chat').exists()
+
+    @property
+    def is_donor(self):
+        return self.all_purchased_items.filter(play_instance__is_active=True, item__slug='donate-to-streamer').exists()
+
     '''
     def get_play_user(self):
         return self.play_user.filter(play_instance__is_active=True).first()

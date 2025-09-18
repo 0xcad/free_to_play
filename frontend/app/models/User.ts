@@ -11,5 +11,5 @@ export interface User {
   is_muted?: bool;
   is_joined: bool;
   has_played: bool;
-  inventory?: number[];
+  has_superchat?: bool;
 }

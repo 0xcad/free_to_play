@@ -738,10 +738,19 @@ didn't work
 * `Handler error: TypeError: can't access property "count", h is undefined`
 
 TODO:
-* superchat
-* donations (and in backend give priority)
-* purchased items show up in chat.
-  * can probably doing this without creating additional backend chat objects, just hijack the ItemPurchase object
-* on the account page, show the user what their chat thing looks like
 * instead of fetching users with the play api, just fetch users in `useUsersState`. change this on login, too, and backend.
 * images for shop icons
+
+# 2025-09-17
+
+adding superchat
+* so i already have `has_superchat` as a serializer method field. just need to, in the chat panel, detect if a user who has superchat. then boom, text to speech that shit
+  * I'm going to nix that idea, actually. the backend should handle that logic and pass that along in the websocket.
+
+donate to streamer
+* make this one unlimited, actually
+
+DONE:
+* superchat
+* donors have priority
+* purchased items show up in chat.

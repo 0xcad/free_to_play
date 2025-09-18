@@ -94,17 +94,24 @@ class PlayInstanceViewSet(viewsets.ViewSet):
         """
         play_instance = self.get_object()
         excluded_ids = request.data.get('exclude', [])
-        # eligible_users = play_instance.play_users.filter(is_muted=False, has_played=False)
+
+        # all audience members who are not muted, not staff, and haven't played yet
         eligible_users = (
             play_instance.audience
             .filter(is_muted=False, is_participating=True, has_played=False, is_staff=False)
             .exclude(id__in=excluded_ids)
         )
+
+        # prioritize donors if any
+        filtered_users = [u for u in list(eligible_users) if u.is_donor]
+        if filtered_users:
+            eligible_users = filtered_users
+
         if not eligible_users:
             # eligible_users = play_instance.play_users.filter(is_muted=False)
             eligible_users = (
                 play_instance.audience
-                .filter(is_muted=False, is_participating=True, has_played=False, is_staff=False)
+                .filter(is_muted=False, is_participating=True, is_staff=False)
                 .exclude(id__in=excluded_ids)
             )
         if not eligible_users:

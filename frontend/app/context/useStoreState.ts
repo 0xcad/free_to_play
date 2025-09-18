@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
-import type { WsState } from "../useWsState";
-import type { UserState } from "../useUsersState";
+import type { WsState } from "./useWsState";
+import type { UserState } from "./useUsersState";
 import type { Item, ItemCategory, ItemPurchase } from "../models/Item";
 
 import Api from '../utils/api';
@@ -61,6 +61,13 @@ export function useStoreState(ws : WsState, currentUser : User, users: UserState
       var user = users.users[ip.user_id];
       if (user) {
         users.updateUser({ ...user, verified: user.verified + 1 });
+      }
+    }
+    // make user have super speech
+    else if (item && item.slug === 'super-chat') {
+      var user = users.users[ip.user_id];
+      if (user) {
+        users.updateUser({ ...user, has_superchat: true });
       }
     }
   };

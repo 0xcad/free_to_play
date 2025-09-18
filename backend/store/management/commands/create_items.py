@@ -138,7 +138,7 @@ class Command(BaseCommand):
                 "description": "To show how trustworthy you are as a person with money, a verification badge shows up next to your name. You don't have to stop buying at one, you'll just keep on getting verified.",
                 "quantity": None,
                 "item_type": "user",
-                "order": 2,
+                "order": 1,
             },
             {
                 "name": "💬 Super Chat 🔊",
@@ -147,16 +147,16 @@ class Command(BaseCommand):
                 "description": "Your chat messages are read aloud for the rest of the show!",
                 "quantity": 1,
                 "item_type": "user",
-                "order": 1,
+                "order": 3,
             },
             {
                 "name": "🎁 Donate to Streamer ❤️",
                 "slug": "donate-to-streamer",
                 "cost": 10,
                 "description": "Get a shoutout from your parasocial bestie. We also prioritize donors in choosing audience members to play.",
-                "quantity": 1,
+                "quantity": None,
                 "item_type": "user",
-                "order": 3,
+                "order": 2,
             },
         ]
 

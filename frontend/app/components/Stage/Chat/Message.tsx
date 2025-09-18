@@ -13,11 +13,21 @@ const Message: React.FC<MessageProps> = ({ message, user }) => {
     <div>
       <div className='chat-message__date'>{new Date(message.created).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</div>
 
-      <div className='chat-message__content'>
-        <UserInfo user={user} />
-        {': '}
-        {message.content}
-      </div>
+      {message.system ? (
+        <div className='chat-message__content system'>
+          <span>*</span>
+          <UserInfo user={user} />
+          {' '} purchased {' '}
+          {message.content}
+          <span>*</span>
+        </div>
+      ) : (
+        <div className='chat-message__content'>
+          <UserInfo user={user} />
+          {': '}
+          {message.content}
+        </div>
+      )}
     </div>
   );
 };

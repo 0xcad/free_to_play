@@ -34,6 +34,9 @@ const UserInfo: React.FC<UserInfoProps> = ({
           <span className='gems-blue' key={index}><Icon icon='verified' /></span>
         ))}</>
       )}
+      {user.has_superchat && (
+        <><div className="spacer" /><span>🔊</span></>
+      )}
     </span>
   );
 }

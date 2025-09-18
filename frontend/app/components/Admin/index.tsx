@@ -77,6 +77,28 @@ const Admin: React.FC = () => {
     }
   }
 
+  const readChatMessage = (msg: ChatMessage) => {
+    if (!(msg && msg.read_aloud && !msg.system))
+      return
+    const synth = window.speechSynthesis;
+    const voices = synth.getVoices().filter((v) => v.lang.startsWith("en-US"))
+    //const voiceIndex = Math.floor(Math.random() * voices.length);
+    // everyone gets a unique voice
+    const voice = voices[msg.user_id % voices.length];
+    const utterThis = new SpeechSynthesisUtterance(msg.content);
+    utterThis.voice = voice;
+    synth.speak(utterThis);
+  }
+
+  // if a websocket comes in with a new chat message, read it if needed
+  useEffect(() => {
+    ws.registerHandler("chat.ChatMessage.created", readChatMessage);
+
+    return () => {
+      ws.unregisterHandler("chat.ChatMessage.created", readChatMessage);
+    };
+  }, [ws.registerHandler, ws.unregisterHandler]);
+
   const updatePlayInstance = async (data: any) => {
     try {
       var oldPI = play.playInstance;

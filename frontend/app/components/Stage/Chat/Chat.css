@@ -15,3 +15,8 @@ li.chat-message:nth-child(even) {
   color: #999;
   display: none;
 }
+
+.system {
+  text-align: center;
+  font-style: italic;
+}

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 import type { ChatMessage } from '../models/ChatMessage';
 import type { WsState } from "./useWsState";
+import type { UserState } from "./useUsersState";
 
 export interface ChatState {
   messages: Record<string, ChatMessage>;
