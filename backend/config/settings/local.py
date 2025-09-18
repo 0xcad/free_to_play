@@ -17,6 +17,6 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://localhost:5173',
     'http://172.26.34.73:3000',
-    'http://ftp.0xcad.dev',
-    'https://ftp.0xcad.dev',
+    'http://freetoplay.tech',
+    'https://freetoplay.tech',
 ]

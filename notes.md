@@ -634,7 +634,6 @@ TODO:
 # 2025-09-01
 
 TODO:
-* set the domain name (freetoplay.tech)
 * favicon :))
 * logo from cole?
 * replace inventory with freelance typing game (read script, lol)
@@ -642,7 +641,6 @@ TODO:
 * super chat obv
 * terms of service + privacy policy in google thing
 * tutorial + program
-* page on the website where you can see all purchases as they come in
 
 September 19th and 20th the show
 
@@ -728,3 +726,22 @@ when a user purchases an item
 -----
 
 then modify chat messages to include just a user id, not actually a user serializer - DONE
+
+# 2025-09-08
+* deployed freetoplay.tech
+
+# 2025-09-13
+didn't work
+* google cloud -- fixed!
+* load older messages doesn't work - fixed!
+
+* `Handler error: TypeError: can't access property "count", h is undefined`
+
+TODO:
+* superchat
+* donations (and in backend give priority)
+* purchased items show up in chat.
+  * can probably doing this without creating additional backend chat objects, just hijack the ItemPurchase object
+* on the account page, show the user what their chat thing looks like
+* instead of fetching users with the play api, just fetch users in `useUsersState`. change this on login, too, and backend.
+* images for shop icons
