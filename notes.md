@@ -759,14 +759,13 @@ DONE:
 
 game day, let's see what I still have TODO
 
-* email skirp?
 * images on the store
-* change gem prices / item prices
-* take users off of play, fetch that in `useUsersState`
-* tutorial and program
-* notification css?
 * make typing game look nicer
+* notification css?
+
+* actually migrate gem prices script
 * test stripe webhooks
+* typing test on waiting screen
 
 typing game - DONE
 * play gets a new serializer only field, `freelance_score`, which is the sum of all the audience player `freelance_index` things - DONE
@@ -779,3 +778,10 @@ DONE
 * CRT css
 * change "now playing" text size
 * stripe webhooks
+
+
+* fix bug with multiple purchases
+* change gem prices / item prices
+* take users off of play, fetch that in `useUsersState`
+* fix timezone bug 
+* tutorial and program

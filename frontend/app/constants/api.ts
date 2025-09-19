@@ -30,6 +30,7 @@ export const apiUrls = {
 
   play: {
     detail: 'play/',
+    users: 'play/users',
     update: 'play/update/',
     join: `play/join/`,
     select_player: 'play/select_player/',

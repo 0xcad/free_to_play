@@ -43,8 +43,13 @@ class PlayInstanceViewSet(viewsets.ViewSet):
             'access': str(refresh.access_token),
             'user': UserSerializer(user).data,
             'play_instance': play_instance_data,
-            'users': UserListSerializer(play_instance.audience, many=True).data,
         })
+
+    @action(detail=False, methods=['GET'], permission_classes=[permissions.IsAuthenticated])
+    def users(self, request):
+        play_instance = self.get_object()
+
+        return Response(UserListSerializer(play_instance.audience, many=True).data)
 
     def destroy(self, request, pk=None):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

@@ -11,7 +11,7 @@ import routes from '~/constants/routes';
 const Verify: React.FC = () => {
   let navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { setToken, setCurrentUser, play, users } = useAppContext();
+  const { setToken, setCurrentUser, play } = useAppContext();
   const [loginFailed, setLoginFailed] = useState(false);
   const hasVerified = useRef(false);
 
@@ -50,12 +50,6 @@ const Verify: React.FC = () => {
       response.user.is_authenticated = true;
       setCurrentUser(response.user);
       play.setPlayInstance(response.play_instance);
-
-      // TODO: this code is so fucking bad, why is this here?
-      const dict: Record<string, User> = {};
-      response.users.forEach((m) => { dict[m.id] = m; });
-
-      users.setUsers(dict);
 
       if (response.user.is_joined)
         navigate(routes.stage.link);

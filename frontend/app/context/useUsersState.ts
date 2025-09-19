@@ -16,9 +16,9 @@ export interface UsersState {
 }
 
 export function useUsersState(
-  ws: WsState, currentUser : User,
+  ws: WsState, currentUser : User | undefined,
   setCurrentUser: (user: User | undefined) => void,
-): ChatState {
+): UsersState {
   let navigate = useNavigate();
   const [users, setUsers] = useState<Record<string, User>>({});
 

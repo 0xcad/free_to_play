@@ -11,7 +11,7 @@ export interface PlayState {
   updatePlayInstance: (p: any) => void;
 }
 
-export function usePlayState(ws: WsState, currentUser: User): PlayState {
+export function usePlayState(ws: WsState, currentUser: User | undefined): PlayState {
   const [playInstance, setPlayInstance] = useState<PlayInstance>(defaultPlayInstance());
 
   const updatePlayInstance= (playInstanceData : PlayInstance) => {

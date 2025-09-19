@@ -28,6 +28,7 @@
   font-family: var(--font-title);
   text-shadow: 0 2px 0 var(--color-gray);
   font-size: min(4vw, 1em);
+  color: var(--color-bg);
 }
 .game-nav a .icon { font-size: 1.4em; }
 .game-nav a.active .icon {

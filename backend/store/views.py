@@ -155,9 +155,11 @@ class StripeViewSet(viewsets.ViewSet):
             )
         except ValueError as e:
             # Invalid payload
+            print(e)
             return HttpResponse(status=400)
         except stripe.error.SignatureVerificationError as e:
             # Invalid signature
+            print(e)
             return HttpResponse(status=400)
 
         if (event['type'] == 'checkout.session.completed'

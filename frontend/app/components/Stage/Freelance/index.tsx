@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAppContext } from '~/context/AppContext';
 
@@ -8,6 +8,7 @@ import { apiUrls } from '~/constants/api';
 import Icon from '~/components/shared/Icon';
 
 import "./Freelance.css";
+import "../Chat/Chat.css";
 
 interface FreelanceTextResponse {
   freelance_text: string | undefined,
@@ -16,7 +17,7 @@ interface FreelanceTextResponse {
 }
 
  const Freelance = () => {
-  const { currentUser, setCurrentUser, play } = useAppContext();
+  const { currentUser, play } = useAppContext();
 
   const [inputText, setInputText] = useState<string>('');
   const [freelanceText, setFreelanceText] = useState(currentUser?.freelance_text)

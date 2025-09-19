@@ -39,6 +39,7 @@ export const iconMap = {
   send: FaPaperPlane,
   help: FaRegQuestionCircle,
   theater: LuTheater,
+  waiting: LuTheater,
   swag: GiPayMoney,
   user: FaRegUserCircle,
   verified: RiVerifiedBadgeFill,

@@ -41,7 +41,7 @@ class ItemPurchaseSerializer(serializers.ModelSerializer):
     item_id = serializers.PrimaryKeyRelatedField(source='item', read_only=True)
     item_type = serializers.CharField(source='item.item_type', read_only=True)
     user_id = serializers.PrimaryKeyRelatedField(source='user', read_only=True)
-    created = serializers.DateTimeField(format='%Y-%m-%dT%H:%M:%S.%fZ')
+    created = serializers.DateTimeField(format='%Y-%m-%dT%H:%M:%S.%f')
 
     class Meta:
         model = ItemPurchase

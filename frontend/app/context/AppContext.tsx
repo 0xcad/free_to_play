@@ -83,14 +83,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setToken(response.access);
         setCurrentUser(response.user as User);
         play.setPlayInstance(response.play_instance);
-
-        // set the users data
-        const dict: Record<string, User> = {};
-        response.users.forEach((m) => { dict[m.id] = m; });
-        users.setUsers(dict);
       } catch (err) {
         console.log('this is the user login error we get', err);
       }
+  };
+
+  const getUsers = async (): Promise<void> => {
+    try {
+        var response = await Api.get(apiUrls.play.users);
+        // set the users data
+        const dict: Record<string, User> = {};
+        response.forEach((m) => { dict[m.id] = m; });
+        users.setUsers(dict);
+    } catch (err) {
+      console.log('this is the users error we get', err);
+    }
   };
 
   // TOKEN UPDATE LOGIC
@@ -144,6 +151,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         && window.location.pathname != routes.verify.link) {
       getUser();
     }
+
+    getUsers();
   }, [token]);
 
 

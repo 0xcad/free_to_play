@@ -180,7 +180,10 @@ header::before {
   filter: brightness(80%);
 }
 
-a { text-decoration: none; }
+a, a:visited { 
+  text-decoration: none;
+  color: var(--color-primary);
+}
 .form input[type="text"], .form input[type="email"] {
   width: 100%;
   box-sizing: border-box;

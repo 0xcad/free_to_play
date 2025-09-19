@@ -1,7 +1,5 @@
-import type { User } from '~/models/User';
-
 export interface PlayInstance {
-  current_player: User | undefined;
+  current_player: string | number | undefined;
   status: string;
   join_code: string;
   stream_url: string;

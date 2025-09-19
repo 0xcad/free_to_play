@@ -7,8 +7,6 @@ import Freelance from './Freelance';
 import UserInfo from '~/components/shared/UserInfo';
 import Icon from '~/components/shared/Icon';
 
-import type {User} from '~/models/User';
-
 import {useState} from 'react';
 import classnames from 'classnames';
 
@@ -58,7 +56,7 @@ const Stage: React.FC = () => {
         initial={{ marginRight: -200 }}
         animate={{ marginRight: 0 }}
         transition={{ type: "spring", bounce: 0.25 }}
-        className="p-2"
+        className="p-2 flex-grow flex-column"
       >
       <h1>stage</h1>
       <Waiting />
