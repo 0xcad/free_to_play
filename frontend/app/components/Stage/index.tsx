@@ -18,7 +18,7 @@ import "./stage.css";
 
 {/* TODO: make this a tab component, make tabs not unmount when you click off... */}
 const Tabs: React.FC<{
-  selectedTab: string, 
+  selectedTab: string,
   setSelectedTab: (tab: string) => void,
 }> = ({selectedTab, setSelectedTab}) => {
   return (
@@ -45,8 +45,12 @@ const Tabs: React.FC<{
 }
 
 const Stage: React.FC = () => {
-  const { currentUser, play } = useAppContext();
+  const { currentUser, play, users } = useAppContext();
   const [selectedTab, setSelectedTab] = useState<string>('chat');
+
+  const currentPlayer = play.playInstance.current_player ?
+    {...users.users[play.playInstance.current_player], is_me: currentUser?.id === play.playInstance.current_player}
+  : undefined;
 
   if (!play || play.playInstance?.status == 'waiting') {
     return (
@@ -87,7 +91,7 @@ const Stage: React.FC = () => {
       </div>
       )}
       <div className='stage-status'>
-        <p className="sm my-0">{play.playInstance?.current_player ? (<><UserInfo user={play.playInstance.current_player} currentUser={currentUser} /> is playing</>) : 'Waiting for player selection...'}</p>
+        <p className="sm my-0">{play.playInstance?.current_player ? (<><UserInfo user={currentPlayer} /> is playing</>) : 'Waiting for player selection...'}</p>
       </div>
       <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
     </motion.div>
