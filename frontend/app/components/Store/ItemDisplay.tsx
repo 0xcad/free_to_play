@@ -32,7 +32,7 @@ const ItemDisplay: React.FC<{
     )}
     >
       <div className="flex gap-4">
-        <img src="https://placehold.co/100x100/EEE/31343C" />
+        <img src={item.image ? item.image : "https://placehold.co/100x100/EEE/31343C"} />
         <div>
           <h3 className="my-2">{item.name}</h3>
           <p>{item.description}</p>
