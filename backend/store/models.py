@@ -45,17 +45,16 @@ class Item(models.Model):
     class Meta:
         ordering = ['category__order', 'order', 'name']
 
-    @property
-    def count(self):
+    def count(self, user):
         '''
         How many have been purchased in the current active play instance
         '''
+        if self.item_type == 'user':
+            return self.purchased_items.filter(play_instance__is_active=True, user=user).count()
         return self.purchased_items.filter(play_instance__is_active=True).count()
 
     def is_available(self, user):
-        count = self.count
-        if self.item_type == 'user':
-            count = self.purchased_items.filter(user=user).count()
+        count = self.count(user)
         return (not self.quantity or count < self.quantity)
 
 class ItemPurchase(models.Model):

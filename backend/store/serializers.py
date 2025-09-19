@@ -34,10 +34,8 @@ class ItemSerializer(serializers.ModelSerializer):
         return obj.is_available(request.user) if request else False
 
     def get_count(self, obj):
-        if obj.item_type == 'user':
-            request = self.context.get('request')
-            return obj.purchased_items.filter(user=request.user).count()
-        return obj.count
+        request = self.context.get('request')
+        return obj.count(user=request.user)
 
 class ItemPurchaseSerializer(serializers.ModelSerializer):
     item_id = serializers.PrimaryKeyRelatedField(source='item', read_only=True)
