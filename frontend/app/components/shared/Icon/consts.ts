@@ -13,7 +13,7 @@ import {
   LuTheater,
 } from "react-icons/lu";
 
-import { RiVerifiedBadgeFill } from "react-icons/ri";
+import { RiVerifiedBadgeFill, RiMoneyDollarCircleLine } from "react-icons/ri";
 
 import {
   PiTreasureChestDuotone,
@@ -27,6 +27,7 @@ import { GiPayMoney, GiReceiveMoney } from "react-icons/gi";
 export const iconMap = {
   admin: FaCrown,
   back: FaArrowLeft,
+  bux: RiMoneyDollarCircleLine,
   chat: PiChatDotsDuotone,
   chest: PiTreasureChestDuotone,
   close: FaXmark,

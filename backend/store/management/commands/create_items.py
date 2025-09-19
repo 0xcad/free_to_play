@@ -107,7 +107,7 @@ class Command(BaseCommand):
             {
                 "name": "🌟 Be in the show 🎬",
                 "slug": "be-in-the-show",
-                "cost": 30,
+                "cost": 300,
                 "description": "We will pull you up to be in the show.",
                 "quantity": 1,
                 "item_type": "play",

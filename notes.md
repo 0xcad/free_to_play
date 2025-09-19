@@ -760,10 +760,8 @@ DONE:
 game day, let's see what I still have TODO
 
 * images on the store
-* make typing game look nicer
 * notification css?
 
-* actually migrate gem prices script
 * test stripe webhooks
 * typing test on waiting screen
 
@@ -785,3 +783,6 @@ DONE
 * take users off of play, fetch that in `useUsersState`
 * fix timezone bug 
 * tutorial and program
+* actually migrate gem prices script
+
+* make typing game look nicer
