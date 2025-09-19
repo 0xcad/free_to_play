@@ -53,6 +53,20 @@ h1 { font-family: var(--font-title); }
 .overflow-hidden { overflow: hidden; }
 
 .app { width: 100%; height: 100%;}
+.app::before {
+  content: " ";
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(rgba(18,16,16,0) 50%,rgba(0,0,0,.2) 50%) 0 0/100% 2px,linear-gradient(90deg,rgba(255,0,0,.04),rgba(0,255,0,.016),rgba(0,0,255,.04)) 0 0/3px 100%;
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0.8;
+}
+
 .app-content {
   max-width: 35rem;
   margin: 0 auto;
@@ -247,11 +261,11 @@ label {
   display: block;
 }
 .mt-1 {
-  margin-top: 1rem;
+  margin-top: 1rem !important;
   display: block;
 }
 .mt-2 {
-  margin-top: 1.5rem;
+  margin-top: 1.5rem !important;
   display: block;
 }
 .mt-3 {
@@ -307,3 +321,5 @@ label {
 .error { color: var(--color-error); }
 .gap-3 { gap: 1rem; }
 .gap-4 { gap: 1.5rem; }
+
+.sm { font-size: 0.8em; }

@@ -1,24 +1,16 @@
 from rest_framework import serializers
 from .models import PlayInstance
 from accounts.serializers import UserListSerializer
-from django.utils import timezone
-from datetime import timedelta
-
-from store.serializers import ItemSerializer
-
 
 class PlayInstanceSerializer(serializers.ModelSerializer):
-    current_player = UserListSerializer(read_only=True)
-    #audience = UserListSerializer(many=True, read_only=True)
-    #inventory = serializers.SerializerMethodField()
+    freelance_score = serializers.SerializerMethodField()
 
     class Meta:
         model = PlayInstance
-        exclude = ('id', 'is_active', 'audience')
+        exclude = ('id', 'is_active', 'audience', 'is_debug', 'name', 'created')
 
-    #def get_inventory(self, obj):
-    #    item_ids = [item.item.id for item in obj.purchased_items.filter(item__item_type='play')]
-    #    return item_ids
+    def get_freelance_score(self, obj):
+        return obj.freelance_score
 
 
 class PlayInstanceUpdateSerializer(serializers.ModelSerializer):

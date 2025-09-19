@@ -52,6 +52,29 @@ class PlayInstanceViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+
+    @action(detail=False, methods=['POST'], permission_classes=[permissions.IsAuthenticated])
+    def freelance(self, request):
+        play_instance = self.get_object()
+
+        user = request.user
+        freelance_text = user.freelance_text
+        if freelance_text:
+            received_freelance_text = request.data.get('freelance_text')
+
+            # they get it correct
+            if freelance_text == received_freelance_text:
+                user.freelance_index += 1
+                user.save()
+                freelance_text = user.freelance_text
+            else: # incorrect, return 400
+                return Response({"details": "check your text for errors!"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({
+            'freelance_text': freelance_text,
+            'completed': freelance_text is None,
+            'freelance_score': play_instance.freelance_score
+        })
+
     @action(detail=False, methods=['POST'], url_path='join', permission_classes=[permissions.IsAuthenticated])
     def join(self, request):
         """

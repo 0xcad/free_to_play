@@ -1,3 +1,5 @@
+import type {IconNames} from '~/components/shared/Icon'
+
 export interface Item {
   id: number;
   name: string;
@@ -13,7 +15,7 @@ export interface Item {
 export interface ItemCategory {
   id: number;
   name: string;
-  icon?: string;
+  icon?: IconNames;
   description?: string;
   items: number[];
 }

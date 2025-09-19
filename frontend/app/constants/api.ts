@@ -33,9 +33,7 @@ export const apiUrls = {
     update: 'play/update/',
     join: `play/join/`,
     select_player: 'play/select_player/',
-    start_timer: 'play/timer/start/',
-    pause_timer: 'play/timer/pause/',
-    reset_timer: 'play/timer/reset/',
+    freelance: 'play/freelance/',
   },
 
   store: {

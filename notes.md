@@ -754,3 +754,28 @@ DONE:
 * superchat
 * donors have priority
 * purchased items show up in chat.
+
+# 2025-09-19
+
+game day, let's see what I still have TODO
+
+* email skirp?
+* images on the store
+* change gem prices / item prices
+* take users off of play, fetch that in `useUsersState`
+* tutorial and program
+* notification css?
+* make typing game look nicer
+* test stripe webhooks
+
+typing game - DONE
+* play gets a new serializer only field, `freelance_score`, which is the sum of all the audience player `freelance_index` things - DONE
+* current user serializer passes in a `freelance_text` field. we save this in current user state - DONE
+* new post endpoint . if we post correct freelance text, increment user `freelance_index`, and return next freelance text - DONE
+    * two things to return. `completed` boolean, and `text` - DONE
+
+DONE
+* typing game
+* CRT css
+* change "now playing" text size
+* stripe webhooks

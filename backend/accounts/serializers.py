@@ -42,13 +42,14 @@ class UserSerializer(ItemMixin, serializers.ModelSerializer):
     is_admin = serializers.SerializerMethodField()
     is_authenticated = serializers.SerializerMethodField()
     is_joined = serializers.SerializerMethodField()
+    freelance_text = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = ['id', 'name', 'email', 'is_participating', 'is_admin', 'is_authenticated',
                   'balance', 'spent',
                   'is_joined', 'is_muted', 'has_played',
-                  'verified', 'has_superchat']
+                  'verified', 'has_superchat', 'freelance_text']
 
     def get_is_admin(self, obj):
         return obj.is_staff or obj.is_superuser
@@ -58,6 +59,9 @@ class UserSerializer(ItemMixin, serializers.ModelSerializer):
 
     def get_is_joined(self, obj):
         return obj.is_joined
+
+    def get_freelance_text(self, obj):
+        return obj.freelance_text
 
 class ResendEmailSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()

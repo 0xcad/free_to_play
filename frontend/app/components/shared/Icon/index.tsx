@@ -22,6 +22,7 @@ export interface IconBaseProps extends React.SVGAttributes<SVGElement> {
 const Icon:React.FC<IconProps & IconBaseProps> = ({
   icon, className, size = 'md', ...props
 }) => {
+  console.log("HEYEHYE", icon);
   const IconComponent = iconMap[icon];
   return (
     <IconComponent

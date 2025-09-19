@@ -5,6 +5,9 @@ import random
 from django.utils import timezone
 from datetime import timedelta
 
+from django.core.cache import cache
+from django.db.models import Sum
+
 class PlayInstance(models.Model):
     '''
     Stores all the logic for a play. So you'd create one of these for each performance
@@ -28,13 +31,15 @@ class PlayInstance(models.Model):
     audience = models.ManyToManyField(User, related_name='plays')
     join_code = models.CharField(max_length=15, blank=True, null=True)
     current_player = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, blank=True) # current player
-    remaining_time = models.DurationField(default=timedelta(minutes=5)) # game time remaining
-    # Exact UTC time when the game timer should expire (end)
-    end_time = models.DateTimeField(null=True, blank=True,)
-    '''
-    If game remaining time is null *and* game end time is null, then the game is not started
-    If game end time is null, then the game is paused
-    '''
+
+    @property
+    def freelance_score(self):
+        cache_key = f'freelance_score_{self.id}'
+        score = cache.get(cache_key)
+        if score is None:
+            score = self.audience.aggregate(total=Sum('freelance_index'))['total'] or 0
+            cache.set(cache_key, score, timeout=10)
+        return score
 
     @classmethod
     def get_active(cls):
@@ -56,44 +61,6 @@ class PlayInstance(models.Model):
         if not self.audience.filter(id=user.id).exists():
             self.audience.add(user)
             # TODO? UserPlayInstance.create(user=user, play_instance=self)
-
-    def reset_timer(self, duration=None):
-        """
-        Reset clock to full remaining_time and stop.
-        """
-        if duration is None:
-            duration = timedelta(minutes=5)
-        self.remaining_time = duration
-        self.end_time = None
-        self.save(update_fields=["remaining_time", "end_time"])
-
-    def start_timer(self, duration=None):
-        """
-        Start or resume the timer. If duration provided, uses that; otherwise uses remaining_time.
-        """
-        # Determine target end
-        now = timezone.now()
-        # If fresh start with custom duration
-        if duration is not None:
-            self.remaining_time = duration
-        # Compute end_time based on now + remaining
-        self.end_time = now + self.remaining_time
-        self.save(update_fields=["end_time", "remaining_time"])
-
-    def pause_timer(self, now=None):
-        """
-        Pause timer and save remaining_time.
-        """
-        if now is None:
-            now = timezone.now()
-        elif type(now) is str:
-            now = timezone.datetime.fromisoformat(now)
-        if self.end_time:
-            # compute how much remains
-            delta = self.end_time - now
-            self.remaining_time = max(delta, timedelta(seconds=0))
-            self.end_time = None
-            self.save(update_fields=["remaining_time", "end_time"])
 
     def __str__(self):
         s = self.name

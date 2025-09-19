@@ -144,7 +144,10 @@ class StripeViewSet(viewsets.ViewSet):
         payload = request.body
         sig_header = request.META['HTTP_STRIPE_SIGNATURE']
         event = None
+        play_instance = PlayInstance.get_active()
         endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
+        if play_instance.is_debug:
+            endpoint_secret = settings.STRIPE_WEBHOOK_TEST_SECRET
 
         try:
             event = stripe.Webhook.construct_event(
