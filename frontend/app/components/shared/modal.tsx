@@ -16,17 +16,17 @@ const Modal: React.FC<ModalProps> = ({
   title, isOpen, onClose, children
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(isOpen ? isOpen : false);
-  const modalRef = useRef<HTMLDialogElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const modalElement = modalRef.current;
     if (!modalElement) return;
 
     if (onClose && isOpen || !onClose && modalIsOpen) {
-      modalElement.showModal();
+      modalElement.setAttribute("open", "");
     } else if (onClose && !isOpen || !onClose && !modalIsOpen) {
-      //modalElement.close();
-      setTimeout(() => modalElement.close(), 220);
+      modalElement.removeAttribute('open');
+      setTimeout(() => modalElement.removeAttribute('open'), 220);
     }
 }, [isOpen, modalIsOpen]);
 
@@ -38,14 +38,14 @@ const Modal: React.FC<ModalProps> = ({
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLDialogElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Escape") {
       handleCloseModal();
     }
   };
 
   return (
-    <dialog ref={modalRef} className="modal-overlay flex-center" onKeyDown={handleKeyDown} onClick={handleCloseModal}>
+    <div ref={modalRef} className="modal-overlay flex-center" onKeyDown={handleKeyDown} onClick={handleCloseModal}>
       {/* Prevent closing modal when clicking inside the modal content */}
       <AnimatePresence>
       {isOpen && (
@@ -75,7 +75,7 @@ const Modal: React.FC<ModalProps> = ({
       </motion.div>
       )}
       </AnimatePresence>
-    </dialog>
+    </div>
   );
 }
 

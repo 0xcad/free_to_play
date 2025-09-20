@@ -20,6 +20,7 @@ const UserInfo: React.FC<UserInfoProps> = ({
         user.is_admin ? 'admin' : '',
         user.is_muted ? 'muted' : '',
         user.is_participating ? '' : 'not-participating',
+        user.has_played ? 'has-played': '',
     )}>
       {(user.is_admin || user.is_me) && (
         <span className="user-info__icon">

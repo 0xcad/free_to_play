@@ -34,7 +34,7 @@ const BuyGemsModal: React.FC<ModalProps> = ({
   isOpen, onClose
 }) => {
   const { currentUser, setCurrentUser } = useAppContext();
-  const [gems, setGems] = useState(100);
+  const [gems, setGems] = useState(0);
   const [gemProducts, setGemProducts] = useState<GemProduct[]>([]);
   const [priceId, setPriceId] = useState<string | null>(null);
 

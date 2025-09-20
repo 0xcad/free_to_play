@@ -104,18 +104,43 @@ class UserViewSet(viewsets.ModelViewSet):
         return UserSerializer
 
     def get_permissions(self):
-        '''
-        TODO: fixme
         if self.action == 'create':
-            perms = [permissions.AllowAny]
+            perms = [permissions.AllowAny()]
         elif self.action in ['update', 'partial_update']:
-            perms = [permissions.IsAuthenticated, IsStaffOrSelf]
+            perms = [permissions.IsAuthenticated(), IsStaffOrSelf()]
         elif self.action in ['retrieve']:
-            perms = [permissions.IsAuthenticated]
+            perms = [permissions.IsAuthenticated()]
         elif self.action == 'destroy':
-            perms = [permissions.DenyAll]
-        '''
-        return super().get_permissions()
+            perms = [permissions.IsAdminUser()]
+        else:
+            return super().get_permissions()
+        return perms
+
+    # if the updated field is `name` or `has_played`, send a notification
+    def perform_update_with_check(self, serializer):
+        instance = self.get_object()
+        old_name = instance.name
+        old_has_played = instance.has_played
+        old_is_participating = instance.is_participating
+
+        updated_instance = serializer.save()
+        if (old_name != updated_instance.name) or (old_has_played != updated_instance.has_played) or (old_is_participating != updated_instance.is_participating):
+            serialized = UserListSerializer(updated_instance).data
+            send_notification('accounts.User', 'updated', serialized)
+
+        return updated_instance
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update_with_check(serializer)
+        return Response(serializer.data)
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
 
     def create(self, request, *args, **kwargs):
         """

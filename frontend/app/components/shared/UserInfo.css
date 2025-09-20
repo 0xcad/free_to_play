@@ -19,6 +19,13 @@
   color: red;
 }
 
+.user-info.not-participating:not(.admin) {
+  color: #bbb;
+}
+.user-info.has-played:not(.admin) {
+  color: hotpink;
+}
+
 .user-info__tag {
   margin-left: 0.25rem;
   background-color: #aaa;

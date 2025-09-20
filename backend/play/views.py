@@ -72,12 +72,18 @@ class PlayInstanceViewSet(viewsets.ViewSet):
                 user.freelance_index += 1
                 user.save()
                 freelance_text = user.freelance_text
-            else: # incorrect, return 400
-                return Response({"details": "check your text for errors!"}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({
+                    'freelance_text': freelance_text,
+                    'completed': freelance_text is None,
+                    'freelance_score': play_instance.freelance_score * 25,
+                    "correct": False
+                })
         return Response({
             'freelance_text': freelance_text,
             'completed': freelance_text is None,
-            'freelance_score': play_instance.freelance_score
+            'freelance_score': play_instance.freelance_score * 25,
+            "correct": True
         })
 
     @action(detail=False, methods=['POST'], url_path='join', permission_classes=[permissions.IsAuthenticated])

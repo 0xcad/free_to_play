@@ -40,6 +40,7 @@ export function useUsersState(
   };
 
   const updateUser = (user: User) => {
+    console.log("HEY", user)
     if (!user) return;
     var updated_user = users[user.id];
     setUsers((prev) => {
@@ -89,11 +90,13 @@ export function useUsersState(
     ws.registerHandler("accounts.User.kicked", userKicked);
     ws.registerHandler("accounts.User.muted", userMuted);
     ws.registerHandler("accounts.User.joined", addUser);
+    ws.registerHandler("accounts.User.updated", updateUser);
 
     return () => {
       ws.unregisterHandler("accounts.User.kicked", userKicked);
       ws.unregisterHandler("accounts.User.muted", userMuted);
       ws.unregisterHandler("accounts.User.joined", addUser);
+      ws.unregisterHandler("accounts.User.updated", updateUser);
     };
   }, [ws.registerHandler, ws.unregisterHandler]);
 

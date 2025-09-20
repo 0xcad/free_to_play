@@ -14,7 +14,8 @@ import "../Chat/Chat.css";
 interface FreelanceTextResponse {
   freelance_text: string | undefined,
   completed: boolean,
-  freelance_score: number 
+  freelance_score: number,
+  correct: boolean,
 }
 
 interface LetterProps {
@@ -26,7 +27,7 @@ import classnames from 'classnames';
 import { motion } from "motion/react"
 
 const Letter: React.FC<LetterProps> = ({
-  letter, status 
+  letter, status
 }) => {
   return (
     <span
@@ -72,12 +73,18 @@ const Freelance = () => {
 
     try {
       var response : FreelanceTextResponse = await Api.post(apiUrls.play.freelance, {freelance_text: inputText});
-      setInputText('');
+      if (response.correct) {
+        setInputText('');
+        setFreelanceScore(Math.max(response.freelance_score, freelanceScore + 25))
+        toast.success("I'm proud of you")
+      } else {
+        setFreelanceScore(response.freelance_score)
+        toast.error("incorrect! check your text for errors.")
+      }
       setCompleted(response.completed)
       setFreelanceText(response.freelance_text)
-      setFreelanceScore(Math.max(response.freelance_score, freelanceScore + 1))
-      toast.success("I'm proud of you")
     } catch (err) {
+      toast.error(err);
     }
   };
 
@@ -123,8 +130,8 @@ const Freelance = () => {
                   {i === inputText.length && (
                     <motion.div className={classnames("cursor", isFocused ? "blink" : "")}>|</motion.div>
                   )}
-                  <Letter 
-                    letter={c} 
+                  <Letter
+                    letter={c}
                     status={status}
                   />
                   </>

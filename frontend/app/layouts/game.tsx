@@ -39,13 +39,14 @@ export default function GameLayout() {
       toast.info('the game has begun!');
     }
 
-    if (data.current_player && play.playInstance.current_player?.id != data.current_player.id && currentUser?.id === data.current_player.id) {
+    console.log("hey", data);
+    if (data.current_player && play.playInstance.current_player != data.current_player && currentUser?.id === data.current_player) {
       toast.info('go on, get!');
       playPlaying();
       setCurrentPlayerModalIsOpen(true);
     }
   }, [currentUser, play.playInstance]);
-  
+
   // if the play instance updates, set a new one
   useEffect(() => {
     ws.registerHandler("play.PlayInstance.updated", wsGameUpdatePlayInstance);

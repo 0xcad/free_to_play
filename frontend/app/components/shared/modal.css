@@ -8,8 +8,10 @@
   z-index: 9;
   padding: 1rem;
   margin: 0;
+  left: 0;
 
   display: none;
+  box-sizing: border-box;
 }
 .modal-overlay[open=""] {
   display: flex;

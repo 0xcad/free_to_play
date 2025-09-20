@@ -781,8 +781,19 @@ DONE
 * fix bug with multiple purchases
 * change gem prices / item prices
 * take users off of play, fetch that in `useUsersState`
-* fix timezone bug 
+* fix timezone bug
 * tutorial and program
 * actually migrate gem prices script
 
 * make typing game look nicer
+
+# 2025-09-20
+
+show went well last night! except that real payments didn't work, i was unaware of a stripe captcha that appeared.
+
+DONE:
+* fix real payments ideally?
+* fixed a bug that stopped modals from appearing, oops
+* add a websocket signal for users. every time users get saved, send out the websocket. a la play instance.
+* chat game is bugged. make it more robust by sending current `freelance_text` on incorrect submissions
+

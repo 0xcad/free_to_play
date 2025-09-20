@@ -12,6 +12,7 @@ import Chat from '~/components/Stage/Chat';
 import Modal from '~/components/shared/modal';
 
 import Inventory from '~/components/Store/Inventory';
+import UserInfo from '~/components/shared/UserInfo';
 
 import "./admin.css";
 
@@ -176,7 +177,7 @@ const Admin: React.FC = () => {
           {/*Consider turning this to a table. Name, balance, actions, statuses*/}
           {Object.values(users.users).map((user) => (
             <li key={user.id}>
-              {user.name} {''}
+              <UserInfo user={user} /> {''}
               {!user.is_admin && (
                 <>
                   <button onClick={() => {kickUser(user.id)}}>Kick</button>

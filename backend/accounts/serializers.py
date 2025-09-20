@@ -72,7 +72,7 @@ class UserListSerializer(ItemMixin, serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'name', 'is_admin', 'is_muted', 'has_played',
-                  'verified', 'has_superchat']
+                  'verified', 'has_superchat', 'is_participating']
 
     def get_is_admin(self, obj):
         return obj.is_staff or obj.is_superuser
