@@ -13,6 +13,8 @@
   position: relative;
 }
 
+.item img { background: var(--color-text); }
+
 .item h3 {
   font-size: 1.1em;
   border-bottom: 2px solid var(--color-darker-gray);
