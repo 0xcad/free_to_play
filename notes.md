@@ -797,3 +797,7 @@ DONE:
 * add a websocket signal for users. every time users get saved, send out the websocket. a la play instance.
 * chat game is bugged. make it more robust by sending current `freelance_text` on incorrect submissions
 
+fixing real payments
+* apparently a `dialog` will appear on top of a div even with max `z-index`. now using `div` to not appear over the stripe captcha
+* changed the pk in the frontend to the real one, not the test one
+

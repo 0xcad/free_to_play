@@ -1,19 +1,21 @@
 # Free to Play (or Pay What You Will)
 
-*Free to Play* was an interactive theatre performance that publicly premiered September 20th, 2025. Audience members could affect the direction of a live play via an interactive game, microtransactions, and chat and video features. This repo contains the codebase for the website.
+*Free to Play* was an interactive theatre performance that publicly premiered September 20th, 2025. Audience members were randomly called up to play a choose-your-own adventure style game that dictated what the actors did on stage. A web application allowed additional audience members to interact with the play via microtransactions, chat, and video features. Besides optional microtransactions, the play was entirely free to see.
 
-*Free to Play* is funded in part, and generously by, the The Frank-Ratchye STUDIO for Creative Inquiry [CS+X grant](https://studioforcreativeinquiry.org/csx-grant)
+This repo contains the codebase for the web app.
+
+*Free to Play* was funded in part, and generously by, the The Frank-Ratchye STUDIO for Creative Inquiry [CS+X grant](https://studioforcreativeinquiry.org/csx-grant). The game was created by [Lucia Shen](https://luciashen.itch.io/). Many more talented individuals came together to make this happen, and a program is available at [Fishtank Theater Company's website](https://www.fishtanktheatercompany.com/free-to-play).
 
 ## Website Features
 
 * log in with Google SSO or get a one-time email link and join the play with a unique code
 * send and receive chat messages with other audience members
-* play a typing game to increase the score for the collective audience. This affects the play's dialog.
+* play a typing game to increase a score shared by the collective audience. This affects the play's dialog.
 * buy "gems" (in game currency) with real money, and use these to purchase items in the store
    * items either affect what the actors do on stage (i.e, triggering a Dream Ballet sequence, having them wear funny hats) or novelly affect user chat settings
    * ex: the PA system plays the chat messages of all users who purchase "Super Chat" via TTS
 * play livestream content from the play
-* an admin interface (one one the frontend, one via Django) that helps crew moderate chat and track purchases
+* an admin interface (one one the frontend, one via Django) that helps crew moderate chat, call up audience members to play, and track purchases
 
 ## Tech Stack / "Tech Features"
 
