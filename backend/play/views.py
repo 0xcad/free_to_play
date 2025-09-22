@@ -76,13 +76,13 @@ class PlayInstanceViewSet(viewsets.ViewSet):
                 return Response({
                     'freelance_text': freelance_text,
                     'completed': freelance_text is None,
-                    'freelance_score': play_instance.freelance_score * 25,
+                    'freelance_score': play_instance.freelance_score,
                     "correct": False
                 })
         return Response({
             'freelance_text': freelance_text,
             'completed': freelance_text is None,
-            'freelance_score': play_instance.freelance_score * 25,
+            'freelance_score': play_instance.freelance_score,
             "correct": True
         })
 

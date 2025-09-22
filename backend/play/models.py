@@ -37,7 +37,7 @@ class PlayInstance(models.Model):
         cache_key = f'freelance_score_{self.id}'
         score = cache.get(cache_key)
         if score is None:
-            score = self.audience.aggregate(total=Sum('freelance_index'))['total'] or 0
+            score = self.audience.aggregate(total=Sum('freelance_index'))['total'] * 25 or 0
             cache.set(cache_key, score, timeout=10)
         return score
 

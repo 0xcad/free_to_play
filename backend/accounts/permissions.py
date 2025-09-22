@@ -12,7 +12,7 @@ class AllowInactiveUsers(permissions.BasePermission):
 
 class UserJoinedAudience(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.is_joined
+        return not request.user.is_anonymous and request.user.is_authenticated and request.user.is_joined
 
 class IsStaffOrSelf(permissions.BasePermission):
     """Custom permission to only allow staff or the user themselves to edit their data."""

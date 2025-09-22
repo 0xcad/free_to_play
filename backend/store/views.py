@@ -5,6 +5,7 @@ from accounts.permissions import UserJoinedAudience
 from rest_framework import generics, viewsets, status, permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.exceptions import AuthenticationFailed
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Item, ItemPurchase, ItemCategory, StripeCheckoutSession
@@ -195,7 +196,7 @@ class ItemViewSet(viewsets.ModelViewSet):
     * /items/inventory -- get the user's inventory, and play inventory
     """
     serializer_class = ItemSerializer
-    permissions = [UserJoinedAudience]
+    permissions = [permissions.IsAuthenticated, UserJoinedAudience]
 
     def get_queryset(self):
         return Item.objects.all()
@@ -207,6 +208,10 @@ class ItemViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         categories = ItemCategory.objects.all()
         serializer = self.get_serializer(queryset, many=True)
+
+        user = request.user
+        if not user.is_authenticated or user.is_anonymous:
+            raise AuthenticationFailed("Unauthorized", code=401)
 
         data = {'categories': ItemCategorySerializer(categories, many=True).data,
                 'items': serializer.data}

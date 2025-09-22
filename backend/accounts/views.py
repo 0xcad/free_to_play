@@ -317,7 +317,7 @@ def qr_code(request):
         play_instance.save()
 
     encoded_code = quote(play_instance.join_code)
-    login_link = f'{settings.FRONTEND_URL}/auth/login?join_code={encoded_code}'
+    login_link = f'{settings.FRONTEND_URL}/auth/join?join_code={encoded_code}'
 
     # make the qr code
     qr = qrcode.QRCode(version=1, box_size=10, border=1)
