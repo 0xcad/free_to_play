@@ -6,6 +6,84 @@ This repo contains the codebase for the web app.
 
 *Free to Play* was funded in part, and generously by, the The Frank-Ratchye STUDIO for Creative Inquiry [CS+X grant](https://studioforcreativeinquiry.org/csx-grant). The game was created by [Lucia Shen](https://luciashen.itch.io/). Many more talented individuals came together to make this happen, and a program is available at [Fishtank Theater Company's website](https://www.fishtanktheatercompany.com/free-to-play).
 
+## Media
+
+### Stage
+
+<table>
+  <tr>
+    <td>
+      <img src="media/waiting.png" alt="Waiting Screen" width="100%"/>
+      <br/>
+      <em>Waiting Screen</em>
+    </td>
+    <td>
+      <img src="media/freelance.png" alt="Freelance Game" width="100%"/>
+      <br/>
+      <em>Typing game to earn points in the play</em>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="media/chat_thunderdome.png" alt="Chat after a new player joins" width="100%"/>
+      <br/>
+      <em>Chat</em>
+    </td>
+    <td>
+      <img src="media/chat_streamer_pog.png" alt="Chat after a purchase" width="100%"/>
+      <br/>
+      <em>Chat after a purchase</em>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="media/chat_gun.png" alt="Chat after a big reveal" width="100%"/>
+    </td>
+    <td>
+      <img src="media/chat_betrayal.png" alt="Chat by the end of the play" width="100%"/>
+    </td>
+  </tr>
+</table>
+
+### Store and Account
+
+<table>
+  <tr>
+    <td>
+      <img src="media/buy_gems.png" alt="Buying gems" width="100%"/>
+      <br/>
+      <em>Buying Gems</em>
+    </td>
+    <td>
+      <img src="media/buy_gems_stripe.png" alt="Buying gems with Stripe" width="100%"/>
+      <br/>
+      <em>Buying Gems -- Stripe</em>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <img src="media/store.png" alt="The store" width="100%"/>
+      <br/>
+      <em>The Store -- purchases page</em>
+    </td>
+    <td>
+      <img src="media/account.png" alt="Account settings" width="100%"/>
+      <br/>
+      <em>Account settings</em>
+    </td>
+  </tr>
+</table>
+
+### Media of the Play
+
+I promise there's other things in this play besides karaoke, that's just what I had photos of
+
+![Photo of the play during a karaoke scene](media/karaoke.jpeg)
+
+https://github.com/user-attachments/assets/7cbef199-9aa3-4408-8357-af49c3b64782
+
+The video was recorded on my flip phone. This is the best we could get.
+
 ## Website Features
 
 * log in with Google SSO or get a one-time email link and join the play with a unique code
